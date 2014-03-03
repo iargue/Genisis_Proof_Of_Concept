@@ -3,16 +3,20 @@
 <html>
 <head>
 	<script src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
-	<script src="jquery-1.11.0.min.js"> </script>
-	<script src="base.js"> </script>
+	<script src="./src/playerclass.js"> </script>
+	<script src="./src/monsterlist.js"> </script>
+	<script src="./src/monsterclass.js"> </script>
+	<script src="./src/heroclass.js"> </script>
+	<script src="./vendor/jquery-1.11.0.min.js"> </script>
+	<script src="./src/base.js"> </script>
 </head>
 <body onLoad="init();">
-	<input type="button" value="Slow unit1" id="pauseBtn" onclick="unitList[0].applyEffect(normalSlow);">
-	<input type="button" value="Slow unit2" id="pauseBtn" onclick="unitList[1].applyEffect(normalSlow);">
-	<input type="button" value="Stun unit1" id="pauseBtn" onclick="unitList[0].applyEffect(normalStun);">
-	<input type="button" value="Stun unit2" id="pauseBtn" onclick="unitList[1].applyEffect(normalStun);">
-	<input type="button" value="spawn" id="pauseBtn" onclick="spawnUnit(10,20,30,40,50,60,70,90,150);"><br>
-	<canvas id="demoCanvas" width="800" height="600">
+	<input type="button" value="Slow unit1" id="pauseBtn" onclick="playerList[0].unitList[0].applyEffect(normalSlow);">
+	<input type="button" value="Slow unit2" id="pauseBtn" onclick="playerList[0].unitList[1].applyEffect(normalSlow);">
+	<input type="button" value="Stun unit1" id="pauseBtn" onclick="playerList[0].unitList[0].applyEffect(normalStun);">
+	<input type="button" value="Stun unit2" id="pauseBtn" onclick="playerList[0].unitList[1].applyEffect(normalStun);">
+	<input type="button" value="spawn" id="pauseBtn" onclick="spawnAll();"><br>
+	<canvas id="player0Canvas" width="800" height="600">
 		alternate content
 	</canvas>
 </body>
