@@ -62,7 +62,7 @@ function init() {
 	// stage = new createjs.Stage("demoCanvas");
 
 	playerList[0] = new player(0, true)
-	playerList[1] = new player(1, false)
+	//playerList[1] = new player(1, false)
 
 	console.log(playerList[0])
 
@@ -84,16 +84,17 @@ function init() {
 			MR: 5,
 			AR: 5,
 			MS: 11,
-			RN: 5,
+			RN: 15,
+			AS: 10,
 		},
 		color: "green",
 		spells: {}
 	}
 
 	heroList[heroList.length] = new hero(player1, 450, 450, 0)
-	// heroList[heroList.length] = new hero(player1, 150, 150, 1)
+	//heroList[heroList.length] = new hero(player1, 150, 150, 1)
 	playerList[0].hero = heroList[0]
-	// playerList[1].hero = heroList[1]
+	//playerList[1].hero = heroList[1]
 	activePlayer = playerList[0]
 
 	console.log(playerList)
@@ -141,9 +142,10 @@ function gameLoop(event) {
 		}
 	}
 
-	for (var i = 0; i < heroList.length; i++) {
-		heroList[i].updateEffects(event)
-		heroList[i].move(event)
+	for (var i = 0; i < playerList.length; i++) {
+		playerList[i].hero.updateEffects(event)
+		playerList[i].hero.move(event)
+		playerList[i].hero.handleCombat()
 	}
 
 

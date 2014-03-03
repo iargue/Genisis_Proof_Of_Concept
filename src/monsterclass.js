@@ -145,9 +145,10 @@ function monster(monster, x, y, player) {
 			damageAmount -= (damageAmount / 100) * this.MR
 		}
 		this.CHP -= damageAmount
+		console.log(this.CHP)
 		if (this.CHP <= 0) {
 			this.alive = false
-			this.attacker.gold += this.bounty
+			attacker.gold += this.bounty
 		}
 	}
 
