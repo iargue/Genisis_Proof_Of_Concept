@@ -126,20 +126,27 @@ function hero(hero, x, y, player) {
 		this.movewaypointy = event.stageY;
 	}
 
+	this.distance = function(x, y) {
+		var xDist = this.stageobject.x - x;
+		var yDist = this.stageobject.y - y;
+		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
+
+	}
+
 	this.handleCombat = function() {
 		if (this.attackTarget == null) {
 			console.log('Looking for target')
 			for (var i = 0; i < this.player.unitList.length; i++) {
-				var xDist = this.stageobject.x - this.player.unitList[i].stageobject.x;
-				var yDist = this.stageobject.y - this.player.unitList[i].stageobject.y;
-				var distance = Math.sqrt(xDist * xDist + yDist * yDist);
-				if (distance < this.RN) {
+				if (this.player.unitList[i].distance(this.stageobject.x, this.stageobject.y) < this.RN) {
 					this.attackTarget = this.player.unitList[i];
 					break;
 				}
 			}
 		} else if (this.attackTarget.alive == false) {
 			console.log('Dead')
+			this.attackTarget = null;
+		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) > this.RN) {
+			console.log('Too far')
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) {
 			console.log('Attacking')

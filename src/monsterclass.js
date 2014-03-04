@@ -152,6 +152,13 @@ function monster(monster, x, y, player) {
 		}
 	}
 
+	this.distance = function(x, y) {
+		var xDist = this.stageobject.x - x;
+		var yDist = this.stageobject.y - y;
+		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
+
+	}
+
 	this.handleCombat = function() {
 		if (this.attackTarget == null) {
 			if (this.player.hero.alive == true) {
@@ -160,6 +167,7 @@ function monster(monster, x, y, player) {
 		} else if (this.attackTarget.alive == false) {
 			this.attackTarget = null
 		}
+
 
 	}
 

@@ -77,7 +77,7 @@ function init() {
 
 	player1 = {
 		stats: {
-			AD: 5,
+			AD: 30,
 			HP: 5,
 			MP: 5,
 			MD: 5,
