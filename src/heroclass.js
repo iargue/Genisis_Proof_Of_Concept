@@ -24,11 +24,16 @@ function hero(hero, x, y, player) {
 	this.stageobject.y = y,
 	this.healthBar = new createjs.Shape(),
 	this.healthBar.graphics.beginFill("green").drawRect(0, 0, 20, 5);
-	this.healthBar.x = x - 11;
-	this.healthBar.y = y - 16;
+	this.healthBar.x = x - 11,
+	this.healthBar.y = y - 25,
+	this.manaBar = new createjs.Shape(),
+	this.manaBar.graphics.beginFill("blue").drawRect(0, 0, 20, 5);
+	this.manaBar.x = x - 11,
+	this.manaBar.y = y - 15,
 	this.player = playerList[player]
 	this.player.stage.addChild(this.stageobject),
 	this.player.stage.addChild(this.healthBar),
+	this.player.stage.addChild(this.manaBar),
 	this.effects = [],
 	this.hit = 11,
 	this.movewaypointx = x,
@@ -59,7 +64,9 @@ function hero(hero, x, y, player) {
 			this.moving = false
 		}
 		this.healthBar.x = this.stageobject.x - 11;
-		this.healthBar.y = this.stageobject.y - 16;
+		this.healthBar.y = this.stageobject.y - 20;
+		this.manaBar.x = this.stageobject.x - 11;
+		this.manaBar.y = this.stageobject.y - 15;
 
 	},
 
@@ -169,7 +176,7 @@ function hero(hero, x, y, player) {
 			this.alive = false
 			this.deadTime = new Date()
 		} else {
-			this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+			this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
 			this.healthBar.x = this.stageobject.x - 11;
 			this.healthBar.y = this.stageobject.y - 16;
 		}
@@ -177,17 +184,21 @@ function hero(hero, x, y, player) {
 
 	this.spawn = function() {
 		this.alive = true
+		this.CHP = this.HP
+		this.CMP = this.MP
 		this.stageobject.x = this.player.stage.canvas.width - 250
 		this.stageobject.y = this.player.stage.canvas.height / 2
 		this.healthBar.x = this.stageobject.x - 11;
-		this.healthBar.y = this.stageobject.y - 16;
-		this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+		this.healthBar.y = this.stageobject.y - 20;
+		this.manaBar.x = this.stageobject.x - 11;
+		this.manaBar.y = this.stageobject.y - 15;
+		this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+		this.manaBar.graphics.clear().beginFill("blue").drawRect(0, 0, (this.CMP / this.MP) * 20, 5)
 		this.movewaypointx = this.stageobject.x,
 		this.movewaypointy = this.stageobject.y,
 		this.player.stage.addChild(this.stageobject)
 		this.player.stage.addChild(this.healthBar)
-		this.CHP = this.HP
-		
+		this.player.stage.addChild(this.manaBar)
 	}
 
 	this.handleCombat = function() {

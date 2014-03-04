@@ -39,17 +39,12 @@ function monster(monster, x, y, player) {
 		if (this.rooted) return;
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 		if (this.attackTarget != null) {
-			var xDist = this.stageobject.x - this.attackTarget.stageobject.x;
-			var yDist = this.stageobject.y - this.attackTarget.stageobject.y;
-			var distance = Math.sqrt(xDist * xDist + yDist * yDist);
 			if (this.distance(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y) > this.RN) {
 				this.moving = true;
 				this.moveTo(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y, this.steps)
 			} else {
 				this.moving = false;
-				console.log(this.distance(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y))
 			}
-
 		} else if (this.stageobject.x < this.player.stage.canvas.width - 150) {
 			this.moving = true;
 			this.moveTo(this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)

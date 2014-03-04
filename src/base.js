@@ -149,7 +149,8 @@ function gameLoop(event) {
 		playerList[i].hero.handleCombat()
 		if (playerList[i].hero.alive == false) {
 			playerList[i].stage.removeChild(playerList[i].hero.stageobject)
-			playerList[i].stage.removeChild(playerList[i].hero.stageobject)
+			playerList[i].stage.removeChild(playerList[i].hero.healthBar)
+			playerList[i].stage.removeChild(playerList[i].hero.manaBar)
 			if (new Date() - playerList[i].hero.deadTime > playerList[i].hero.spawnTime) {
 				console.log('Spawning')
 				playerList[i].hero.spawn();
