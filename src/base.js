@@ -135,6 +135,7 @@ function gameLoop(event) {
 			playerList[n].unitList[i].handleCombat()
 			if (playerList[n].unitList[i].alive == false) {
 				playerList[n].unitList[i].player.stage.removeChild(playerList[n].unitList[i].stageobject)
+				playerList[n].unitList[i].player.stage.removeChild(playerList[n].unitList[i].healthBar)
 				playerList[n].unitList.splice(i, 1)
 				i--;
 			}

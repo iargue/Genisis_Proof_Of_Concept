@@ -26,6 +26,14 @@ function hero(hero, x, y, player) {
 	this.movewaypointx = x,
 	this.movewaypointy = y,
 	this.gold = 100,
+	this.moving = false,
+	this.healthBar = new createjs.Shape(),
+	this.healthBar.graphics.beginFill("green").drawRect(0, 0, 20, 5);
+	this.healthBar.x = x - 11;
+	this.healthBar.y = y - 16;
+	this.player.stage.addChild(this.healthBar),
+
+
 
 	this.move = function(event) {
 		if (this.stunned) return;
@@ -33,8 +41,18 @@ function hero(hero, x, y, player) {
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 
 		if (this.movewaypointx != this.stageobject.x || this.movewaypointy != this.stageobject.y) {
-			this.moveTo(this.movewaypointx, this.movewaypointy, this.steps)
+			this.moving = true;
+			if (this.distance(this.movewaypointx, this.movewaypointy) < this.steps) {
+				this.stageobject.x = this.movewaypointx
+				this.stageobject.y = this.movewaypointy
+			} else {
+				this.moveTo(this.movewaypointx, this.movewaypointy, this.steps)
+			}
+		} else {
+			this.moving = false
 		}
+		this.healthBar.x = this.stageobject.x - 11;
+		this.healthBar.y = this.stageobject.y - 16;
 
 	},
 
@@ -134,6 +152,8 @@ function hero(hero, x, y, player) {
 	}
 
 	this.handleCombat = function() {
+		if (this.stunned) return
+		if (this.moving) return
 		if (this.attackTarget == null) {
 			console.log('Looking for target')
 			for (var i = 0; i < this.player.unitList.length; i++) {
