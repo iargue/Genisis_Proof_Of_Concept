@@ -10,8 +10,11 @@ function monster(monster, x, y, player) {
 	this.MS = monster.stats.MS * 10,
 	this.RN = monster.stats.RN * 10,
 	this.CMS = monster.stats.MS * 10,
+	this.AS = 1000 - (monster.stats.AS * 10),
 	this.cost = monster.cost,
+	this.experience = monster.experience,
 	this.bounty = Math.ceil(this.cost / 20),
+	this.attackTime = new Date(),
 	this.stunned = false,
 	this.rooted = false,
 	this.alive = true,
@@ -36,21 +39,26 @@ function monster(monster, x, y, player) {
 		if (this.rooted) return;
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 		if (this.attackTarget != null) {
-
 			var xDist = this.stageobject.x - this.attackTarget.stageobject.x;
 			var yDist = this.stageobject.y - this.attackTarget.stageobject.y;
 			var distance = Math.sqrt(xDist * xDist + yDist * yDist);
 			if (this.distance(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y) > this.RN) {
+				this.moving = true;
 				this.moveTo(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y, this.steps)
+			} else {
+				this.moving = false;
+				console.log(this.distance(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y))
 			}
 
 		} else if (this.stageobject.x < this.player.stage.canvas.width - 150) {
+			this.moving = true;
 			this.moveTo(this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)
+		} else {
+			this.moving = true;
+			this.moveTo(this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
 			if (this.stageobject.x > this.player.stage.canvas.width) {
 				this.passedGate();
 			}
-		} else {
-			this.moveTo(this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
 		}
 		this.healthBar.x = this.stageobject.x - 11;
 		this.healthBar.y = this.stageobject.y - 16;
@@ -143,7 +151,7 @@ function monster(monster, x, y, player) {
 	this.passedGate = function() {
 		this.alive = false
 		this.player.stage.removeChild(this.stageobject)
-		//handle team points later. pretty please?
+		this.player.points -= 1
 	}
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
@@ -153,13 +161,12 @@ function monster(monster, x, y, player) {
 			damageAmount -= (damageAmount / 100) * this.MR
 		}
 		this.CHP -= damageAmount
-		console.log(this.CHP)
 		if (this.CHP <= 0) {
 			this.alive = false
 			attacker.gold += this.bounty
+			attacker.experience += this.experience
 		} else {
-			this.healthBar.graphics.clear();
-			this.healthBar.graphics.beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+			this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
 			this.healthBar.x = this.stageobject.x - 11;
 			this.healthBar.y = this.stageobject.y - 16;
 		}
@@ -173,12 +180,21 @@ function monster(monster, x, y, player) {
 	}
 
 	this.handleCombat = function() {
+		if (this.stunned) return
+		if (this.alive == false) return;
 		if (this.attackTarget == null) {
 			if (this.player.hero.alive == true) {
 				this.attackTarget = this.player.hero
 			}
 		} else if (this.attackTarget.alive == false) {
 			this.attackTarget = null
+		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) > this.RN) {
+			this.attackTarget = null;
+		} else if ((new Date() - this.attackTime) > this.AS) {
+			if (this.moving) return
+			if (this.alive == false) return;
+			this.attackTarget.takeDamage(this.AD, "AD", this)
+			this.attackTime = new Date()
 		}
 
 

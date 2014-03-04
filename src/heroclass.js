@@ -1,7 +1,10 @@
 function hero(hero, x, y, player) {
+	this.level = 1
 	this.AD = hero.stats.AD,
-	this.HP = hero.stats.HP * 5,
+	this.HP = hero.stats.HP * 10,
+	this.CHP = hero.stats.HP * 10
 	this.MP = hero.stats.MP * 5,
+	this.CMP = hero.stats.CMP * 10,
 	this.MD = hero.stats.MD,
 	this.MR = hero.stats.MR,
 	this.AR = hero.stats.AR,
@@ -19,25 +22,29 @@ function hero(hero, x, y, player) {
 	this.stageobject.graphics.beginFill(hero.color).drawCircle(0, 0, 9),
 	this.stageobject.x = x,
 	this.stageobject.y = y,
+	this.healthBar = new createjs.Shape(),
+	this.healthBar.graphics.beginFill("green").drawRect(0, 0, 20, 5);
+	this.healthBar.x = x - 11;
+	this.healthBar.y = y - 16;
 	this.player = playerList[player]
 	this.player.stage.addChild(this.stageobject),
+	this.player.stage.addChild(this.healthBar),
 	this.effects = [],
 	this.hit = 11,
 	this.movewaypointx = x,
 	this.movewaypointy = y,
 	this.gold = 100,
 	this.moving = false,
-	this.healthBar = new createjs.Shape(),
-	this.healthBar.graphics.beginFill("green").drawRect(0, 0, 20, 5);
-	this.healthBar.x = x - 11;
-	this.healthBar.y = y - 16;
-	this.player.stage.addChild(this.healthBar),
+	this.spawnTime = 5000 * this.level,
+	this.deadTime = null,
+	this.experience = 0,
 
 
 
 	this.move = function(event) {
 		if (this.stunned) return;
 		if (this.rooted) return;
+		if (this.alive == false) return;
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 
 		if (this.movewaypointx != this.stageobject.x || this.movewaypointy != this.stageobject.y) {
@@ -151,11 +158,43 @@ function hero(hero, x, y, player) {
 
 	}
 
+	this.takeDamage = function(damageAmount, damageType, attacker) {
+		if (damageType == "AD") {
+			damageAmount -= (damageAmount / 100) * this.AR
+		} else if (damageType == "MD") {
+			damageAmount -= (damageAmount / 100) * this.MR
+		}
+		this.CHP -= damageAmount
+		if (this.CHP <= 0) {
+			this.alive = false
+			this.deadTime = new Date()
+		} else {
+			this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+			this.healthBar.x = this.stageobject.x - 11;
+			this.healthBar.y = this.stageobject.y - 16;
+		}
+	}
+
+	this.spawn = function() {
+		this.alive = true
+		this.stageobject.x = this.player.stage.canvas.width - 250
+		this.stageobject.y = this.player.stage.canvas.height / 2
+		this.healthBar.x = this.stageobject.x - 11;
+		this.healthBar.y = this.stageobject.y - 16;
+		this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
+		this.movewaypointx = this.stageobject.x,
+		this.movewaypointy = this.stageobject.y,
+		this.player.stage.addChild(this.stageobject)
+		this.player.stage.addChild(this.healthBar)
+		this.CHP = this.HP
+		
+	}
+
 	this.handleCombat = function() {
 		if (this.stunned) return
 		if (this.moving) return
+		if (this.alive == false) return;
 		if (this.attackTarget == null) {
-			console.log('Looking for target')
 			for (var i = 0; i < this.player.unitList.length; i++) {
 				if (this.player.unitList[i].distance(this.stageobject.x, this.stageobject.y) < this.RN) {
 					this.attackTarget = this.player.unitList[i];
@@ -163,17 +202,14 @@ function hero(hero, x, y, player) {
 				}
 			}
 		} else if (this.attackTarget.alive == false) {
-			console.log('Dead')
 			this.attackTarget = null;
 		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) > this.RN) {
-			console.log('Too far')
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) {
-			console.log('Attacking')
 			this.attackTarget.takeDamage(this.AD, "AD", this)
 			this.attackTime = new Date()
 		}
-	}
 
+	}
 
 }

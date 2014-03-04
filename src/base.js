@@ -78,7 +78,7 @@ function init() {
 	player1 = {
 		stats: {
 			AD: 30,
-			HP: 5,
+			HP: 55,
 			MP: 5,
 			MD: 5,
 			MR: 5,
@@ -147,6 +147,14 @@ function gameLoop(event) {
 		playerList[i].hero.updateEffects(event)
 		playerList[i].hero.move(event)
 		playerList[i].hero.handleCombat()
+		if (playerList[i].hero.alive == false) {
+			playerList[i].stage.removeChild(playerList[i].hero.stageobject)
+			playerList[i].stage.removeChild(playerList[i].hero.stageobject)
+			if (new Date() - playerList[i].hero.deadTime > playerList[i].hero.spawnTime) {
+				console.log('Spawning')
+				playerList[i].hero.spawn();
+			}
+		}
 	}
 
 

@@ -8,8 +8,10 @@ var monsterList = [{
 		AR: 5,
 		MS: 20,
 		RN: 10,
+		AS: 10,
 	},
 	color: "black",
+	experience: 10,
 	cost: 1,
 },{
 	stats: {
@@ -21,8 +23,10 @@ var monsterList = [{
 		AR: 5,
 		MS: 10,
 		RN: 15,
+		AS: 15,
 	},
 	color: "blue",
+	experience: 10,
 	cost: 1,
 },{
 	stats: {
@@ -34,8 +38,10 @@ var monsterList = [{
 		AR: 5,
 		MS: 15,
 		RN: 20,
+		AS: 5,
 	},
 	color: "orange",
+	experience: 10,
 	cost: 1,
 },{
 	stats: {
@@ -47,8 +53,10 @@ var monsterList = [{
 		AR: 5,
 		MS: 5,
 		RN: 5,
+		AS: 10,
 	},
 	color: "red",
+	experience: 10,
 	cost: 1,
 } ];
 
