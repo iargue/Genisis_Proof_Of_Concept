@@ -45,6 +45,22 @@ function hero(hero, x, y, player) {
 	this.experience = 0,
 
 
+	this.update = function(event) {
+		if (this.alive == false) {
+			if (new Date() - this.deadTime > this.spawnTime) {
+				console.log('Spawning')
+				this.spawn();
+			} else {
+				return
+			}
+		}
+		this.updateEffects(event)
+		this.move(event)
+		this.handleCombat(event)
+
+	}
+
+
 
 	this.move = function(event) {
 		if (this.stunned) return;
@@ -175,6 +191,9 @@ function hero(hero, x, y, player) {
 		if (this.CHP <= 0) {
 			this.alive = false
 			this.deadTime = new Date()
+			this.player.stage.removeChild(this.stageobject)
+			this.player.stage.removeChild(this.healthBar)
+			this.player.stage.removeChild(this.manaBar)
 		} else {
 			this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
 			this.healthBar.x = this.stageobject.x - 11;

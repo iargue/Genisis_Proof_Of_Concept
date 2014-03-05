@@ -129,12 +129,8 @@ function switchCanvas() {
 function gameLoop(event) {
 	for (var n = 0; n < playerList.length; n++) {
 		for (var i = 0; i < playerList[n].unitList.length; i++) {
-			playerList[n].unitList[i].updateEffects(event)
-			playerList[n].unitList[i].move(event)
-			playerList[n].unitList[i].handleCombat()
+			playerList[n].unitList[i].update(event)
 			if (playerList[n].unitList[i].alive == false) {
-				playerList[n].unitList[i].player.stage.removeChild(playerList[n].unitList[i].stageobject)
-				playerList[n].unitList[i].player.stage.removeChild(playerList[n].unitList[i].healthBar)
 				playerList[n].unitList.splice(i, 1)
 				i--;
 			}
@@ -143,18 +139,7 @@ function gameLoop(event) {
 	}
 
 	for (var i = 0; i < playerList.length; i++) {
-		playerList[i].hero.updateEffects(event)
-		playerList[i].hero.move(event)
-		playerList[i].hero.handleCombat()
-		if (playerList[i].hero.alive == false) {
-			playerList[i].stage.removeChild(playerList[i].hero.stageobject)
-			playerList[i].stage.removeChild(playerList[i].hero.healthBar)
-			playerList[i].stage.removeChild(playerList[i].hero.manaBar)
-			if (new Date() - playerList[i].hero.deadTime > playerList[i].hero.spawnTime) {
-				console.log('Spawning')
-				playerList[i].hero.spawn();
-			}
-		}
+		playerList[i].hero.update(event)
 	}
 
 

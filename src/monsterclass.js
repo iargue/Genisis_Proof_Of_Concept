@@ -34,6 +34,16 @@ function monster(monster, x, y, player) {
 	this.player.stage.addChild(this.healthBar),
 
 
+	this.update = function(event) {
+		if (this.alive == false) {
+			return
+		}
+		this.updateEffects(event)
+		this.move(event)
+		this.handleCombat(event)
+	}
+
+
 	this.move = function(event) {
 		if (this.stunned) return;
 		if (this.rooted) return;
@@ -145,8 +155,9 @@ function monster(monster, x, y, player) {
 
 	this.passedGate = function() {
 		this.alive = false
-		this.player.stage.removeChild(this.stageobject)
 		this.player.points -= 1
+		this.player.stage.removeChild(this.stageobject)
+		this.player.stage.removeChild(this.healthBar)
 	}
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
@@ -160,6 +171,8 @@ function monster(monster, x, y, player) {
 			this.alive = false
 			attacker.gold += this.bounty
 			attacker.experience += this.experience
+			this.player.stage.removeChild(this.stageobject)
+			this.player.stage.removeChild(this.healthBar)
 		} else {
 			this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
 			this.healthBar.x = this.stageobject.x - 11;
