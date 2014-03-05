@@ -110,7 +110,6 @@ function init() {
 
 	activePlayer.stage.addEventListener("stagemouseup", handleClick);
 
-	console.log(playerList[0].unitList)
 }
 
 function handleClick(event) {
