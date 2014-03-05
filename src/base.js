@@ -1,6 +1,5 @@
 var stage, timeCircle, tickCircle, unitList = [],
 	playerList = [],
-	heroList = [],
 	activePlayer = null;
 
 function getRandom10(min, max) {
@@ -75,25 +74,10 @@ function init() {
 	normalSlow = new effect(20, 7000, "slow")
 	normalStun = new effect(1, 3000, "stun")
 
-	player1 = {
-		stats: {
-			AD: 30,
-			HP: 55,
-			MP: 5,
-			MD: 5,
-			MR: 5,
-			AR: 5,
-			MS: 11,
-			RN: 15,
-			AS: 10,
-		},
-		color: "green",
-		spells: {}
-	}
 
-	heroList[heroList.length] = new hero(player1, 450, 450, 0)
+	console.log(heroList)
 	//heroList[heroList.length] = new hero(player1, 150, 150, 1)
-	playerList[0].hero = heroList[0]
+	playerList[0].hero = new hero(heroList['warrior'], {}, 450, 450, 0)
 	//playerList[1].hero = heroList[1]
 	activePlayer = playerList[0]
 

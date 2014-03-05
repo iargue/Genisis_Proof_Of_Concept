@@ -1,4 +1,4 @@
-function hero(hero, x, y, player) {
+function hero(hero, heroSpells, x, y, player) {
 	this.level = 1
 	this.AD = hero.stats.AD,
 	this.HP = hero.stats.HP * 10,
@@ -13,7 +13,7 @@ function hero(hero, x, y, player) {
 	this.CMS = hero.stats.MS * 10,
 	this.AS = 1000 - (hero.stats.AS * 10),
 	this.attackTime = new Date(),
-	this.spells = hero.spells,
+	this.spells = heroSpells,
 	this.alive = true,
 	this.stunned = false,
 	this.rooted = false,
