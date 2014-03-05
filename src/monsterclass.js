@@ -183,13 +183,13 @@ function monster(monster, x, y, player) {
 			}
 		} else if (this.attackTarget.alive == false) {
 			this.attackTarget = null
-		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) > this.RN) {
-			this.attackTarget = null;
-		} else if ((new Date() - this.attackTime) > this.AS) {
-			if (this.moving) return
-			if (this.alive == false) return;
-			this.attackTarget.takeDamage(this.AD, "AD", this)
-			this.attackTime = new Date()
+		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) <= this.RN) {
+			if ((new Date() - this.attackTime) > this.AS) {
+				if (this.moving) return
+				if (this.alive == false) return;
+				this.attackTarget.takeDamage(this.AD, "AD", this)
+				this.attackTime = new Date()
+			}
 		}
 
 
