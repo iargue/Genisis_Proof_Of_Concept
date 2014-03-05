@@ -120,19 +120,28 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.castQ = function(event) {
-		//handle casting Q spell
+		console.log('Casting Q')
+		if (this.player.stage.mouseInBounds) {
+			this.spells[0].cast(this.player.stage.mouseX,this.player.stage.mouseY, this)
+		} 
 	},
 
 	this.castE = function(event) {
-		//handle casting E spell
+		if (this.player.stage.mouseInBounds) {
+			this.spells[1].cast(this.player.stage.mouseX,this.player.stage.mouseY, this)
+		} 
 	},
 
 	this.castW = function(event) {
-		//handle casting W spell
+		if (this.player.stage.mouseInBounds) {
+			this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+		} 
 	},
 
 	this.castR = function(event) {
-		//handle casting R spell
+		if (this.player.stage.mouseInBounds) {
+			this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+		} 
 	},
 
 	this.levelQ = function(event) {

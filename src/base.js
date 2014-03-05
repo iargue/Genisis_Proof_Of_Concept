@@ -1,6 +1,13 @@
 var stage, timeCircle, tickCircle, unitList = [],
 	playerList = [],
+	keys = [],
 	activePlayer = null;
+
+var KEYCODE_Q = 81;
+var KEYCODE_W = 87;
+var KEYCODE_E = 69;
+var KEYCODE_R = 82;
+
 
 function getRandom10(min, max) {
 	return getRandomInt(min / 10, max / 10) * 10;
@@ -77,7 +84,7 @@ function init() {
 
 	console.log(heroList)
 	//heroList[heroList.length] = new hero(player1, 150, 150, 1)
-	playerList[0].hero = new hero(heroList['warrior'], {}, 450, 450, 0)
+	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun']], 450, 450, 0)
 	//playerList[1].hero = heroList[1]
 	activePlayer = playerList[0]
 
@@ -86,15 +93,39 @@ function init() {
 
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
+	document.onkeydown = handleKeyDown;
 
-	// test = document.getElementById("player0Canvas").id = "player1Canvas"
-	// console.log(test)
-	// test.id = "player1Canvas"
 
 
 	activePlayer.stage.addEventListener("stagemouseup", handleClick);
 
 }
+
+function handleKeyDown(e) {
+	if (!e) {
+		var e = window.event;
+	}
+	if (e.shiftKey) {
+
+	} else {
+		switch (e.keyCode) {
+			case KEYCODE_Q:
+				activePlayer.hero.castQ();
+				return false;
+			case KEYCODE_W:
+				activePlayer.hero.castW();
+				return false;
+			case KEYCODE_E:
+				activePlayer.hero.castE();
+				return false;
+			case KEYCODE_R:
+				activePlayer.hero.castR();
+				return false;
+		}
+	}
+
+}
+
 
 function handleClick(event) {
 	if (event.currentTarget.canvas == activePlayer.stage.canvas) {
@@ -102,8 +133,6 @@ function handleClick(event) {
 			activePlayer.hero.updateWaypoint(event);
 		}
 	}
-
-
 }
 
 function switchCanvas() {
@@ -118,7 +147,7 @@ function gameLoop(event) {
 				playerList[n].unitList.splice(i, 1)
 				i--;
 			}
-			
+
 		}
 	}
 
