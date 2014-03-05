@@ -184,6 +184,9 @@ function hero(hero, x, y, player) {
 
 	this.spawn = function() {
 		this.alive = true
+		this.stunned = false
+		this.rooted = false
+		this.CMS = this.MS
 		this.CHP = this.HP
 		this.CMP = this.MP
 		this.stageobject.x = this.player.stage.canvas.width - 250
