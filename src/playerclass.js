@@ -6,3 +6,10 @@ function player(playerNumber, active) {
 	this.team = playerNumber,
 	this.activePlayer = active
 }
+
+function effect(effectAmount, effectDuration, effectType) {
+	this.effectAmount = effectAmount
+	this.effectDuration = effectDuration
+	this.appliedTime = null;
+	this.effectType = effectType
+}

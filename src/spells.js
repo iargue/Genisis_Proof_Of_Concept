@@ -1,8 +1,10 @@
 var spellList = {
 	singleTargetSlow: {
+		damage: 50,
 		manaCost: 25,
 		coolDown: 10,
 		currentCoolDown: null,
+		effect: new effect(60, 7000, "slow"),
 		cast: function(x, y, attacker) {
 			bounds = {
 				height: 9,
@@ -18,12 +20,16 @@ var spellList = {
 					var collidee = potential_collidees[i];
 					// console.log(collidee)
 					if (collidee == this) continue;
-					if (collidee.checkCollision(x,y,2)) {
-						console.log(collidee);
+					if (collidee.checkCollision(x, y, 2)) {
+						target = collidee;
+						break;
 					}
 				}
 			}
-			target = attacker.player.stage.getObjectUnderPoint(x, y)
+			if (target) {
+				target.applyEffect(this.effect)
+				target.takeDamage(this.damage, 'MD', attacker)
+			}
 		}
 	},
 	singleTargetStun: {

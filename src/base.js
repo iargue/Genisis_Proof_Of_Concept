@@ -23,13 +23,6 @@ function Clone(x) {
 		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
-function effect(effectAmount, effectDuration, effectType) {
-	this.effectAmount = effectAmount
-	this.effectDuration = effectDuration
-	this.appliedTime = null;
-	this.effectType = effectType
-}
-
 function spawnUnit(monsterNumber, player) {
 	blackList = []
 	nodeOkay = false
@@ -84,7 +77,7 @@ function init() {
 	}
 
 
-	normalSlow = new effect(20, 7000, "slow")
+	
 	normalStun = new effect(1, 3000, "stun")
 
 
