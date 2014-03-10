@@ -126,13 +126,13 @@ function hero(hero, heroSpells, x, y, player) {
 		} 
 	},
 
-	this.castE = function(event) {
+	this.castW = function(event) {
 		if (this.player.stage.mouseInBounds) {
 			this.spells[1].cast(this.player.stage.mouseX,this.player.stage.mouseY, this)
 		} 
 	},
 
-	this.castW = function(event) {
+	this.castE = function(event) {
 		if (this.player.stage.mouseInBounds) {
 			this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
 		} 

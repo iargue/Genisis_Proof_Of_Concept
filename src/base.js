@@ -63,7 +63,7 @@ function init() {
 	// stage = new createjs.Stage("demoCanvas");
 
 	playerList[0] = new player(0, true)
-	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun']], 450, 450, 0)
+	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun'], spellList['aoeStun']], 450, 450, 0)
 	activePlayer = playerList[0]
 	ctx = activePlayer.stage.canvas.getContext('2d')
 	activePlayer.stage.setBounds(ctx.canvas.offsetLeft, ctx.canvas.offsetRight, ctx.canvas.width, ctx.canvas.height)
@@ -77,11 +77,6 @@ function init() {
 	}
 
 
-	
-	normalStun = new effect(1, 3000, "stun")
-
-
-	
 
 	console.log(playerList)
 
