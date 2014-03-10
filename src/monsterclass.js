@@ -32,6 +32,9 @@ function monster(monster, x, y, player) {
 	this.healthBar.x = x - 11;
 	this.healthBar.y = y - 16;
 	this.player.stage.addChild(this.healthBar),
+	this.radius = 9,
+	this.stageobject.setBounds(x,y,9,9),
+	this.radius = 9,
 
 
 	this.update = function(event) {
@@ -41,6 +44,7 @@ function monster(monster, x, y, player) {
 		this.updateEffects(event)
 		this.move(event)
 		this.handleCombat(event)
+		this.stageobject.setBounds(this.stageobject.x,this.stageobject.y,9,9)
 	}
 
 
@@ -186,6 +190,14 @@ function monster(monster, x, y, player) {
 		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
 
 	}
+
+	this.checkCollision = function(x,y,radius) {
+		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageobject.x, 2) + Math.pow(y - this.stageobject.y, 2))) {
+			return false;
+		} else {
+			return true;
+		}
+	},
 
 	this.handleCombat = function() {
 		if (this.stunned) return

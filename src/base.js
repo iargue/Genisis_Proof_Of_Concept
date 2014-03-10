@@ -1,7 +1,8 @@
 var stage, timeCircle, tickCircle, unitList = [],
 	playerList = [],
 	keys = [],
-	activePlayer = null;
+	collisionTree,
+	activePlayer;
 
 var KEYCODE_Q = 81;
 var KEYCODE_W = 87;
@@ -54,41 +55,44 @@ function spawnUnit(monsterNumber, player) {
 			}
 		}
 	}
-	playerList[player].unitList[this.playerList[player].unitList.length] = new monster(monsterList[monsterNumber], x, y, player)
+	playerList[player].unitList[playerList[player].unitList.length] = new monster(monsterList[monsterNumber], x, y, player)
+	collisionTree.insertObject(playerList[player].unitList[playerList[player].unitList.length-1])
 }
 
 function spawnAll() {
 	for (var i = 0; i < monsterList.length; i++) {
 		spawnUnit(i, 0);
 	}
-	console.log(unitList.length)
+	console.log(activePlayer.unitList.length)
 }
 
 function init() {
 	// stage = new createjs.Stage("demoCanvas");
 
 	playerList[0] = new player(0, true)
-	//playerList[1] = new player(1, false)
+	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun']], 450, 450, 0)
+	activePlayer = playerList[0]
+	ctx = activePlayer.stage.canvas.getContext('2d')
+	activePlayer.stage.setBounds(ctx.canvas.offsetLeft, ctx.canvas.offsetRight, ctx.canvas.width, ctx.canvas.height)
+	collisionTree = new QuadTree(activePlayer.stage.getBounds(), 0, 4, 2)
+	console.log(collisionTree)
 
 	console.log(playerList[0])
 
 	for (var i = 0; i < monsterList.length; i++) {
 		spawnUnit(i, 0);
 	}
-	// spawnUnit(2, 0)
 
 
 	normalSlow = new effect(20, 7000, "slow")
 	normalStun = new effect(1, 3000, "stun")
 
 
-	console.log(heroList)
-	//heroList[heroList.length] = new hero(player1, 150, 150, 1)
-	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun']], 450, 450, 0)
-	//playerList[1].hero = heroList[1]
-	activePlayer = playerList[0]
+	
 
 	console.log(playerList)
+
+	
 
 
 	createjs.Ticker.on("tick", gameLoop);
@@ -150,7 +154,7 @@ function gameLoop(event) {
 
 		}
 	}
-
+	collisionTree.update(event)
 	for (var i = 0; i < playerList.length; i++) {
 		playerList[i].hero.update(event)
 	}

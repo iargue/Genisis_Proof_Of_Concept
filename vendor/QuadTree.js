@@ -1,5 +1,4 @@
 function QuadTree(bounds, depth, max_depth, max_objects) {
-    
     this.bounds = bounds; // set node's bounds
     this.depth = depth; // set node's depth
     
@@ -11,6 +10,17 @@ function QuadTree(bounds, depth, max_depth, max_objects) {
 
 }
 
+QuadTree.prototype.update = function(event) {
+    this.wipe();
+    for (var n = 0; n < playerList.length; n++) {
+        for (var i = 0; i < playerList[n].unitList.length; i++) {
+            if (playerList[n].unitList[i].alive == true) {
+                this.insertObject(playerList[n].unitList[i])
+            }
+        }
+    }
+}
+
 QuadTree.prototype.insertObject = function(object) {
 
     var objects = this.objects;
@@ -18,7 +28,7 @@ QuadTree.prototype.insertObject = function(object) {
     // check if node was subdivided
     if (this.nodes) {
         // if yes check if objects fits any of the subnodes
-        var subnode = this.getSubnodeForBounds(object.getBounds());
+        var subnode = this.getSubnodeForBounds(object.stageobject.getBounds());
         if (subnode) {
             // if it fits one of subnodes add it to this subnode
             subnode.insertObject(object);
@@ -46,7 +56,7 @@ QuadTree.prototype.insertObject = function(object) {
         for (var i = 0, n = objects.length; i < n; i++) {
         
             object = objects[i];
-            subnode = this.getSubnodeForBounds(object.getBounds());
+            subnode = this.getSubnodeForBounds(object.stageobject.getBounds());
 
             if (subnode) {
                 subnode.insertObject(object);
