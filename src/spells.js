@@ -12,8 +12,6 @@ var spellList = {
 				y: y,
 			}
 
-			var potential_collidees = collisionTree.getObjectsAtBounds(bounds);
-
 			collisionTree.retrieve(bounds, function(collidee) {
 				if (collidee.checkCollision(x, y, 6) && !target) {
 					target = collidee;
