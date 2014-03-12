@@ -51,24 +51,19 @@ function hero(hero, heroSpells, x, y, player) {
 
 
 	this.update = function(event) {
-		if (this.alive == false) {
-			if (new Date() - this.deadTime > this.spawnTime) {
-				console.log('Spawning')
-				this.spawn();
+		if (this.alive == false) { //Hero is dead
+			if (new Date() - this.deadTime > this.spawnTime) { //Is current time long enough after he died?
+				this.spawn(); //Spawn the Hero
 			} else {
 				return
 			}
 		}
-		if (this.experience >= this.experienceToLevel) {
-			this.levelUp()
-			console.log(this)
+		if (this.experience >= this.experienceToLevel) { //Is our experience greated then what we need to level?
+			this.levelUp() //Level up our hero
 		}
-		this.updateEffects(event)
-		this.move(event)
-		this.handleCombat(event)
-
-
-
+		this.updateEffects(event) //Update all effects on character, removing those that have expired.
+		this.move(event) //Move the hero is he needs to be moved
+		this.handleCombat(event) //Handle targeting and dealing damage
 	}
 
 
@@ -112,13 +107,13 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.castSpell = function(keyCode) {
-		if (this.player.stage.mouseInBounds) {
+		if (this.player.stage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
 			switch (keyCode) {
-				case 49:
-					this.spells[0].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+				case 49: //Key 1
+					this.spells[0].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast spell 1 with current mouse x and y
 					return false;
-				case 50:
-					this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+				case 50: //Key 2
+					this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast Spell 2 with current mouse x and y
 					return false;
 				case 51:
 					this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
@@ -135,10 +130,10 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.levelSpell = function(keyCode) {
-		if (this.spellLevels > 0) {
+		if (this.spellLevels > 0) { //Do they even have the ability to level up a spell?
 			switch (keyCode) {
-				case 49:
-					this.spells[0].levelUp(this)
+				case 49: //Key 1
+					this.spells[0].levelUp(this) //Spell 1. Level it up, passing hero object
 					return false;
 				case 50:
 					this.spells[1].levelUp(this)
@@ -158,30 +153,30 @@ function hero(hero, heroSpells, x, y, player) {
 
 
 
-	this.updateEffects = function(event) {
-		for (var i = 0; i < this.effects.length; i++) {
-			if (this.effects[i].effectType == "slow" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) {
-				this.CMS += (this.effects[i].effectAmount / 100) * this.MS
-				this.effects.splice(i, 1)
+	this.updateEffects = function(event) { //called every ticket
+		for (var i = 0; i < this.effects.length; i++) { //For every effect
+			if (this.effects[i].effectType == "slow" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) { //If its a slow and its expired
+				this.CMS += (this.effects[i].effectAmount / 100) * this.MS //Improve our CMS by the amount it was reduced by
+				this.effects.splice(i, 1) //Remove that effect from the list
 			}
-			if (this.effects[i].effectType == "stun" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) {
-				this.stunned = false
-				this.effects.splice(i, 1)
+			if (this.effects[i].effectType == "stun" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) { //Its a stun and its expired
+				this.stunned = false //We are no longer stunned. Two stuns never stack (Currently)
+				this.effects.splice(i, 1) //Remove that effect from list
 			}
-			if (this.effects[i].effectType == "root" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) {
-				this.rooted = false
-				this.effects.splice(i, 1)
+			if (this.effects[i].effectType == "root" && (new Date() - this.effects[i].appliedTime) >= this.effects[i].effectDuration) { //Its a root and its expired
+				this.rooted = false //We are no longer ooted. Two roots never stack Currently)
+				this.effects.splice(i, 1) //Remove that effect
 			}
 		}
 	},
 
-	this.updateWaypoint = function(event) {
+	this.updateWaypoint = function(event) { //Simply updates our hero's Waypoint based on clicks
 		this.movewaypoint.x = event.stageX;
 		this.movewaypoint.y = event.stageY;
 	}
 
 	this.levelUp = function() { //We have enough experience, we should level up!
-		this.experience -= this.experienceToLevel
+		this.experience -= this.experienceToLevel //Take away the experience needed to level up this time.
 		for (var stat in this.baseStats) {
 			this.baseStats[stat] += 1 //Increase all of our base stats by 1
 		}
@@ -246,20 +241,20 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.stunned) return
 		if (this.moving) return
 		if (this.alive == false) return;
-		if (this.attackTarget == null) {
+		if (this.attackTarget == null) { //Find an attack target if they are near you
 			for (var i = 0; i < this.player.unitList.length; i++) {
-				if (distance(this, this.player.unitList[i]) < this.RN) {
-					this.attackTarget = this.player.unitList[i];
+				if (distance(this, this.player.unitList[i]) < this.RN) { //Target is in range
+					this.attackTarget = this.player.unitList[i]; //This is who we are attacking now
 					break;
 				}
 			}
-		} else if (this.attackTarget.alive == false) {
+		} else if (this.attackTarget.alive == false) { //Whoops, our target is dead. We will get a new one next tick
 			this.attackTarget = null;
-		} else if (distance(this, this.attackTarget) > this.RN) {
+		} else if (distance(this, this.attackTarget) > this.RN) { //Moved out of range, we should find a new target
 			this.attackTarget = null;
-		} else if ((new Date() - this.attackTime) > this.AS) {
-			this.attackTarget.takeDamage(this.AD, "AD", this)
-			this.attackTime = new Date()
+		} else if ((new Date() - this.attackTime) > this.AS) { //Hes in range, and not dead, AND we can attack. Lets deal some damage
+			this.attackTarget.takeDamage(this.AD, "AD", this) //Deal damage to that minion based on our AD
+			this.attackTime = new Date() //set our last attack time to just now.
 		}
 
 	}
