@@ -37,8 +37,10 @@ function hero(hero, heroSpells, x, y, player) {
 	this.player.stage.addChild(this.manaBar),
 	this.effects = [],
 	this.hit = 11,
-	this.movewaypointx = x,
-	this.movewaypointy = y,
+	this.movewaypoint = {
+		x: x,
+		y: y
+	}
 	this.gold = 100,
 	this.moving = false,
 	this.spawnTime = 5000 + (1000 * this.level),
@@ -69,14 +71,9 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.alive == false) return;
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 
-		if (this.movewaypointx != this.stageobject.x || this.movewaypointy != this.stageobject.y) {
+		if (this.movewaypoint.x != this.stageobject.x || this.movewaypoint.y != this.stageobject.y) {
 			this.moving = true;
-			if (this.distance(this.movewaypointx, this.movewaypointy) < this.steps) {
-				this.stageobject.x = this.movewaypointx
-				this.stageobject.y = this.movewaypointy
-			} else {
-				this.moveTo(this.movewaypointx, this.movewaypointy, this.steps)
-			}
+			moveTo(this, this.movewaypoint.x, this.movewaypoint.y, this.steps)
 		} else {
 			this.moving = false
 		}
@@ -87,20 +84,6 @@ function hero(hero, heroSpells, x, y, player) {
 
 	},
 
-	this.moveTo = function(targetX, targetY, steps) {
-		// Calculate direction towards target
-		towardsX = targetX - this.stageobject.x;
-		towardsY = targetY - this.stageobject.y;
-
-		// Normalize
-		toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
-		towardsX = towardsX / toPlayerLength;
-		towardsY = towardsY / toPlayerLength;
-
-		// Move towards the player
-		this.stageobject.x += towardsX * steps;
-		this.stageobject.y += towardsY * steps;
-	},
 
 	this.applyEffect = function(x) {
 		effect = new Clone(x)
@@ -185,14 +168,8 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.updateWaypoint = function(event) {
-		this.movewaypointx = event.stageX;
-		this.movewaypointy = event.stageY;
-	}
-
-	this.distance = function(x, y) { // Move to ultility?
-		var xDist = Math.abs(this.stageobject.x - x)
-		var yDist = Math.abs(this.stageobject.y - y)
-		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
+		this.movewaypoint.x = event.stageX;
+		this.movewaypoint.y = event.stageY;
 	}
 
 
@@ -245,14 +222,14 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.alive == false) return;
 		if (this.attackTarget == null) {
 			for (var i = 0; i < this.player.unitList.length; i++) {
-				if (this.player.unitList[i].distance(this.stageobject.x, this.stageobject.y) < this.RN) {
+				if (distance(this, this.player.unitList[i]) < this.RN) {
 					this.attackTarget = this.player.unitList[i];
 					break;
 				}
 			}
 		} else if (this.attackTarget.alive == false) {
 			this.attackTarget = null;
-		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) > this.RN) {
+		} else if (distance(this, this.attackTarget) > this.RN) {
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) {
 			this.attackTarget.takeDamage(this.AD, "AD", this)

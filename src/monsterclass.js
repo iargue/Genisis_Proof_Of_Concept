@@ -52,18 +52,18 @@ function monster(monster, x, y, player) {
 		if (this.rooted) return;
 		this.steps = (((event.delta) / 100 * this.CMS) / 10)
 		if (this.attackTarget != null) {
-			if (this.distance(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y) > this.RN) {
+			if (distance(this, this.attackTarget) > this.RN) {
 				this.moving = true;
-				this.moveTo(this.attackTarget.stageobject.x, this.attackTarget.stageobject.y, this.steps)
+				moveTo(this, this.attackTarget.stageobject.x, this.attackTarget.stageobject.y, this.steps)
 			} else {
 				this.moving = false;
 			}
 		} else if (this.stageobject.x < this.player.stage.canvas.width - 150) {
 			this.moving = true;
-			this.moveTo(this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)
+			moveTo(this,this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)
 		} else {
 			this.moving = true;
-			this.moveTo(this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
+			moveTo(this,this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
 			if (this.stageobject.x > this.player.stage.canvas.width) {
 				this.passedGate();
 			}
@@ -73,20 +73,6 @@ function monster(monster, x, y, player) {
 
 	},
 
-	this.moveTo = function(targetX, targetY, steps) {
-		// Calculate direction towards target
-		towardsX = targetX - this.stageobject.x;
-		towardsY = targetY - this.stageobject.y;
-
-		// Normalize
-		toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
-		towardsX = towardsX / toPlayerLength;
-		towardsY = towardsY / toPlayerLength;
-
-		// Move towards the player
-		this.stageobject.x += towardsX * steps;
-		this.stageobject.y += towardsY * steps;
-	},
 
 	this.applyEffect = function(x) {
 		effect = new Clone(x)
@@ -133,28 +119,6 @@ function monster(monster, x, y, player) {
 		}
 	},
 
-	this.hitPoint = function(tX, tY) {
-		return this.hitRadius(tX, tY, 0);
-	},
-
-	this.hitRadius = function(tX, tY, tHit) {
-		//early returns speed it up
-		if (tX - tHit > this.stageobject.x + this.hit) {
-			return;
-		}
-		if (tX + tHit < this.stageobject.x - this.hit) {
-			return;
-		}
-		if (tY - tHit > this.stageobject.y + this.hit) {
-			return;
-		}
-		if (tY + tHit < this.stageobject.y - this.hit) {
-			return;
-		}
-
-		//now do the circle distance test
-		return this.hit + tHit > Math.sqrt(Math.pow(Math.abs(this.stageobject.x - tX), 2) + Math.pow(Math.abs(this.stageobject.y - tY), 2));
-	}
 
 	this.passedGate = function() {
 		this.alive = false
@@ -183,12 +147,7 @@ function monster(monster, x, y, player) {
 		}
 	}
 
-	this.distance = function(x, y) {
-		var xDist = Math.abs(this.stageobject.x - x)
-		var yDist = Math.abs(this.stageobject.y - y)
-		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
 
-	}
 
 	this.checkCollision = function(x,y,radius) {
 		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageobject.x, 2) + Math.pow(y - this.stageobject.y, 2))) {
@@ -207,7 +166,7 @@ function monster(monster, x, y, player) {
 			}
 		} else if (this.attackTarget.alive == false) {
 			this.attackTarget = null
-		} else if (this.attackTarget.distance(this.stageobject.x, this.stageobject.y) <= this.RN) {
+		} else if (distance(this, this.attackTarget) <= this.RN) {
 			if ((new Date() - this.attackTime) > this.AS) {
 				if (this.moving) return
 				if (this.alive == false) return;

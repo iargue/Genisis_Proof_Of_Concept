@@ -4,53 +4,7 @@ var stage, timeCircle, tickCircle, unitList = [],
 	collisionTree,
 	activePlayer;
 
-var KEYCODE_Q = 81;
-var KEYCODE_W = 87;
-var KEYCODE_E = 69;
-var KEYCODE_R = 82;
 
-
-function getRandom10(min, max) {
-	return getRandomInt(min / 10, max / 10) * 10;
-}
-
-function getRandomInt(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function Clone(x) {
-	for (p in x)
-		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
-}
-
-function spawnUnit(monsterNumber, player) {
-	blackList = []
-	nodeOkay = false
-	x = 10
-	y = getRandom10(10, 560);
-
-	for (var i = 0; i < unitList.length; i++) {
-		if (unitList[i].hitRadius(x, y, 11)) {
-			blackList.push(y)
-			if (blackList.length >= 54) {
-				x += 10
-				blackList = 0
-				nodeOkay = true
-			} else {
-				nodeOkay = false
-			}
-			while (nodeOkay == false) {
-				y = getRandom10(10, 560);
-				if ($.inArray(y, blackList) === -1) {
-					nodeOkay = true
-				}
-
-			}
-		}
-	}
-	playerList[player].unitList[playerList[player].unitList.length] = new monster(monsterList[monsterNumber], x, y, player)
-	collisionTree.insert(playerList[player].unitList[playerList[player].unitList.length - 1])
-}
 
 function spawnAll() {
 	for (var i = 0; i < monsterList.length; i++) {
@@ -60,7 +14,6 @@ function spawnAll() {
 }
 
 function init() {
-	// stage = new createjs.Stage("demoCanvas");
 
 	playerList[0] = new player(0, true)
 	playerList[0].hero = new hero(heroList['warrior'], [spellList['singleTargetSlow'], spellList['singleTargetStun'], spellList['aoeSlow'], spellList['aoeStun']], 450, 450, 0)
@@ -113,9 +66,6 @@ function handleClick(event) {
 	}
 }
 
-function switchCanvas() {
-
-}
 
 function updateCollisionTree(event) {
 	collisionTree.clear();
