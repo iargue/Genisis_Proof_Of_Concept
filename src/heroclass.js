@@ -1,17 +1,18 @@
 function hero(hero, heroSpells, x, y, player) {
 	this.level = 1
-	this.AD = hero.stats.AD,
-	this.HP = hero.stats.HP * 10,
-	this.CHP = hero.stats.HP * 10
-	this.MP = hero.stats.MP * 5,
-	this.CMP = hero.stats.CMP * 10,
-	this.MD = hero.stats.MD,
-	this.MR = hero.stats.MR,
-	this.AR = hero.stats.AR,
-	this.MS = hero.stats.MS * 10,
-	this.RN = hero.stats.RN * 10,
-	this.CMS = hero.stats.MS * 10,
-	this.AS = 1000 - (hero.stats.AS * 10),
+	this.baseStats = hero.stats
+	this.AD = this.baseStats.AD,
+	this.HP = this.baseStats.HP * 10,
+	this.CHP = this.baseStats.HP * 10
+	this.MP = this.baseStats.MP * 5,
+	this.CMP = this.baseStats.CMP * 10,
+	this.MD = this.baseStats.MD,
+	this.MR = this.baseStats.MR,
+	this.AR = this.baseStats.AR,
+	this.MS = this.baseStats.MS * 10,
+	this.RN = this.baseStats.RN * 10,
+	this.CMS = this.baseStats.MS * 10,
+	this.AS = 1000 - (this.baseStats.AS * 10),
 	this.attackTime = new Date(),
 	this.spells = heroSpells,
 	this.alive = true,
@@ -40,7 +41,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.movewaypointy = y,
 	this.gold = 100,
 	this.moving = false,
-	this.spawnTime = 5000 * this.level,
+	this.spawnTime = 5000 + (1000 * this.level),
 	this.deadTime = null,
 	this.experience = 0,
 
@@ -119,46 +120,51 @@ function hero(hero, heroSpells, x, y, player) {
 		}
 	},
 
-	this.castQ = function(event) {
-		console.log('Casting Q')
+	this.castSpell = function(keyCode) {
 		if (this.player.stage.mouseInBounds) {
-			this.spells[0].cast(this.player.stage.mouseX,this.player.stage.mouseY, this)
-		} 
+			switch (keyCode) {
+				case 49:
+					this.spells[0].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 50:
+					this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 51:
+					this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 52:
+					this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 53:
+					this.spells[4].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+			}
+		}
+
 	},
 
-	this.castW = function(event) {
+	this.levelSpell = function(keyCode) {
 		if (this.player.stage.mouseInBounds) {
-			this.spells[1].cast(this.player.stage.mouseX,this.player.stage.mouseY, this)
-		} 
+			switch (keyCode) {
+				case 49:
+					this.spells[0].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 50:
+					this.spells[1].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 51:
+					this.spells[2].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 52:
+					this.spells[3].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+				case 53:
+					this.spells[4].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					return false;
+			}
+		}
 	},
 
-	this.castE = function(event) {
-		if (this.player.stage.mouseInBounds) {
-			this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
-		} 
-	},
-
-	this.castR = function(event) {
-		if (this.player.stage.mouseInBounds) {
-			this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
-		} 
-	},
-
-	this.levelQ = function(event) {
-		//handle leveling Q spell
-	},
-
-	this.levelE = function(event) {
-		//handle casting E spell
-	},
-
-	this.levelW = function(event) {
-		//handle casting W spell
-	},
-
-	this.levelR = function(event) {
-		//handle casting R spell
-	},
 
 
 	this.updateEffects = function(event) {
@@ -183,12 +189,13 @@ function hero(hero, heroSpells, x, y, player) {
 		this.movewaypointy = event.stageY;
 	}
 
-	this.distance = function(x, y) {
+	this.distance = function(x, y) { // Move to ultility?
 		var xDist = Math.abs(this.stageobject.x - x)
 		var yDist = Math.abs(this.stageobject.y - y)
 		return distance = Math.sqrt(xDist * xDist + yDist * yDist);
-
 	}
+
+
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
 		if (damageType == "AD") {
@@ -223,8 +230,8 @@ function hero(hero, heroSpells, x, y, player) {
 		this.healthBar.y = this.stageobject.y - 20;
 		this.manaBar.x = this.stageobject.x - 11;
 		this.manaBar.y = this.stageobject.y - 15;
-		this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
-		this.manaBar.graphics.clear().beginFill("blue").drawRect(0, 0, (this.CMP / this.MP) * 20, 5)
+		this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, 20, 5)
+		this.manaBar.graphics.clear().beginFill("blue").drawRect(0, 0, 20, 5)
 		this.movewaypointx = this.stageobject.x,
 		this.movewaypointy = this.stageobject.y,
 		this.player.stage.addChild(this.stageobject)

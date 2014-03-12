@@ -7,9 +7,3 @@ function player(playerNumber, active) {
 	this.activePlayer = active
 }
 
-function effect(effectAmount, effectDuration, effectType) {
-	this.effectAmount = effectAmount
-	this.effectDuration = effectDuration
-	this.appliedTime = null;
-	this.effectType = effectType
-}

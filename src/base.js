@@ -97,22 +97,9 @@ function handleKeyDown(e) {
 		var e = window.event;
 	}
 	if (e.shiftKey) {
-
+		activePlayer.hero.levelSpell(e.keyCode)
 	} else {
-		switch (e.keyCode) {
-			case KEYCODE_Q:
-				activePlayer.hero.castQ();
-				return false;
-			case KEYCODE_W:
-				activePlayer.hero.castW();
-				return false;
-			case KEYCODE_E:
-				activePlayer.hero.castE();
-				return false;
-			case KEYCODE_R:
-				activePlayer.hero.castR();
-				return false;
-		}
+		activePlayer.hero.castSpell(e.keyCode)
 	}
 
 }

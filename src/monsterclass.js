@@ -10,7 +10,7 @@ function monster(monster, x, y, player) {
 	this.MS = monster.stats.MS * 10,
 	this.RN = monster.stats.RN * 10,
 	this.CMS = monster.stats.MS * 10,
-	this.AS = 1000 - (monster.stats.AS * 10),
+	this.AS = 2000 - (monster.stats.AS * 10),
 	this.cost = monster.cost,
 	this.experience = monster.experience,
 	this.bounty = Math.ceil(this.cost / 20),
@@ -34,7 +34,6 @@ function monster(monster, x, y, player) {
 	this.player.stage.addChild(this.healthBar),
 	this.radius = 9,
 	this.stageobject.setBounds(x,y,9,9),
-	this.radius = 9,
 
 
 	this.update = function(event) {

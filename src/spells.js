@@ -1,10 +1,21 @@
+function effect(effectAmount, effectDuration, effectType) {
+	this.effectAmount = effectAmount
+	this.effectDuration = effectDuration
+	this.appliedTime = null;
+	this.effectType = effectType
+}
+
+
 var spellList = {
 	singleTargetSlow: {
 		damage: 50,
-		coolDown: 10,
-		currentCoolDown: null,
+		coolDown: 1000,
+		currentCoolDown: new Date(),
 		effect: new effect(60, 7000, "slow"),
 		cast: function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown) {
+				return false;
+			}
 			bounds = {
 				height: 9,
 				width: 9,
@@ -12,6 +23,7 @@ var spellList = {
 				y: y,
 			}
 
+			var target;
 			collisionTree.retrieve(bounds, function(collidee) {
 				if (collidee.checkCollision(x, y, 6) && !target) {
 					target = collidee;
@@ -21,15 +33,19 @@ var spellList = {
 			if (target) {
 				target.applyEffect(this.effect)
 				target.takeDamage(this.damage, 'MD', attacker)
+				this.currentCoolDown = new Date()
 			}
 		}
 	},
 	singleTargetStun: {
-		coolDown: 15,
+		coolDown: 1500,
 		damage: 25,
-		currentCoolDown: null,
+		currentCoolDown: new Date(),
 		effect: new effect(1, 3000, "stun"),
 		cast: function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown) {
+				return false;
+			}
 			bounds = {
 				height: 9,
 				width: 9,
@@ -49,15 +65,19 @@ var spellList = {
 			if (target) {
 				target.applyEffect(this.effect)
 				target.takeDamage(this.damage, 'MD', attacker)
+				this.currentCoolDown = new Date()
 			}
 		}
 	},
 	aoeSlow: {
-		coolDown: 25,
+		coolDown: 2500,
 		damage: 50,
-		currentCoolDown: null,
+		currentCoolDown: new Date(),
 		effect: new effect(60, 3000, "slow"),
 		cast: function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown) {
+				return false;
+			}
 			bounds = {
 				height: 200,
 				width: 200,
@@ -78,16 +98,20 @@ var spellList = {
 					target.applyEffect(this.effect)
 					target.takeDamage(this.damage, 'MD', attacker)
 				}
+				this.currentCoolDown = new Date()
 			}
 		}
 
 	},
 	aoeStun: {
-		coolDown: 25,
+		coolDown: 2500,
 		damage: 25,
-		currentCoolDown: null,
+		currentCoolDown: new Date(),
 		effect: new effect(1, 3000, "stun"),
 		cast: function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown) {
+				return false;
+			}
 			bounds = {
 				height: 200,
 				width: 200,
@@ -108,6 +132,7 @@ var spellList = {
 					target.applyEffect(this.effect)
 					target.takeDamage(this.damage, 'MD', attacker)
 				}
+				this.currentCoolDown = new Date()
 			}
 		}
 
