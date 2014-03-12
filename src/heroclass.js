@@ -46,6 +46,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.spawnTime = 5000 + (1000 * this.level),
 	this.deadTime = null,
 	this.experience = 0,
+	this.experienceToLevel = 50 + (this.level * 50),
 	this.spellLevels = 1,
 
 
@@ -58,9 +59,15 @@ function hero(hero, heroSpells, x, y, player) {
 				return
 			}
 		}
+		if (this.experience >= this.experienceToLevel) {
+			this.levelUp()
+			console.log(this)
+		}
 		this.updateEffects(event)
 		this.move(event)
 		this.handleCombat(event)
+
+
 
 	}
 
@@ -173,7 +180,25 @@ function hero(hero, heroSpells, x, y, player) {
 		this.movewaypoint.y = event.stageY;
 	}
 
-
+	this.levelUp = function() { //We have enough experience, we should level up!
+		this.experience -= this.experienceToLevel
+		for (var stat in this.baseStats) {
+			this.baseStats[stat] += 1 //Increase all of our base stats by 1
+		}
+		this.level += 1 //Increase our level
+		this.AD = this.baseStats.AD, //Normalize all stats based on value
+		this.HP = this.baseStats.HP * 10,
+		this.CHP = this.baseStats.HP * 10
+		this.MP = this.baseStats.MP * 5,
+		this.CMP = this.baseStats.CMP * 10,
+		this.MD = this.baseStats.MD,
+		this.MR = this.baseStats.MR,
+		this.AR = this.baseStats.AR,
+		this.AS = 1000 - (this.baseStats.AS * 10),
+		this.spawnTime = 5000 + (1000 * this.level),
+		this.experienceToLevel = 50 + (this.level * 50), //Increase our experience needed to level.
+		this.spellLevels += 1 //Give us the ability to level up a new spell
+	},
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
 		if (damageType == "AD") {
