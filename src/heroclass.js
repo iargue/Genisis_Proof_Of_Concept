@@ -46,6 +46,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.spawnTime = 5000 + (1000 * this.level),
 	this.deadTime = null,
 	this.experience = 0,
+	this.spellLevels = 1,
 
 
 	this.update = function(event) {
@@ -127,22 +128,22 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.levelSpell = function(keyCode) {
-		if (this.player.stage.mouseInBounds) {
+		if (this.spellLevels > 0) {
 			switch (keyCode) {
 				case 49:
-					this.spells[0].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[0].levelUp(this)
 					return false;
 				case 50:
-					this.spells[1].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[1].levelUp(this)
 					return false;
 				case 51:
-					this.spells[2].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[2].levelUp(this)
 					return false;
 				case 52:
-					this.spells[3].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[3].levelUp(this)
 					return false;
 				case 53:
-					this.spells[4].level(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[4].levelUp(this)
 					return false;
 			}
 		}

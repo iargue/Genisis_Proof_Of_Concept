@@ -7,13 +7,16 @@ function effect(effectAmount, effectDuration, effectType) {
 
 
 var spellList = {
-	singleTargetSlow: {
-		damage: 50,
-		coolDown: 1000,
-		currentCoolDown: new Date(),
-		effect: new effect(60, 7000, "slow"),
-		cast: function(x, y, attacker) {
-			if (new Date() - this.currentCoolDown < this.coolDown) {
+	singleTargetSlow: function() {
+		this.level = 0,
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
+		this.damage = this.damagePerLevel[this.level],
+		this.coolDown = this.coolDownPerLevel[this.level],
+		this.currentCoolDown = 9999999,
+		this.effect = new effect(60, 7000, "slow"),
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
 			}
 			bounds = {
@@ -35,15 +38,25 @@ var spellList = {
 				target.takeDamage(this.damage, 'MD', attacker)
 				this.currentCoolDown = new Date()
 			}
+		},
+		this.levelUp = function(hero) {
+			this.level += 1
+			this.damage = this.damagePerLevel[this.level],
+			this.coolDown = this.coolDownPerLevel[this.level],
+			console.log(this)
+			hero.spellLevels -= 1
 		}
 	},
-	singleTargetStun: {
-		coolDown: 1500,
-		damage: 25,
-		currentCoolDown: new Date(),
-		effect: new effect(1, 3000, "stun"),
-		cast: function(x, y, attacker) {
-			if (new Date() - this.currentCoolDown < this.coolDown) {
+	singleTargetStun: function() {
+		this.level = 0,
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
+		this.damage = this.damagePerLevel[this.level],
+		this.coolDown = this.coolDownPerLevel[this.level],
+		this.currentCoolDown = 9999999,
+		this.effect = new effect(1, 3000, "stun"),
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
 			}
 			bounds = {
@@ -68,21 +81,32 @@ var spellList = {
 				this.currentCoolDown = new Date()
 			}
 		}
+		this.levelUp = function(hero) {
+			this.level += 1
+			this.damage = this.damagePerLevel[this.level],
+			this.coolDown = this.coolDownPerLevel[this.level],
+			console.log(this)
+			hero.spellLevels -= 1
+		}
+
 	},
-	aoeSlow: {
-		coolDown: 2500,
-		damage: 50,
-		currentCoolDown: new Date(),
-		effect: new effect(60, 3000, "slow"),
-		cast: function(x, y, attacker) {
-			if (new Date() - this.currentCoolDown < this.coolDown) {
+	aoeSlow: function() {
+		this.level = 0,
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
+		this.damage = this.damagePerLevel[this.level],
+		this.coolDown = this.coolDownPerLevel[this.level],
+		this.currentCoolDown = 9999999,
+		this.effect = new effect(60, 3000, "slow"),
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
 			}
 			bounds = {
-				height: 200,
-				width: 200,
-				x: x - 100,
-				y: y - 100,
+				height: 9,
+				width: 9,
+				x: x,
+				y: y,
 			}
 
 			var targets = [];
@@ -101,22 +125,31 @@ var spellList = {
 				this.currentCoolDown = new Date()
 			}
 		}
-
+		this.levelUp = function(hero) {
+			this.level += 1
+			this.damage = this.damagePerLevel[this.level],
+			this.coolDown = this.coolDownPerLevel[this.level],
+			console.log(this)
+			hero.spellLevels -= 1
+		}
 	},
-	aoeStun: {
-		coolDown: 2500,
-		damage: 25,
-		currentCoolDown: new Date(),
-		effect: new effect(1, 3000, "stun"),
-		cast: function(x, y, attacker) {
-			if (new Date() - this.currentCoolDown < this.coolDown) {
+	aoeStun: function() {
+		this.level = 0,
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
+		this.damage = this.damagePerLevel[this.level],
+		this.coolDown = this.coolDownPerLevel[this.level],
+		this.currentCoolDown = 9999999,
+		this.effect = new effect(1, 3000, "stun"),
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
 			}
 			bounds = {
-				height: 200,
-				width: 200,
-				x: x - 100,
-				y: y - 100,
+				height: 9,
+				width: 9,
+				x: x,
+				y: y,
 			}
 
 			var targets = [];
@@ -134,6 +167,13 @@ var spellList = {
 				}
 				this.currentCoolDown = new Date()
 			}
+		}
+		this.levelUp = function(hero) {
+			this.level += 1
+			this.damage = this.damagePerLevel[this.level],
+			this.coolDown = this.coolDownPerLevel[this.level],
+			console.log(this)
+			hero.spellLevels -= 1
 		}
 
 	}
