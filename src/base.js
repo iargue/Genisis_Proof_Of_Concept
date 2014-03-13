@@ -2,8 +2,8 @@ var stage, timeCircle, tickCircle, unitList = [],
 	playerList = [],
 	keys = [],
 	collisionTree,
-	activePlayer;
-
+	activePlayer,
+	particlesList;
 
 
 function spawnAll() {
@@ -19,8 +19,15 @@ function init() {
 	playerList[0].hero = new hero(heroList['warrior'], [new spellList['singleTargetSlow'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun']], 450, 450, 0)
 	activePlayer = playerList[0]
 	ctx = activePlayer.stage.canvas.getContext('2d')
-	activePlayer.stage.setBounds(ctx.canvas.offsetLeft, ctx.canvas.offsetRight, ctx.canvas.width, ctx.canvas.height)
-	collisionTree = QUAD.init(activePlayer.stage.getBounds());
+	console.log(ctx)
+	bounds = {
+		x: ctx.canvas.offsetLeft,
+		y: ctx.canvas.offsetTop,
+		w: ctx.canvas.width,
+		h: ctx.canvas.height
+	}
+	console.log(bounds)
+	collisionTree = QUAD.init(bounds);
 	console.log(collisionTree)
 
 	console.log(playerList[0])
@@ -79,24 +86,15 @@ function updateCollisionTree(event) {
 }
 
 function gameLoop(event) {
-	for (var n = 0; n < playerList.length; n++) {
-		for (var i = 0; i < playerList[n].unitList.length; i++) {
-			playerList[n].unitList[i].update(event)
-			if (playerList[n].unitList[i].alive == false) {
-				playerList[n].unitList.splice(i, 1)
-				i--;
-			}
-
+	for (var player in playerList) { //Check each player in the game
+		playerList[player].hero.update(event) //Update the hero object for this play
+		for (var unit in playerList[player].unitList) {
+			playerList[player].unitList[unit].update(event) //Update every unit spawned against this player
 		}
+		playerList[player].unitList = playerList[player].unitList.filter(function(x) { //Filter dead units from the player
+			return x.alive == true;
+		})
+		playerList[player].stage.update(event); //Finally update the stage with all of our changes.
 	}
 	updateCollisionTree(event)
-	for (var i = 0; i < playerList.length; i++) {
-		playerList[i].hero.update(event)
-	}
-
-
-	for (var i = 0; i < playerList.length; i++) {
-		playerList[i].stage.update(event);
-	}
-
 }

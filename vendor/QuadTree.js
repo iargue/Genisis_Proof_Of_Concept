@@ -116,16 +116,16 @@ QUAD.init = function(args) {
              */
             findInsertNode : function (item) {
                 // left
-                if (item.x + item.width < x + (w / 2)) {
-                    if (item.y + item.height < y + (h / 2)) return TOP_LEFT;
-                    if (item.y >= y + (h / 2)) return BOTTOM_LEFT;
+                if (item.stageobject._bounds.x + item.stageobject._bounds.width < x + (w / 2)) {
+                    if (item.stageobject._bounds.y+ item.stageobject._bounds.height < y + (h / 2)) return TOP_LEFT;
+                    if (item.stageobject._bounds.y>= y + (h / 2)) return BOTTOM_LEFT;
                     return PARENT;
                 }
 
                 // right
-                if (item.x >= x + (w / 2)) {
-                    if (item.y + item.height < y + (h / 2)) return TOP_RIGHT;
-                    if (item.y >= y + (h / 2)) return BOTTOM_RIGHT;
+                if (item.stageobject._bounds.x >= x + (w / 2)) {
+                    if (item.stageobject._bounds.y+ item.stageobject._bounds.height < y + (h / 2)) return TOP_RIGHT;
+                    if (item.stageobject._bounds.y >= y + (h / 2)) return BOTTOM_RIGHT;
                     return PARENT;
                 }
 
@@ -139,13 +139,13 @@ QUAD.init = function(args) {
             findOverlappingNodes : function (item, callback) {
                 // left
                 if (item.x < x + (w / 2)) {
-                    if (item.y < y + (h / 2)) callback(TOP_LEFT);
-                    if (item.y + item.height >= y + h/2) callback(BOTTOM_LEFT);
+                    if (item.y< y + (h / 2)) callback(TOP_LEFT);
+                    if (item.y+ item.height >= y + h/2) callback(BOTTOM_LEFT);
                 }
                 // right
                 if (item.x + item.width >= x + (w / 2)) {
-                    if (item.y < y + (h / 2)) callback(TOP_RIGHT);
-                    if (item.y + item.height >= y + h/2) callback(BOTTOM_RIGHT);
+                    if (item.y< y + (h / 2)) callback(TOP_RIGHT);
+                    if (item.y+ item.height >= y + h/2) callback(BOTTOM_RIGHT);
                 }
             },
 

@@ -230,8 +230,8 @@ function hero(hero, heroSpells, x, y, player) {
 		this.manaBar.y = this.stageobject.y - 15;
 		this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, 20, 5)
 		this.manaBar.graphics.clear().beginFill("blue").drawRect(0, 0, 20, 5)
-		this.movewaypointx = this.stageobject.x,
-		this.movewaypointy = this.stageobject.y,
+		this.movewaypoint.x = this.stageobject.x,
+		this.movewaypoint.y = this.stageobject.y,
 		this.player.stage.addChild(this.stageobject)
 		this.player.stage.addChild(this.healthBar)
 		this.player.stage.addChild(this.manaBar)
