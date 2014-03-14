@@ -103,10 +103,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				return false;
 			}
 			bounds = {
-				height: 9,
-				width: 9,
-				x: x,
-				y: y,
+				height: 100,
+				width: 100,
+				x: x-50,
+				y: y-50,
 			}
 
 			var targets = [];
@@ -146,10 +146,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				return false;
 			}
 			bounds = {
-				height: 9,
-				width: 9,
-				x: x,
-				y: y,
+				height: 100,
+				width: 100,
+				x: x-50,
+				y: y-50,
 			}
 
 			var targets = [];
