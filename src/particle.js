@@ -2,9 +2,6 @@
 // Particles have their stage object created and then passed to this function during construction.
 // The particle will expire when the number of milliseconds lasped in "expireTime" has happened.
 
-
-
-
 particle = function(object, expireTime) {
 	this.stageObject = object,
 	this.appliedTime = new Date()

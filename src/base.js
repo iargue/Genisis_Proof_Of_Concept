@@ -36,7 +36,7 @@ function endGame(loser) {
 function init() {
 	gameOptions = {
 		hero: 'warrior',
-		spells: [new spellList['singleTargetSlow'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun']]
+		spells: [new spellList['singleTargetSlow'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
 	newGame('solo', gameOptions)
 	ctx = activePlayer.stage.canvas.getContext('2d')
@@ -58,7 +58,7 @@ function init() {
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown;
 
-
+	console.log(activePlayer.stage)
 
 	activePlayer.stage.addEventListener("stagemouseup", handleClick);
 

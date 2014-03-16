@@ -40,7 +40,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date() // Set spell on CD
 			}
 		},
-		this.levelUp = function(hero) {// Called when the player chooses to level a spell
+		this.levelUp = function(hero) { // Called when the player chooses to level a spell
 			//Todo: Limit spell leveling up based on what other spells are already leveled.
 			this.level += 1 //Increase level of spell
 			this.damage = this.damagePerLevel[this.level], //Damage based on level
@@ -106,8 +106,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			bounds = {
 				height: 100,
 				width: 100,
-				x: x-50,
-				y: y-50,
+				x: x - 50,
+				y: y - 50,
 			}
 
 			var targets = [];
@@ -149,8 +149,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			bounds = {
 				height: 100,
 				width: 100,
-				x: x-50,
-				y: y-50,
+				x: x - 50,
+				y: y - 50,
 			}
 
 			var targets = [];
@@ -176,6 +176,46 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			console.log(this)
 			hero.spellLevels -= 1
 		}
+	},
+	aoeNuke: function() {
+		this.level = 0,
+		this.damagePerLevel = [0, 150, 400, 700, 800, 1000, 1250, 1400, 1650, 1900, 2199],
+		this.coolDownPerLevel = [0, 10000, 9500, 8000, 7500, 7000, 6500, 5000, 4500, 3000, 3600],
+		this.damage = this.damagePerLevel[this.level],
+		this.coolDown = this.coolDownPerLevel[this.level],
+		this.currentCoolDown = 9999999,
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
+				return false;
+			}
+			bounds = {
+				height: 100,
+				width: 100,
+				x: x - 50,
+				y: y - 50,
+			}
 
+			var targets = [];
+			collisionTree.retrieve(bounds, function(collidee) {
+				if (collidee.checkCollision(x, y, 100)) {
+					targets.push(collidee)
+				}
+			});
+
+			if (targets) {
+				for (var i = 0, n = targets.length; i < n; i++) {
+					var target = targets[i];
+					target.takeDamage(this.damage, 'MD', attacker)
+				}
+				this.currentCoolDown = new Date()
+			}
+		}
+		this.levelUp = function(hero) {
+			this.level += 1
+			this.damage = this.damagePerLevel[this.level],
+			this.coolDown = this.coolDownPerLevel[this.level],
+			console.log(this)
+			hero.spellLevels -= 1
+		}
 	}
 }

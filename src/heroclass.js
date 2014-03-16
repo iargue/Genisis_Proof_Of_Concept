@@ -19,22 +19,41 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stunned = false,
 	this.rooted = false,
 	this.attackTarget = null,
-	this.stageobject = new createjs.Shape(),
-	this.stageobject.graphics.beginFill(hero.color).drawCircle(0, 0, 9),
+	this.stageobject = new createjs.Container(),
 	this.stageobject.x = x,
 	this.stageobject.y = y,
+	this.stageShape = new createjs.Shape(),
+	this.stageShape.graphics.beginFill(hero.color).drawCircle(0, 0, 25),
 	this.healthBar = new createjs.Shape(),
-	this.healthBar.graphics.beginFill("green").drawRect(0, 0, 20, 5);
-	this.healthBar.x = x - 11,
-	this.healthBar.y = y - 25,
-	this.manaBar = new createjs.Shape(),
-	this.manaBar.graphics.beginFill("blue").drawRect(0, 0, 20, 5);
-	this.manaBar.x = x - 11,
-	this.manaBar.y = y - 15,
-	this.player = player
+	this.healthBar.graphics.beginFill("green").drawRect(-30, -60, 60, 10);
+	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
+	this.spellBar = {
+		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-30, -50, 11, 15)),
+		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 11, 15)),
+		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-18, -50, 11, 15)),
+		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 11, 15)),
+		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-6, -50, 11, 15)),
+		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 11, 15)),
+		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(6, -50, 11, 15)),
+		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 11, 15)),
+		spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(18, -50, 11, 15)),
+		spellfiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 11, 15)),
+	},
+	this.player = player,
 	this.player.stage.addChild(this.stageobject),
-	this.player.stage.addChild(this.healthBar),
-	this.player.stage.addChild(this.manaBar),
+	this.stageobject.addChild(this.stageShape)
+	this.stageobject.addChild(this.healthBar),
+	this.stageobject.addChild(this.spellBar.spellOneCooldown),
+	this.stageobject.addChild(this.spellBar.spellTwoCooldown),
+	this.stageobject.addChild(this.spellBar.spellThreeCooldown),
+	this.stageobject.addChild(this.spellBar.spellFourCooldown),
+	this.stageobject.addChild(this.spellBar.spellFiveCooldown),
+	this.stageobject.addChild(this.spellBar.spellOne),
+	this.stageobject.addChild(this.spellBar.spellTwo),
+	this.stageobject.addChild(this.spellBar.spellThree),
+	this.stageobject.addChild(this.spellBar.spellFour),
+	this.stageobject.addChild(this.spellBar.spellFive),
+
 	this.effects = [],
 	this.hit = 11,
 	this.movewaypoint = {
@@ -60,6 +79,7 @@ function hero(hero, heroSpells, x, y, player) {
 				this.levelUp() //Level up our hero
 			}
 			this.updateEffects(event) //Update all effects on character, removing those that have expired.
+			this.updateSpellBar(event)
 			this.move(event) //Move the hero is he needs to be moved
 			this.handleCombat(event) //Handle targeting and dealing damage
 		}
@@ -69,7 +89,7 @@ function hero(hero, heroSpells, x, y, player) {
 
 	this.move = function(event) {
 		for (var effect in this.effects) {
-			if (effect.effectType != "stun" || "root") return
+			if (effect.effectType == "stun" || "root") return
 		}
 		if (this.alive == false) return; //We can possibly remove this
 		steps = (((event.delta) / 100 * this.CMS) / 10)
@@ -80,13 +100,46 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
-		this.healthBar.x = this.stageobject.x - 11;
-		this.healthBar.y = this.stageobject.y - 20;
-		this.manaBar.x = this.stageobject.x - 11;
-		this.manaBar.y = this.stageobject.y - 15;
+		// this.statusBar.x = this.stageobject.x - 11;
+		// this.statusBar.y = this.stageobject.y - 20;
 
 	},
 
+	// spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-30, -50, 11, 15)),
+	// spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 11, 15)),
+	// spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-18, -50, 11, 15)),
+	// spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 11, 15)),
+	// spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-6, -50, 11, 15)),
+	// spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 11, 15)),
+	// spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(6, -50, 11, 15)),
+	// spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 11, 15)),
+	// spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(18, -50, 11, 15)),
+	// spellfiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 11, 15)),
+
+	this.updateSpellBar = function(event) {
+		for (var spell in this.spells) {
+			if (this.spells[spell].level = 0) return
+			switch (spell) {
+				case 0: //Key 1
+					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, 11, 15)
+					return false;
+					// case : //Key 2
+					// 	this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast Spell 2 with current mouse x and y
+					// 	return false;
+					// case 0:
+					// 	this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					// 	return false;
+					// case 0:
+					// 	this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					// 	return false;
+					// case 0:
+					// 	this.spells[4].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					// 	return false;
+			}
+
+		}
+
+	}
 
 	this.applyEffect = function(x) {
 		effect = new Clone(x)
@@ -105,6 +158,11 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.castSpell = function(keyCode) {
+		if (this.alive == false) return
+		for (var effect in this.effects) {
+			if (effect.effectType == "stun" || "root") return
+		}
+
 		if (this.player.stage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
 			switch (keyCode) {
 				case 49: //Key 1
@@ -204,12 +262,8 @@ function hero(hero, heroSpells, x, y, player) {
 			this.alive = false
 			this.deadTime = new Date()
 			this.player.stage.removeChild(this.stageobject)
-			this.player.stage.removeChild(this.healthBar)
-			this.player.stage.removeChild(this.manaBar)
 		} else {
-			this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
-			this.healthBar.x = this.stageobject.x - 11;
-			this.healthBar.y = this.stageobject.y - 16;
+			this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 		}
 	}
 
@@ -222,17 +276,10 @@ function hero(hero, heroSpells, x, y, player) {
 		this.CMP = this.MP
 		this.stageobject.x = this.player.stage.canvas.width - 250
 		this.stageobject.y = this.player.stage.canvas.height / 2
-		this.healthBar.x = this.stageobject.x - 11;
-		this.healthBar.y = this.stageobject.y - 20;
-		this.manaBar.x = this.stageobject.x - 11;
-		this.manaBar.y = this.stageobject.y - 15;
-		this.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, 20, 5)
-		this.manaBar.graphics.clear().beginFill("blue").drawRect(0, 0, 20, 5)
+		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, 60, 10);
 		this.movewaypoint.x = this.stageobject.x,
 		this.movewaypoint.y = this.stageobject.y,
 		this.player.stage.addChild(this.stageobject)
-		this.player.stage.addChild(this.healthBar)
-		this.player.stage.addChild(this.manaBar)
 	}
 
 	this.handleCombat = function() {

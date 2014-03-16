@@ -19,21 +19,21 @@ function monster(monster, x, y, player) {
 	this.rooted = false,
 	this.alive = true,
 	this.attackTarget = null,
-	this.stageobject = new createjs.Shape(),
-	this.stageobject.graphics.beginFill(monster.color).drawCircle(0, 0, 9),
+	this.stageobject = new createjs.Container(),
 	this.stageobject.x = x,
 	this.stageobject.y = y,
-	this.player = player,
+	this.stageShape = new createjs.Shape(),
+	this.stageShape.graphics.beginFill(monster.color).drawCircle(0, 0, 9),
+	this.healthBar = new createjs.Shape(),
+	this.healthBar.graphics.beginFill("red").drawRect(-11, -20, 20, 5);
+	this.player = player
 	this.player.stage.addChild(this.stageobject),
+	this.stageobject.addChild(this.stageShape)
+	this.stageobject.addChild(this.healthBar),
 	this.effects = [],
 	this.hit = 11,
-	this.healthBar = new createjs.Shape(),
-	this.healthBar.graphics.beginFill("red").drawRect(0, 0, 20, 5);
-	this.healthBar.x = x - 11;
-	this.healthBar.y = y - 16;
-	this.player.stage.addChild(this.healthBar),
 	this.radius = 9,
-	this.stageobject.setBounds(x,y,9,9),
+	this.stageobject.setBounds(x, y, 9, 9),
 
 
 	this.update = function(event) {
@@ -43,7 +43,7 @@ function monster(monster, x, y, player) {
 		this.updateEffects(event)
 		this.move(event)
 		this.handleCombat(event)
-		this.stageobject.setBounds(this.stageobject.x,this.stageobject.y,9,9)
+		this.stageobject.setBounds(this.stageobject.x, this.stageobject.y, 9, 9)
 	}
 
 
@@ -60,16 +60,14 @@ function monster(monster, x, y, player) {
 			}
 		} else if (this.stageobject.x < this.player.stage.canvas.width - 150) {
 			this.moving = true;
-			moveTo(this,this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)
+			moveTo(this, this.player.stage.canvas.width - 150, this.player.stage.canvas.height / 2, this.steps)
 		} else {
 			this.moving = true;
-			moveTo(this,this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
+			moveTo(this, this.player.stage.canvas.width + 10, this.player.stage.canvas.height / 2, this.steps)
 			if (this.stageobject.x > this.player.stage.canvas.width) {
 				this.passedGate();
 			}
 		}
-		this.healthBar.x = this.stageobject.x - 11;
-		this.healthBar.y = this.stageobject.y - 16;
 
 	},
 
@@ -124,7 +122,6 @@ function monster(monster, x, y, player) {
 		this.alive = false
 		this.player.team.removePoints(1)
 		this.player.stage.removeChild(this.stageobject)
-		this.player.stage.removeChild(this.healthBar)
 	}
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
@@ -139,17 +136,14 @@ function monster(monster, x, y, player) {
 			attacker.gold += this.bounty
 			attacker.experience += this.experience
 			this.player.stage.removeChild(this.stageobject)
-			this.player.stage.removeChild(this.healthBar)
 		} else {
-			this.healthBar.graphics.clear().beginFill("red").drawRect(0, 0, (this.CHP / this.HP) * 20, 5)
-			this.healthBar.x = this.stageobject.x - 11;
-			this.healthBar.y = this.stageobject.y - 16;
+			this.healthBar.graphics.clear().beginFill("red").drawRect(-11, -20, (this.CHP / this.HP) * 20, 5)
 		}
 	}
 
 
 
-	this.checkCollision = function(x,y,radius) {
+	this.checkCollision = function(x, y, radius) {
 		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageobject.x, 2) + Math.pow(y - this.stageobject.y, 2))) {
 			return false;
 		} else {
