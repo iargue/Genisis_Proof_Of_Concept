@@ -29,30 +29,30 @@ function hero(hero, heroSpells, x, y, player) {
 	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
 	this.spellBar = {
 		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-30, -50, 11, 15)),
-		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 11, 15)),
+		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 10, 14)),
 		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-18, -50, 11, 15)),
-		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 11, 15)),
+		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 10, 14)),
 		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-6, -50, 11, 15)),
-		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 11, 15)),
+		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 10, 14)),
 		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(6, -50, 11, 15)),
-		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 11, 15)),
+		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 10, 14)),
 		spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(18, -50, 11, 15)),
-		spellfiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 11, 15)),
+		spellFiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 10, 14)),
 	},
 	this.player = player,
 	this.player.stage.addChild(this.stageobject),
 	this.stageobject.addChild(this.stageShape)
 	this.stageobject.addChild(this.healthBar),
-	this.stageobject.addChild(this.spellBar.spellOneCooldown),
-	this.stageobject.addChild(this.spellBar.spellTwoCooldown),
-	this.stageobject.addChild(this.spellBar.spellThreeCooldown),
-	this.stageobject.addChild(this.spellBar.spellFourCooldown),
-	this.stageobject.addChild(this.spellBar.spellFiveCooldown),
 	this.stageobject.addChild(this.spellBar.spellOne),
 	this.stageobject.addChild(this.spellBar.spellTwo),
 	this.stageobject.addChild(this.spellBar.spellThree),
 	this.stageobject.addChild(this.spellBar.spellFour),
 	this.stageobject.addChild(this.spellBar.spellFive),
+	this.stageobject.addChild(this.spellBar.spellOneCooldown),
+	this.stageobject.addChild(this.spellBar.spellTwoCooldown),
+	this.stageobject.addChild(this.spellBar.spellThreeCooldown),
+	this.stageobject.addChild(this.spellBar.spellFourCooldown),
+	this.stageobject.addChild(this.spellBar.spellFiveCooldown),
 
 	this.effects = [],
 	this.hit = 11,
@@ -118,23 +118,44 @@ function hero(hero, heroSpells, x, y, player) {
 
 	this.updateSpellBar = function(event) {
 		for (var spell in this.spells) {
-			if (this.spells[spell].level = 0) return
+			if (this.spells[spell].level == 0) continue
+			console.log(spell)
 			switch (spell) {
-				case 0: //Key 1
-					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, 11, 15)
-					return false;
-					// case : //Key 2
-					// 	this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast Spell 2 with current mouse x and y
-					// 	return false;
-					// case 0:
-					// 	this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
-					// 	return false;
-					// case 0:
-					// 	this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
-					// 	return false;
-					// case 0:
-					// 	this.spells[4].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
-					// 	return false;
+				case "0": //Key 1
+					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
+					if (percentage > 1) {
+						percentage = 1
+					}
+					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 10, 14)
+					continue
+				case "1": //Key 2
+					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
+					if (percentage > 1) {
+						percentage = 1
+					}
+					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-18, -50, percentage * 10, 14) //Cast Spell 2 with current mouse x and y
+					continue
+				case "2":
+					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
+					if (percentage > 1) {
+						percentage = 1
+					}
+					this.spellBar.spellThreeCooldown.graphics.clear().beginFill("red").drawRect(-6, -50, percentage * 10, 14)
+					continue
+				case "3":
+					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
+					if (percentage > 1) {
+						percentage = 1
+					}
+					this.spellBar.spellFourCooldown.graphics.clear().beginFill("red").drawRect(6, -50, percentage * 10, 14)
+					continue
+				case "4":
+					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
+					if (percentage > 1) {
+						percentage = 1
+					}
+					this.spellBar.spellFiveCooldown.graphics.clear().beginFill("red").drawRect(18, -50, percentage * 10, 14)
+					continue
 			}
 
 		}
@@ -162,7 +183,6 @@ function hero(hero, heroSpells, x, y, player) {
 		for (var effect in this.effects) {
 			if (effect.effectType == "stun" || "root") return
 		}
-
 		if (this.player.stage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
 			switch (keyCode) {
 				case 49: //Key 1
