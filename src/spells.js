@@ -6,6 +6,7 @@ function effect(effectAmount, effectDuration, effectType) {
 }
 
 
+
 var spellList = { //Constains a list of every spell in the game, Named.
 	singleTargetSlow: function() { //Now a constructor object that creates a new spell for each Hero
 		this.level = 0, //Level of spell

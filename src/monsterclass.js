@@ -23,7 +23,7 @@ function monster(monster, x, y, player) {
 	this.stageobject.graphics.beginFill(monster.color).drawCircle(0, 0, 9),
 	this.stageobject.x = x,
 	this.stageobject.y = y,
-	this.player = playerList[player],
+	this.player = player,
 	this.player.stage.addChild(this.stageobject),
 	this.effects = [],
 	this.hit = 11,
@@ -122,7 +122,7 @@ function monster(monster, x, y, player) {
 
 	this.passedGate = function() {
 		this.alive = false
-		this.player.points -= 1
+		this.player.team.removePoints(1)
 		this.player.stage.removeChild(this.stageobject)
 		this.player.stage.removeChild(this.healthBar)
 	}

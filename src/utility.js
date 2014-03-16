@@ -11,7 +11,7 @@ function Clone(x) {
 		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
-function spawnUnit(monsterNumber, player) {
+function spawnUnit(monsterNumber) {
 	blackList = []
 	nodeOkay = false
 	x = 10
@@ -36,8 +36,9 @@ function spawnUnit(monsterNumber, player) {
 			}
 		}
 	}
-	playerList[player].unitList[playerList[player].unitList.length] = new monster(monsterList[monsterNumber], x, y, player)
-	collisionTree.insert(playerList[player].unitList[playerList[player].unitList.length - 1])
+	unit = new monster(monsterList[monsterNumber], x, y, activePlayer)
+	opponentTeam.unitList.push(unit)
+	collisionTree.insert(unit)
 }
 
 function moveTo(unit, targetX, targetY, steps) {

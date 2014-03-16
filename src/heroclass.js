@@ -31,7 +31,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.manaBar.graphics.beginFill("blue").drawRect(0, 0, 20, 5);
 	this.manaBar.x = x - 11,
 	this.manaBar.y = y - 15,
-	this.player = playerList[player]
+	this.player = player
 	this.player.stage.addChild(this.stageobject),
 	this.player.stage.addChild(this.healthBar),
 	this.player.stage.addChild(this.manaBar),
@@ -54,29 +54,29 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.alive == false) { //Hero is dead
 			if (new Date() - this.deadTime > this.spawnTime) { //Is current time long enough after he died?
 				this.spawn(); //Spawn the Hero
-			} else {
-				return
 			}
+		} else {
+			if (this.experience >= this.experienceToLevel) { //Is our experience greated then what we need to level?
+				this.levelUp() //Level up our hero
+			}
+			this.updateEffects(event) //Update all effects on character, removing those that have expired.
+			this.move(event) //Move the hero is he needs to be moved
+			this.handleCombat(event) //Handle targeting and dealing damage
 		}
-		if (this.experience >= this.experienceToLevel) { //Is our experience greated then what we need to level?
-			this.levelUp() //Level up our hero
-		}
-		this.updateEffects(event) //Update all effects on character, removing those that have expired.
-		this.move(event) //Move the hero is he needs to be moved
-		this.handleCombat(event) //Handle targeting and dealing damage
-	}
+	},
 
 
 
 	this.move = function(event) {
-		if (this.stunned) return;
-		if (this.rooted) return;
-		if (this.alive == false) return;
-		this.steps = (((event.delta) / 100 * this.CMS) / 10)
+		for (var effect in this.effects) {
+			if (effect.effectType != "stun" || "root") return
+		}
+		if (this.alive == false) return; //We can possibly remove this
+		steps = (((event.delta) / 100 * this.CMS) / 10)
 
 		if (this.movewaypoint.x != this.stageobject.x || this.movewaypoint.y != this.stageobject.y) {
 			this.moving = true;
-			moveTo(this, this.movewaypoint.x, this.movewaypoint.y, this.steps)
+			moveTo(this, this.movewaypoint.x, this.movewaypoint.y, steps)
 		} else {
 			this.moving = false
 		}
@@ -98,11 +98,9 @@ function hero(hero, heroSpells, x, y, player) {
 		}
 		if (effect.effectType == "stun" && this.stunned == false) {
 			this.effects.push(effect)
-			this.stunned = true
 		}
 		if (effect.effectType == "root" && this.rooted = false) {
 			this.effects.push(effect)
-			this.rooted = true
 		}
 	},
 
@@ -242,9 +240,9 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.moving) return
 		if (this.alive == false) return;
 		if (this.attackTarget == null) { //Find an attack target if they are near you
-			for (var i = 0; i < this.player.unitList.length; i++) {
-				if (distance(this, this.player.unitList[i]) < this.RN) { //Target is in range
-					this.attackTarget = this.player.unitList[i]; //This is who we are attacking now
+			for (var i = 0; i < this.player.team.unitList.length; i++) {
+				if (distance(this, this.player.team.unitList[i]) < this.RN) { //Target is in range
+					this.attackTarget = this.player.team.unitList[i]; //This is who we are attacking now
 					break;
 				}
 			}
