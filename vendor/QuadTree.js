@@ -116,16 +116,16 @@ QUAD.init = function(args) {
              */
             findInsertNode : function (item) {
                 // left
-                if (item.stageobject._bounds.x + item.stageobject._bounds.width < x + (w / 2)) {
-                    if (item.stageobject._bounds.y+ item.stageobject._bounds.height < y + (h / 2)) return TOP_LEFT;
-                    if (item.stageobject._bounds.y>= y + (h / 2)) return BOTTOM_LEFT;
+                if (item.stageObject._bounds.x + item.stageObject._bounds.width < x + (w / 2)) {
+                    if (item.stageObject._bounds.y+ item.stageObject._bounds.height < y + (h / 2)) return TOP_LEFT;
+                    if (item.stageObject._bounds.y>= y + (h / 2)) return BOTTOM_LEFT;
                     return PARENT;
                 }
 
                 // right
-                if (item.stageobject._bounds.x >= x + (w / 2)) {
-                    if (item.stageobject._bounds.y+ item.stageobject._bounds.height < y + (h / 2)) return TOP_RIGHT;
-                    if (item.stageobject._bounds.y >= y + (h / 2)) return BOTTOM_RIGHT;
+                if (item.stageObject._bounds.x >= x + (w / 2)) {
+                    if (item.stageObject._bounds.y+ item.stageObject._bounds.height < y + (h / 2)) return TOP_RIGHT;
+                    if (item.stageObject._bounds.y >= y + (h / 2)) return BOTTOM_RIGHT;
                     return PARENT;
                 }
 

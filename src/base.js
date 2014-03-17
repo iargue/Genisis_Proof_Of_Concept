@@ -30,16 +30,17 @@ function newGame(gameMode, gameOptions) {
 }
 
 function endGame(loser) {
-
+	console.log(Loser + ' Has lost this game. Sucker')
 }
 
 function init() {
+	gameStage = new createjs.Stage("gameCanvas"),
 	gameOptions = {
 		hero: 'warrior',
 		spells: [new spellList['singleTargetSlow'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
 	newGame('solo', gameOptions)
-	ctx = activePlayer.stage.canvas.getContext('2d')
+	ctx = gameStage.canvas.getContext('2d')
 	bounds = {
 		x: ctx.canvas.offsetLeft,
 		y: ctx.canvas.offsetTop,
@@ -60,7 +61,7 @@ function init() {
 
 	console.log(activePlayer.stage)
 
-	activePlayer.stage.addEventListener("stagemouseup", handleClick);
+	gameStage.addEventListener("stagemouseup", handleClick);
 
 }
 
@@ -78,8 +79,8 @@ function handleKeyDown(e) {
 
 
 function handleClick(event) {
-	if (event.currentTarget.canvas == activePlayer.stage.canvas) {
-		if (activePlayer.stage.mouseInBounds == true) {
+	if (event.currentTarget.canvas == gameStage.canvas) {
+		if (gameStage.mouseInBounds == true) {
 			activePlayer.hero.updateWaypoint(event);
 		}
 	}
@@ -97,16 +98,18 @@ function updateCollisionTree(event) {
 
 function gameLoop(event) {
 	for (var team in teamList) { //We have to update each team
+		for (var player in teamList[team].playerList) { //Check each player on that team
+			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
+
+		}
 		for (var unit in teamList[team].unitList) {
 			teamList[team].unitList[unit].update(event) //Update every unit spawned against this player
 		}
 		teamList[team].unitList = teamList[team].unitList.filter(function(x) { //Filter dead units from the player List
 			return x.alive == true;
 		})
-		for (var player in teamList[team].playerList) { //Check each player on that team
-			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
-			teamList[team].playerList[player].stage.update(event); //Finally update the stage with all of our changes.
-		}
+
 	}
 	updateCollisionTree(event)
+	gameStage.update(event); //Finally update the stage with all of our changes.
 }

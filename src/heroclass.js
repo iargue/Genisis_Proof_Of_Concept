@@ -19,9 +19,9 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stunned = false,
 	this.rooted = false,
 	this.attackTarget = null,
-	this.stageobject = new createjs.Container(),
-	this.stageobject.x = x,
-	this.stageobject.y = y,
+	this.stageObject = new createjs.Container(),
+	this.stageObject.x = x,
+	this.stageObject.y = y,
 	this.stageShape = new createjs.Shape(),
 	this.stageShape.graphics.beginFill(hero.color).drawCircle(0, 0, 25),
 	this.healthBar = new createjs.Shape(),
@@ -40,19 +40,19 @@ function hero(hero, heroSpells, x, y, player) {
 		spellFiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 10, 14)),
 	},
 	this.player = player,
-	this.player.stage.addChild(this.stageobject),
-	this.stageobject.addChild(this.stageShape)
-	this.stageobject.addChild(this.healthBar),
-	this.stageobject.addChild(this.spellBar.spellOne),
-	this.stageobject.addChild(this.spellBar.spellTwo),
-	this.stageobject.addChild(this.spellBar.spellThree),
-	this.stageobject.addChild(this.spellBar.spellFour),
-	this.stageobject.addChild(this.spellBar.spellFive),
-	this.stageobject.addChild(this.spellBar.spellOneCooldown),
-	this.stageobject.addChild(this.spellBar.spellTwoCooldown),
-	this.stageobject.addChild(this.spellBar.spellThreeCooldown),
-	this.stageobject.addChild(this.spellBar.spellFourCooldown),
-	this.stageobject.addChild(this.spellBar.spellFiveCooldown),
+	gameStage.addChild(this.stageObject),
+	this.stageObject.addChild(this.stageShape)
+	this.stageObject.addChild(this.healthBar),
+	this.stageObject.addChild(this.spellBar.spellOne),
+	this.stageObject.addChild(this.spellBar.spellTwo),
+	this.stageObject.addChild(this.spellBar.spellThree),
+	this.stageObject.addChild(this.spellBar.spellFour),
+	this.stageObject.addChild(this.spellBar.spellFive),
+	this.stageObject.addChild(this.spellBar.spellOneCooldown),
+	this.stageObject.addChild(this.spellBar.spellTwoCooldown),
+	this.stageObject.addChild(this.spellBar.spellThreeCooldown),
+	this.stageObject.addChild(this.spellBar.spellFourCooldown),
+	this.stageObject.addChild(this.spellBar.spellFiveCooldown),
 
 	this.effects = [],
 	this.hit = 11,
@@ -94,14 +94,14 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.alive == false) return; //We can possibly remove this
 		steps = (((event.delta) / 100 * this.CMS) / 10)
 
-		if (this.movewaypoint.x != this.stageobject.x || this.movewaypoint.y != this.stageobject.y) {
+		if (this.movewaypoint.x != this.stageObject.x || this.movewaypoint.y != this.stageObject.y) {
 			this.moving = true;
 			moveTo(this, this.movewaypoint.x, this.movewaypoint.y, steps)
 		} else {
 			this.moving = false
 		}
-		// this.statusBar.x = this.stageobject.x - 11;
-		// this.statusBar.y = this.stageobject.y - 20;
+		// this.statusBar.x = this.stageObject.x - 11;
+		// this.statusBar.y = this.stageObject.y - 20;
 
 	},
 
@@ -183,22 +183,22 @@ function hero(hero, heroSpells, x, y, player) {
 		for (var effect in this.effects) {
 			if (effect.effectType == "stun" || "root") return
 		}
-		if (this.player.stage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
+		if (gameStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
 			switch (keyCode) {
 				case 49: //Key 1
-					this.spells[0].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast spell 1 with current mouse x and y
+					this.spells[0].cast(gameStage.mouseX, gameStage.mouseY, this) //Cast spell 1 with current mouse x and y
 					return false;
 				case 50: //Key 2
-					this.spells[1].cast(this.player.stage.mouseX, this.player.stage.mouseY, this) //Cast Spell 2 with current mouse x and y
+					this.spells[1].cast(gameStage.mouseX, gameStage.mouseY, this) //Cast Spell 2 with current mouse x and y
 					return false;
 				case 51:
-					this.spells[2].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[2].cast(gameStage.mouseX, gameStage.mouseY, this)
 					return false;
 				case 52:
-					this.spells[3].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[3].cast(gameStage.mouseX, gameStage.mouseY, this)
 					return false;
 				case 53:
-					this.spells[4].cast(this.player.stage.mouseX, this.player.stage.mouseY, this)
+					this.spells[4].cast(gameStage.mouseX, gameStage.mouseY, this)
 					return false;
 			}
 		}
@@ -281,7 +281,7 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.CHP <= 0) {
 			this.alive = false
 			this.deadTime = new Date()
-			this.player.stage.removeChild(this.stageobject)
+			gameStage.removeChild(this.stageObject)
 		} else {
 			this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 		}
@@ -294,12 +294,12 @@ function hero(hero, heroSpells, x, y, player) {
 		this.CMS = this.MS
 		this.CHP = this.HP
 		this.CMP = this.MP
-		this.stageobject.x = this.player.stage.canvas.width - 250
-		this.stageobject.y = this.player.stage.canvas.height / 2
+		this.stageObject.x = gameStage.canvas.width - 250
+		this.stageObject.y = gameStage.canvas.height / 2
 		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, 60, 10);
-		this.movewaypoint.x = this.stageobject.x,
-		this.movewaypoint.y = this.stageobject.y,
-		this.player.stage.addChild(this.stageobject)
+		this.movewaypoint.x = this.stageObject.x,
+		this.movewaypoint.y = this.stageObject.y,
+		gameStage.addChild(this.stageObject)
 	}
 
 	this.handleCombat = function() {

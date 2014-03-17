@@ -20,7 +20,6 @@ function team(teamNumber) {
 
 function player(team, active, team) {	
 	this.team = team
-	this.stage = new createjs.Stage("player" + team.side + "Canvas"),
 	this.hero = {},
 	this.team = team,
 	this.activePlayer = active

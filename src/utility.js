@@ -43,8 +43,8 @@ function spawnUnit(monsterNumber) {
 
 function moveTo(unit, targetX, targetY, steps) {
 	// Calculate direction towards target
-	towardsX = targetX - unit.stageobject.x;
-	towardsY = targetY - unit.stageobject.y;
+	towardsX = targetX - unit.stageObject.x;
+	towardsY = targetY - unit.stageObject.y;
 
 	// Normalize
 	toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
@@ -53,17 +53,17 @@ function moveTo(unit, targetX, targetY, steps) {
 		towardsY = towardsY / toPlayerLength;
 
 		// Move towards the player
-		unit.stageobject.x += towardsX * steps;
-		unit.stageobject.y += towardsY * steps;
+		unit.stageObject.x += towardsX * steps;
+		unit.stageObject.y += towardsY * steps;
 	} else {
-		unit.stageobject.x = targetX
-		unit.stageobject.y = targetY
+		unit.stageObject.x = targetX
+		unit.stageObject.y = targetY
 	}
 
 }
 
 function distance(firstUnit, secondUnit) {
-	var xDist = Math.abs(firstUnit.stageobject.x - secondUnit.stageobject.x)
-	var yDist = Math.abs(firstUnit.stageobject.y - secondUnit.stageobject.y)
+	var xDist = Math.abs(firstUnit.stageObject.x - secondUnit.stageObject.x)
+	var yDist = Math.abs(firstUnit.stageObject.y - secondUnit.stageObject.y)
 	return Math.sqrt(xDist * xDist + yDist * yDist);
 }
