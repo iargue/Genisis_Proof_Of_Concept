@@ -119,7 +119,6 @@ function hero(hero, heroSpells, x, y, player) {
 	this.updateSpellBar = function(event) {
 		for (var spell in this.spells) {
 			if (this.spells[spell].level == 0) continue
-			console.log(spell)
 			switch (spell) {
 				case "0": //Key 1
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)

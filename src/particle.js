@@ -11,6 +11,7 @@ particle = function(object, expireTime) {
 	this.update = function(event) {
 		if (new Date() -this.appliedTime > this.expires) {
 			this.active = false
+			gameStage.removeChild(this.stageObject)
 		}
 	}
 }

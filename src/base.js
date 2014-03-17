@@ -6,14 +6,13 @@ var stage, timeCircle, tickCircle, unitList = [],
 	activePlayer,
 	activeTeam,
 	opponentTeam,
-	particlesList;
+	particleList = [];
 
 
 function spawnAll() {
 	for (var i = 0; i < monsterList.length; i++) {
 		spawnUnit(i, 0);
 	}
-	console.log(activePlayer.unitList.length)
 }
 
 function newGame(gameMode, gameOptions) {
@@ -108,8 +107,13 @@ function gameLoop(event) {
 		teamList[team].unitList = teamList[team].unitList.filter(function(x) { //Filter dead units from the player List
 			return x.alive == true;
 		})
-
 	}
+	for (var particle in particleList) {
+		particleList[particle].update(event)
+	}
+	particleList = particleList.filter(function(x) { //Filter dead units from the player List
+		return x.active == true;
+	})
 	updateCollisionTree(event)
 	gameStage.update(event); //Finally update the stage with all of our changes.
 }
