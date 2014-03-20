@@ -15,6 +15,7 @@ function monster(monster, x, y, player) {
 	this.experience = monster.experience,
 	this.bounty = Math.ceil(this.cost / 20),
 	this.attackTime = new Date(),
+	this.particleSpeed = 500
 	this.stunned = false,
 	this.rooted = false,
 	this.alive = true,
@@ -63,7 +64,8 @@ function monster(monster, x, y, player) {
 			moveTo(this, gameStage.canvas.width - 150, gameStage.canvas.height / 2, this.steps)
 		} else {
 			this.moving = true;
-			moveTo(this, gameStage.canvas.width + 10, gameStage.canvas.height / 2, this.steps)
+			object =
+				moveTo(this, gameStage.canvas.width + 10, gameStage.canvas.height / 2, this.steps)
 			if (this.stageObject.x > gameStage.canvas.width) {
 				this.passedGate();
 			}
@@ -164,7 +166,18 @@ function monster(monster, x, y, player) {
 			if ((new Date() - this.attackTime) > this.AS) {
 				if (this.moving) return
 				if (this.alive == false) return;
-				this.attackTarget.takeDamage(this.AD, "AD", this)
+				object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("red").beginFill("red").drawRect(0, 0, 4, 2))
+				object.x = this.stageObject.x
+				object.y = this.stageObject.y
+				object.radius = 2
+				var angle = Math.atan2(this.attackTarget.stageObject.y - this.stageObject.y, this.attackTarget.stageObject.y - this.stageObject.x);
+				angle = angle * (180 / Math.PI);
+				object.rotation = 90 + angle
+				gameStage.addChild(object)
+				particleList.push(new particle(object, 9999, this.particleSpeed, this.attackTarget, this, function(target) {
+					console.log('Dealing Damage')
+					target.takeDamage(this.parent.AD, "AD", this.parent)
+				}))
 				this.attackTime = new Date()
 			}
 		}

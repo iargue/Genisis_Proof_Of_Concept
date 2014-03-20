@@ -13,6 +13,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.RN = this.baseStats.RN * 10,
 	this.CMS = this.baseStats.MS * 10,
 	this.AS = 1000 - (this.baseStats.AS * 10),
+	this.particleSpeed = 400,
 	this.attackTime = new Date(),
 	this.spells = heroSpells,
 	this.alive = true,
@@ -40,6 +41,7 @@ function hero(hero, heroSpells, x, y, player) {
 		spellFiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 10, 14)),
 	},
 	this.player = player,
+	this.stageObject.alpha = 0.9
 	gameStage.addChild(this.stageObject),
 	this.stageObject.addChild(this.stageShape)
 	this.stageObject.addChild(this.healthBar),
@@ -67,6 +69,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.experience = 0,
 	this.experienceToLevel = 50 + (this.level * 50),
 	this.spellLevels = 1,
+	this.radius = 25,
 
 
 	this.update = function(event) {
@@ -100,21 +103,8 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
-		// this.statusBar.x = this.stageObject.x - 11;
-		// this.statusBar.y = this.stageObject.y - 20;
-
 	},
 
-	// spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-30, -50, 11, 15)),
-	// spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 11, 15)),
-	// spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-18, -50, 11, 15)),
-	// spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 11, 15)),
-	// spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-6, -50, 11, 15)),
-	// spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 11, 15)),
-	// spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(6, -50, 11, 15)),
-	// spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 11, 15)),
-	// spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(18, -50, 11, 15)),
-	// spellfiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 11, 15)),
 
 	this.updateSpellBar = function(event) {
 		for (var spell in this.spells) {
@@ -301,6 +291,14 @@ function hero(hero, heroSpells, x, y, player) {
 		gameStage.addChild(this.stageObject)
 	}
 
+	this.checkCollision = function(x, y, radius) {
+		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageObject.x, 2) + Math.pow(y - this.stageObject.y, 2))) {
+			return false;
+		} else {
+			return true;
+		}
+	},
+
 	this.handleCombat = function() {
 		if (this.stunned) return
 		if (this.moving) return
@@ -317,7 +315,19 @@ function hero(hero, heroSpells, x, y, player) {
 		} else if (distance(this, this.attackTarget) > this.RN) { //Moved out of range, we should find a new target
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) { //Hes in range, and not dead, AND we can attack. Lets deal some damage
-			this.attackTarget.takeDamage(this.AD, "AD", this) //Deal damage to that minion based on our AD
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 0, 4, 2))
+			object.x = this.stageObject.x
+			object.y = this.stageObject.y
+			object.radius = 2
+			var angle = Math.atan2(this.attackTarget.stageObject.y - this.stageObject.y, this.attackTarget.stageObject.y - this.stageObject.x );
+        	angle = angle * (180/Math.PI);
+        	object.rotation = 90 + angle 
+        	gameStage.addChild(object)
+			particleList.push(new particle(object, 9999, this.particleSpeed, this.attackTarget, this,function(target) {
+				console.log('Dealing Damage')
+				target.takeDamage(this.parent.AD, "AD", this.parent)
+			}))
+			// this.attackTarget.takeDamage(this.AD, "AD", this) //Deal damage to that minion based on our AD
 			this.attackTime = new Date() //set our last attack time to just now.
 		}
 
