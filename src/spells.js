@@ -35,10 +35,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			});
 
 			if (target) { //If we did end up with a target
-				object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, bounds.width))
+				object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 9))
 				object.alpha = 0.5
 				gameStage.addChild(object)
-				particleList.push(new particle(object, 750))
+				particleList.push(new drawParticle(object, 750))
 				target.applyEffect(this.effect) //Apply the effect
 				target.takeDamage(this.damage, 'MD', attacker) //Deal damage
 				this.currentCoolDown = new Date() // Set spell on CD
@@ -81,10 +81,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			});
 
 			if (target) {
-				object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, bounds.width))
+				object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 9))
 				object.alpha = 0.5
 				gameStage.addChild(object)
-				particleList.push(new particle(object, 750))
+				particleList.push(new drawParticle(object, 750))
 				target.applyEffect(this.effect)
 				target.takeDamage(this.damage, 'MD', attacker)
 				this.currentCoolDown = new Date()
@@ -112,8 +112,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				return false;
 			}
 			bounds = {
-				height: 100,
-				width: 100,
+				height: 150,
+				width: 150,
 				x: x - 50,
 				y: y - 50,
 			}
@@ -125,10 +125,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				}
 			});
 
-			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, bounds.width))
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
 			object.alpha = 0.5
 			gameStage.addChild(object)
-			particleList.push(new particle(object, 750))
+			particleList.push(new drawParticle(object, 750))
 
 			if (targets) {
 				for (var i = 0, n = targets.length; i < n; i++) {
@@ -160,8 +160,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				return false;
 			}
 			bounds = {
-				height: 100,
-				width: 100,
+				height: 150,
+				width: 150,
 				x: x - 50,
 				y: y - 50,
 			}
@@ -173,10 +173,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				}
 			});
 
-			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, bounds.width))
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
 			object.alpha = 0.5
 			gameStage.addChild(object)
-			particleList.push(new particle(object, 750))
+			particleList.push(new drawParticle(object, 750))
 
 			if (targets) {
 				for (var i = 0, n = targets.length; i < n; i++) {
@@ -207,8 +207,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				return false;
 			}
 			bounds = {
-				height: 100,
-				width: 100,
+				height: 150,
+				width: 150,
 				x: x - 50,
 				y: y - 50,
 			}
@@ -220,10 +220,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				}
 			});
 
-			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, bounds.width))
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
 			object.alpha = 0.5
 			gameStage.addChild(object)
-			particleList.push(new particle(object, 750))
+			particleList.push(new drawParticle(object, 750))
 
 			if (targets) {
 				for (var i = 0, n = targets.length; i < n; i++) {

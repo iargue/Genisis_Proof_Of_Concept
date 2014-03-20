@@ -15,7 +15,7 @@ function monster(monster, x, y, player) {
 	this.experience = monster.experience,
 	this.bounty = Math.ceil(this.cost / 20),
 	this.attackTime = new Date(),
-	this.particleSpeed = 500
+	this.particleSpeed = 350,
 	this.stunned = false,
 	this.rooted = false,
 	this.alive = true,
@@ -174,10 +174,7 @@ function monster(monster, x, y, player) {
 				angle = angle * (180 / Math.PI);
 				object.rotation = 90 + angle
 				gameStage.addChild(object)
-				particleList.push(new particle(object, 9999, this.particleSpeed, this.attackTarget, this, function(target) {
-					console.log('Dealing Damage')
-					target.takeDamage(this.parent.AD, "AD", this.parent)
-				}))
+				particleList.push(new bulletParticle(object, this.particleSpeed, this.attackTarget, this))
 				this.attackTime = new Date()
 			}
 		}

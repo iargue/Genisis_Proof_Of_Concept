@@ -13,7 +13,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.RN = this.baseStats.RN * 10,
 	this.CMS = this.baseStats.MS * 10,
 	this.AS = 1000 - (this.baseStats.AS * 10),
-	this.particleSpeed = 400,
+	this.particleSpeed = 450,
 	this.attackTime = new Date(),
 	this.spells = heroSpells,
 	this.alive = true,
@@ -55,7 +55,6 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stageObject.addChild(this.spellBar.spellThreeCooldown),
 	this.stageObject.addChild(this.spellBar.spellFourCooldown),
 	this.stageObject.addChild(this.spellBar.spellFiveCooldown),
-
 	this.effects = [],
 	this.hit = 11,
 	this.movewaypoint = {
@@ -315,19 +314,15 @@ function hero(hero, heroSpells, x, y, player) {
 		} else if (distance(this, this.attackTarget) > this.RN) { //Moved out of range, we should find a new target
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) { //Hes in range, and not dead, AND we can attack. Lets deal some damage
-			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 0, 4, 2))
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 0, 4, 2)) //Create bullet object
 			object.x = this.stageObject.x
-			object.y = this.stageObject.y
-			object.radius = 2
-			var angle = Math.atan2(this.attackTarget.stageObject.y - this.stageObject.y, this.attackTarget.stageObject.y - this.stageObject.x );
-        	angle = angle * (180/Math.PI);
-        	object.rotation = 90 + angle 
-        	gameStage.addChild(object)
-			particleList.push(new particle(object, 9999, this.particleSpeed, this.attackTarget, this,function(target) {
-				console.log('Dealing Damage')
-				target.takeDamage(this.parent.AD, "AD", this.parent)
-			}))
-			// this.attackTarget.takeDamage(this.AD, "AD", this) //Deal damage to that minion based on our AD
+			object.y = this.stageObject.y //I had to override the default, creating it calling this was screwing something up.
+			object.radius = 2 //bullet is 2px wide.
+			var angle = Math.atan2(this.attackTarget.stageObject.y - this.stageObject.y, this.attackTarget.stageObject.y - this.stageObject.x); //Rotation to target.
+			angle = angle * (180 / Math.PI);
+			object.rotation = 90 + angle //Rotate
+			gameStage.addChild(object) //add the object to the stage
+			particleList.push(new bulletParticle(object, this.particleSpeed, this.attackTarget, this)) //Create particle to track this particle
 			this.attackTime = new Date() //set our last attack time to just now.
 		}
 
