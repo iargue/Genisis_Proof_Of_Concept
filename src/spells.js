@@ -45,7 +45,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		},
 		this.levelUp = function(hero) { // Called when the player chooses to level a spell
-			//Todo: Limit spell leveling up based on what other spells are already leveled.
+			if ((hero.level/3) < this.level) {return}
 			this.level += 1 //Increase level of spell
 			this.damage = this.damagePerLevel[this.level], //Damage based on level
 			this.coolDown = this.coolDownPerLevel[this.level], //Cooldown based on level
@@ -91,6 +91,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
+			if ((hero.level/3) < this.level) {return}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -108,6 +109,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.currentCoolDown = 9999999,
 		this.effect = new effect(60, 3000, "slow"),
 		this.cast = function(x, y, attacker) {
+
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
 			}
@@ -140,6 +142,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
+			if ((hero.level/3) < this.level) {return}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -188,6 +191,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
+			if ((hero.level/3) < this.level) {return}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -234,11 +238,13 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
+			if ((hero.level/3) < this.level) {return}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
 			console.log(this)
 			hero.spellLevels -= 1
+
 		}
 	}
 }

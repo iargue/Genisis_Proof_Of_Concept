@@ -37,7 +37,6 @@ bulletParticle = function(object, particleSpeed, target, parent) { //This create
 			this.destination.takeDamage(this.parent.AD, "AD", this.parent)
 		} else
 			steps = (((event.delta) / 100 * this.particleSpeed) / 10)
-			console.log(steps)
 			moveTo(this, this.destination.stageObject.x, this.destination.stageObject.y, steps)
 	}
 }
