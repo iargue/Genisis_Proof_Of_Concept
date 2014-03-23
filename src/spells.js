@@ -45,7 +45,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		},
 		this.levelUp = function(hero) { // Called when the player chooses to level a spell
-			if ((hero.level/3) < this.level) {return}
+			if ((hero.level / 3) < this.level) {
+				return
+			}
 			this.level += 1 //Increase level of spell
 			this.damage = this.damagePerLevel[this.level], //Damage based on level
 			this.coolDown = this.coolDownPerLevel[this.level], //Cooldown based on level
@@ -91,7 +93,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
-			if ((hero.level/3) < this.level) {return}
+			if ((hero.level / 3) < this.level) {
+				return
+			}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -142,7 +146,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
-			if ((hero.level/3) < this.level) {return}
+			if ((hero.level / 3) < this.level) {
+				return
+			}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -191,7 +197,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
-			if ((hero.level/3) < this.level) {return}
+			if ((hero.level / 3) < this.level) {
+				return
+			}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],
@@ -238,7 +246,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 			}
 		}
 		this.levelUp = function(hero) {
-			if ((hero.level/3) < this.level) {return}
+			if ((hero.level / 3) < this.level) {
+				return
+			}
 			this.level += 1
 			this.damage = this.damagePerLevel[this.level],
 			this.coolDown = this.coolDownPerLevel[this.level],

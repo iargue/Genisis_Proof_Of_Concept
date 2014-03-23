@@ -11,14 +11,54 @@ function Clone(x) {
 		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
+function spawnHero(hero, side) {
+	spawnListOne = [{
+			x: 1850,
+			y: 500
+		}, {
+			x: 1850,
+			y: 400
+		}, {
+			x: 1850,
+			y: 600
+		}
+
+	]
+	if (side == 0) {
+		console.log(hero.player.team.playerList)
+		for (var player in hero.player.team.playerList) {
+			for (var spawn in spawnListOne) {
+				console.log(spawnListOne[spawn].x)
+				if (hero.player.team.playerList[player].hero.checkCollision(spawnListOne[spawn].x, spawnListOne[spawn].y, 60)) {
+					continue
+				} else {
+					hero.stageObject.x = spawnListOne[spawn].x
+					hero.stageObject.y = spawnListOne[spawn].y
+					hero.moveWayPoint.x = hero.stageObject.x
+					hero.moveWayPoint.y = hero.stageObject.y
+					hero.miniMapObject.x = Math.round(hero.stageObject.x / 10)
+					hero.miniMapObject.y = Math.round(hero.stageObject.y / 10)
+					return
+				}
+			}
+		}
+	}
+	console.log('nope')
+}
+
 function spawnUnit(monsterNumber) {
 	blackList = []
 	nodeOkay = false
 	x = 10
-	y = getRandom10(10, 560);
+	if (activePlayer.team.side == 0) {
+		y = getRandom10(20, 960);
+	} else {
+		y = getRandom10(1020, 1960);
+	}
+
 
 	for (var i = 0; i < unitList.length; i++) {
-		if (unitList[i].hitRadius(x, y, 11)) {
+		if (unitList[i].checkCollision(x, y, 16)) {
 			blackList.push(y)
 			if (blackList.length >= 54) {
 				x += 10
@@ -55,9 +95,15 @@ function moveTo(unit, targetX, targetY, steps) {
 		// Move towards the player
 		unit.stageObject.x += towardsX * steps;
 		unit.stageObject.y += towardsY * steps;
+
 	} else {
 		unit.stageObject.x = targetX
 		unit.stageObject.y = targetY
+	}
+	if (unit.miniMapObject) {
+		unit.miniMapObject.x = Math.round(unit.stageObject.x / 10)
+		unit.miniMapObject.y = Math.round(unit.stageObject.y / 10)
+
 	}
 
 }

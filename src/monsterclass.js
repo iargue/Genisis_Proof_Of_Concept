@@ -33,7 +33,9 @@ function monster(monster, x, y, player) {
 	this.stageObject.addChild(this.healthBar),
 	this.effects = [],
 	this.hit = 11,
-	this.radius = 9,
+	this.radius = 16,
+	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / 10)))
+	miniMapStage.addChild(this.miniMapObject)
 	this.stageObject.setBounds(x, y, 16, 16),
 
 
@@ -59,14 +61,13 @@ function monster(monster, x, y, player) {
 			} else {
 				this.moving = false;
 			}
-		} else if (this.stageObject.x < gameStage.canvas.width - 150) {
+		} else if (this.stageObject.x < this.player.team.teamPortal.x - 100) {
 			this.moving = true;
-			moveTo(this, gameStage.canvas.width - 150, gameStage.canvas.height / 2, this.steps)
+			moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps)
 		} else {
 			this.moving = true;
-			object =
-				moveTo(this, gameStage.canvas.width + 10, gameStage.canvas.height / 2, this.steps)
-			if (this.stageObject.x > gameStage.canvas.width) {
+			moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps)
+			if (this.stageObject.x = this.player.team.teamPortal.x) {
 				this.passedGate();
 			}
 		}
@@ -138,6 +139,7 @@ function monster(monster, x, y, player) {
 			attacker.gold += this.bounty
 			attacker.experience += this.experience
 			gameStage.removeChild(this.stageObject)
+			miniMapStage.removeChild(this.miniMapObject)
 		} else {
 			this.healthBar.graphics.clear().beginFill("red").drawRect(-18, -30, (this.CHP / this.HP) * 35, 8)
 		}

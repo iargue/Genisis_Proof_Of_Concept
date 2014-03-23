@@ -1,4 +1,3 @@
-
 var stage, timeCircle, tickCircle, unitList = [],
 	playerList = [],
 	keys = [],
@@ -7,7 +6,8 @@ var stage, timeCircle, tickCircle, unitList = [],
 	activePlayer,
 	activeTeam,
 	opponentTeam,
-	particleList = [];
+	particleList = [],
+	playerBorder;
 
 
 function spawnAll() {
@@ -34,22 +34,41 @@ function endGame(loser) {
 }
 
 function init() {
-	gameStage = new createjs.Stage("gameCanvas"),
+	playerStage = new createjs.Stage("gameCanvas");
+	gameStage = new createjs.Container();
+	gameStage.width = 2000;
+	gameStage.height = 2000;
+	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgreen").drawRect(0, 0, 2000, 2000));
+	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 1000, 2000, 5))
+	gameStage.addChild(border)
+	gameStage.addChild(playerSplit)
+	playerStage.addChild(gameStage);
+	miniMapStage = new createjs.Stage("miniMap");
+	var mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, 200, 200));
+	var miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 100, 200, 5))
+	console.log(playerSplit)
+	console.log(miniPlayerSplit)
+	miniMapStage.addChild(mapBorder)
+	miniMapStage.addChild(miniPlayerSplit)
+	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
+	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / 10), Math.round(playerStage.canvas.height / 10)))
+	miniMapStage.addChild(playerBorder)
+
+	playerStage.canvas.oncontextmenu = function(e) {
+		e.preventDefault();
+	};
 	gameOptions = {
 		hero: 'warrior',
 		spells: [new spellList['singleTargetSlow'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
-	newGame('solo', gameOptions)
-	ctx = gameStage.canvas.getContext('2d')
+	newGame('solo', gameOptions);
 	bounds = {
-		x: ctx.canvas.offsetLeft,
-		y: ctx.canvas.offsetTop,
-		w: ctx.canvas.width,
-		h: ctx.canvas.height
+		x: 0,
+		y: 0,
+		w: 2000,
+		h: 2000,
 	}
-	console.log(bounds)
 	collisionTree = QUAD.init(bounds);
-	console.log(collisionTree)
 
 	for (var i = 0; i < monsterList.length; i++) {
 		spawnUnit(i, 0);
@@ -59,9 +78,12 @@ function init() {
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown;
 
-	console.log(activePlayer.stage)
 
-	gameStage.addEventListener("stagemouseup", handleClick);
+	console.log(playerStage.canvas)
+
+
+	playerStage.addEventListener("stagemouseup", handleClick);
+	miniMapStage.addEventListener("stagemouseup", miniMapClick);
 
 }
 
@@ -72,17 +94,61 @@ function handleKeyDown(e) {
 	if (e.shiftKey) {
 		activePlayer.hero.levelSpell(e.keyCode)
 	} else {
-		activePlayer.hero.castSpell(e.keyCode)
+		switch (e.keyCode) {
+			case 40: //Down arrow key
+				if (gameStage.regY + playerStage.canvas.height < 2000) {
+					gameStage.regY += 10
+				}
+				break
+			case 39: // Right arrow key
+				if (gameStage.regX + playerStage.canvas.width < 2000) {
+					gameStage.regX += 10
+				}
+				break;
+			case 38: //Up arrow key
+				if (gameStage.regY > 0) {
+					gameStage.regY -= 10
+				}
+				break;
+			case 37: // Left arrow key
+				if (gameStage.regX > 0) {
+					gameStage.regX -= 10
+				}
+				break;
+			default:
+				activePlayer.hero.castSpell(e.keyCode)
+		}
 	}
 
+	playerBorder.x = Math.round(gameStage.regX / 10)
+	playerBorder.y = Math.round(gameStage.regY / 10)
+
+	console.log(gameStage.regX)
+
+}
+
+function miniMapClick(event) {
+
+	if (miniMapStage.mouseInBounds == true) {
+		point = {
+			x: (event.stageX * 10) - (playerStage.canvas.width / 2),
+			y: (event.stageY * 10) - (playerStage.canvas.height / 2),
+		}
+		console.log(event.stageX * 10)
+		console.log(playerStage.canvas.width / 2)
+		console.log(point)
+		gameStage.regX = point.x
+		gameStage.regY = point.y
+
+		playerBorder.x = Math.round(gameStage.regX / 10)
+		playerBorder.y = Math.round(gameStage.regY / 10)
+	}
 }
 
 
 function handleClick(event) {
-	if (event.currentTarget.canvas == gameStage.canvas) {
-		if (gameStage.mouseInBounds == true) {
-			activePlayer.hero.updateWaypoint(event);
-		}
+	if (playerStage.mouseInBounds == true && event.nativeEvent.which == 3) {
+		activePlayer.hero.updateWaypoint(event);
 	}
 }
 
@@ -116,5 +182,6 @@ function gameLoop(event) {
 		return x.active == true;
 	})
 	updateCollisionTree(event)
-	gameStage.update(event); //Finally update the stage with all of our changes.
+	playerStage.update(event); //Finally update the stage with all of our changes.
+	miniMapStage.update(event)
 }

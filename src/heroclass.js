@@ -57,7 +57,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stageObject.addChild(this.spellBar.spellFiveCooldown),
 	this.effects = [],
 	this.hit = 11,
-	this.movewaypoint = {
+	this.moveWayPoint = {
 		x: x,
 		y: y
 	}
@@ -69,6 +69,10 @@ function hero(hero, heroSpells, x, y, player) {
 	this.experienceToLevel = 50 + (this.level * 50),
 	this.spellLevels = 1,
 	this.radius = 25,
+	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('green').drawCircle(0, 0, Math.round(this.radius / 10)))
+	this.miniMapObject.x = Math.round(this.stageObject.x / 10)
+	this.miniMapObject.y = Math.round(this.stageObject.y / 10)
+	miniMapStage.addChild(this.miniMapObject)
 
 
 	this.update = function(event) {
@@ -96,9 +100,9 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.alive == false) return; //We can possibly remove this
 		steps = (((event.delta) / 100 * this.CMS) / 10)
 
-		if (this.movewaypoint.x != this.stageObject.x || this.movewaypoint.y != this.stageObject.y) {
+		if (this.moveWayPoint.x != this.stageObject.x || this.moveWayPoint.y != this.stageObject.y) {
 			this.moving = true;
-			moveTo(this, this.movewaypoint.x, this.movewaypoint.y, steps)
+			moveTo(this, this.moveWayPoint.x, this.moveWayPoint.y, steps)
 		} else {
 			this.moving = false
 		}
@@ -171,22 +175,23 @@ function hero(hero, heroSpells, x, y, player) {
 		for (var effect in this.effects) {
 			if (effect.effectType == "stun" || "root") return
 		}
-		if (gameStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
+		if (playerStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
+			var point = gameStage.globalToLocal(playerStage.mouseX, playerStage.mouseY);
 			switch (keyCode) {
 				case 49: //Key 1
-					this.spells[0].cast(gameStage.mouseX, gameStage.mouseY, this) //Cast spell 1 with current mouse x and y
+					this.spells[0].cast(point.x, point.y, this) //Cast spell 1 with current mouse x and y
 					return false;
 				case 50: //Key 2
-					this.spells[1].cast(gameStage.mouseX, gameStage.mouseY, this) //Cast Spell 2 with current mouse x and y
+					this.spells[1].cast(point.x, point.y, this) //Cast Spell 2 with current mouse x and y
 					return false;
 				case 51:
-					this.spells[2].cast(gameStage.mouseX, gameStage.mouseY, this)
+					this.spells[2].cast(point.x, point.y, this)
 					return false;
 				case 52:
-					this.spells[3].cast(gameStage.mouseX, gameStage.mouseY, this)
+					this.spells[3].cast(point.x, point.y, this)
 					return false;
 				case 53:
-					this.spells[4].cast(gameStage.mouseX, gameStage.mouseY, this)
+					this.spells[4].cast(point.x, point.y, this)
 					return false;
 			}
 		}
@@ -235,8 +240,14 @@ function hero(hero, heroSpells, x, y, player) {
 	},
 
 	this.updateWaypoint = function(event) { //Simply updates our hero's Waypoint based on clicks
-		this.movewaypoint.x = event.stageX;
-		this.movewaypoint.y = event.stageY;
+		var point = gameStage.globalToLocal(event.stageX, event.stageY);
+		if (this.player.team.side == 0 && point.y > 1000 - this.radius) {
+			return;
+		} else if (this.player.team.side == 1 && point.y < 1000 - this.radius) {
+			return;
+		}
+		this.moveWayPoint.x = point.x;
+		this.moveWayPoint.y = point.y;
 	}
 
 	this.levelUp = function() { //We have enough experience, we should level up!
@@ -270,6 +281,7 @@ function hero(hero, heroSpells, x, y, player) {
 			this.alive = false
 			this.deadTime = new Date()
 			gameStage.removeChild(this.stageObject)
+			miniMapStage.removeChild(this.miniMapObject)
 		} else {
 			this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 		}
@@ -282,12 +294,13 @@ function hero(hero, heroSpells, x, y, player) {
 		this.CMS = this.MS
 		this.CHP = this.HP
 		this.CMP = this.MP
-		this.stageObject.x = gameStage.canvas.width - 250
-		this.stageObject.y = gameStage.canvas.height / 2
+		this.stageObject.x = 800
+		this.stageObject.y = 500
 		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, 60, 10);
-		this.movewaypoint.x = this.stageObject.x,
-		this.movewaypoint.y = this.stageObject.y,
+		console.log(hero.player)
+		spawnHero(hero, hero.player.team.side)
 		gameStage.addChild(this.stageObject)
+		miniMapStage.addChild(this.miniMapObject)
 	}
 
 	this.checkCollision = function(x, y, radius) {

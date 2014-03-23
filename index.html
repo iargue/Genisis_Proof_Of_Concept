@@ -15,10 +15,13 @@
 	<script src="./vendor/jquery-1.11.0.min.js"> </script>
 	<script src="./src/base.js"> </script>
 </head>
-<body onLoad="init();">
+<body onLoad="init();" display="block">
 	<input type="button" value="spawn" id="pauseBtn" onclick="spawnAll();"><br>
-	<canvas id="gameCanvas" width="1600" height="800">
+	<canvas id="gameCanvas" width="1080" height="500">
 		alternate content
+	</canvas>
+	<canvas id="miniMap" width="200" height="200">
+		alternate bullshit
 	</canvas>
 </body>
 </html>
