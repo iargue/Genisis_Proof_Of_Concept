@@ -46,8 +46,6 @@ function init() {
 	miniMapStage = new createjs.Stage("miniMap");
 	var mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, 200, 200));
 	var miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 100, 200, 5))
-	console.log(playerSplit)
-	console.log(miniPlayerSplit)
 	miniMapStage.addChild(mapBorder)
 	miniMapStage.addChild(miniPlayerSplit)
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
@@ -76,12 +74,7 @@ function init() {
 
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
-	document.onkeydown = handleKeyDown;
-
-
-	console.log(playerStage.canvas)
-
-
+	document.onkeydown = handleKeyDown
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("stagemouseup", miniMapClick);
 
@@ -122,21 +115,28 @@ function handleKeyDown(e) {
 
 	playerBorder.x = Math.round(gameStage.regX / 10)
 	playerBorder.y = Math.round(gameStage.regY / 10)
-
-	console.log(gameStage.regX)
-
+	console.log(e)
 }
 
 function miniMapClick(event) {
-
 	if (miniMapStage.mouseInBounds == true) {
 		point = {
 			x: (event.stageX * 10) - (playerStage.canvas.width / 2),
 			y: (event.stageY * 10) - (playerStage.canvas.height / 2),
 		}
-		console.log(event.stageX * 10)
-		console.log(playerStage.canvas.width / 2)
-		console.log(point)
+		console.log(point.x)
+		console.log(2000 - playerStage.canvas.width)
+		if (point.x < 0) {
+			point.x = 0
+		} else if (point.x > (2000 - playerStage.canvas.width)) {
+			point.x = (2000 - playerStage.canvas.width)
+		}
+		if (point.y <0) {
+			point.y = 0
+		} else if (point.y > (2000-playerStage.height/2)) {
+			point.y = (2000-playerStage.height/2)
+		}
+
 		gameStage.regX = point.x
 		gameStage.regY = point.y
 
