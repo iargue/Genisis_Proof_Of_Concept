@@ -29,15 +29,15 @@ function hero(hero, heroSpells, x, y, player) {
 	this.healthBar.graphics.beginFill("green").drawRect(-30, -60, 60, 10);
 	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
 	this.spellBar = {
-		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-30, -50, 11, 15)),
+		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-30, -50, 11, 15)),
 		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 10, 14)),
-		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-18, -50, 11, 15)),
+		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-18, -50, 11, 15)),
 		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 10, 14)),
-		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(-6, -50, 11, 15)),
+		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-6, -50, 11, 15)),
 		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 10, 14)),
-		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(6, -50, 11, 15)),
+		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(6, -50, 11, 15)),
 		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 10, 14)),
-		spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(18, -50, 11, 15)),
+		spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(18, -50, 11, 15)),
 		spellFiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 10, 14)),
 	},
 	this.player = player,
@@ -118,6 +118,7 @@ function hero(hero, heroSpells, x, y, player) {
 					if (percentage > 1) {
 						percentage = 1
 					}
+					console.log(percentage)
 					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 10, 14)
 					continue
 				case "1": //Key 2
@@ -125,7 +126,7 @@ function hero(hero, heroSpells, x, y, player) {
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-18, -50, percentage * 10, 14) //Cast Spell 2 with current mouse x and y
+					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-18, -50, percentage * 10, 14)
 					continue
 				case "2":
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
@@ -202,19 +203,19 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.spellLevels > 0) { //Do they even have the ability to level up a spell?
 			switch (keyCode) {
 				case 49: //Key 1
-					this.spells[0].levelUp(this) //Spell 1. Level it up, passing hero object
+					levelSpell(this, 0) //Spell 1. Level it up, passing hero object
 					return false;
 				case 50:
-					this.spells[1].levelUp(this)
+					levelSpell(this, 1)
 					return false;
 				case 51:
-					this.spells[2].levelUp(this)
+					levelSpell(this, 2)
 					return false;
 				case 52:
-					this.spells[3].levelUp(this)
+					levelSpell(this, 3)
 					return false;
 				case 53:
-					this.spells[4].levelUp(this)
+					levelSpell(this, 4)
 					return false;
 			}
 		}

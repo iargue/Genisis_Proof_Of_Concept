@@ -43,15 +43,6 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				target.takeDamage(this.damage, 'MD', attacker) //Deal damage
 				this.currentCoolDown = new Date() // Set spell on CD
 			}
-		},
-		this.levelUp = function(hero) { // Called when the player chooses to level a spell
-			if ((hero.level / 3) < this.level) {
-				return
-			}
-			this.level += 1 //Increase level of spell
-			this.damage = this.damagePerLevel[this.level], //Damage based on level
-			this.coolDown = this.coolDownPerLevel[this.level], //Cooldown based on level
-			hero.spellLevels -= 1 //Hero has 1 less spell he can level up
 		}
 	},
 	singleTargetStun: function() {
@@ -92,18 +83,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date()
 			}
 		}
-		this.levelUp = function(hero) {
-			if ((hero.level / 3) < this.level) {
-				return
-			}
-			this.level += 1
-			this.damage = this.damagePerLevel[this.level],
-			this.coolDown = this.coolDownPerLevel[this.level],
-			console.log(this)
-			hero.spellLevels -= 1
-		}
-
 	},
+
 	aoeSlow: function() {
 		this.level = 0,
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
@@ -145,16 +126,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date()
 			}
 		}
-		this.levelUp = function(hero) {
-			if ((hero.level / 3) < this.level) {
-				return
-			}
-			this.level += 1
-			this.damage = this.damagePerLevel[this.level],
-			this.coolDown = this.coolDownPerLevel[this.level],
-			console.log(this)
-			hero.spellLevels -= 1
-		}
+
 	},
 	aoeStun: function() {
 		this.level = 0,
@@ -196,16 +168,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date()
 			}
 		}
-		this.levelUp = function(hero) {
-			if ((hero.level / 3) < this.level) {
-				return
-			}
-			this.level += 1
-			this.damage = this.damagePerLevel[this.level],
-			this.coolDown = this.coolDownPerLevel[this.level],
-			console.log(this)
-			hero.spellLevels -= 1
-		}
+
 	},
 	aoeNuke: function() {
 		this.level = 0,
@@ -245,16 +208,6 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date()
 			}
 		}
-		this.levelUp = function(hero) {
-			if ((hero.level / 3) < this.level) {
-				return
-			}
-			this.level += 1
-			this.damage = this.damagePerLevel[this.level],
-			this.coolDown = this.coolDownPerLevel[this.level],
-			console.log(this)
-			hero.spellLevels -= 1
 
-		}
 	}
 }

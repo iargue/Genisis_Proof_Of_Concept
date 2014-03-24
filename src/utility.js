@@ -11,6 +11,16 @@ function Clone(x) {
 		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
+function levelSpell(hero, spellNumber) {
+	if ((hero.level / 3) < hero.spells[spellNumber].level) {
+		return
+	}
+	hero.spells[spellNumber].level += 1 //Increase level of spell
+	hero.spells[spellNumber].damage = hero.spells[spellNumber].damagePerLevel[hero.spells[spellNumber].level], //Damage based on level
+	hero.spells[spellNumber].coolDown = hero.spells[spellNumber].coolDownPerLevel[hero.spells[spellNumber].level], //Cooldown based on level
+	hero.spellLevels -= 1 //Hero has 1 less spell he can level up
+}
+
 function spawnHero(hero, side) {
 	spawnListOne = [{
 			x: 1850,

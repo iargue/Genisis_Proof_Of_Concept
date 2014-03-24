@@ -115,7 +115,6 @@ function handleKeyDown(e) {
 
 	playerBorder.x = Math.round(gameStage.regX / 10)
 	playerBorder.y = Math.round(gameStage.regY / 10)
-	console.log(e)
 }
 
 function miniMapClick(event) {
@@ -124,17 +123,15 @@ function miniMapClick(event) {
 			x: (event.stageX * 10) - (playerStage.canvas.width / 2),
 			y: (event.stageY * 10) - (playerStage.canvas.height / 2),
 		}
-		console.log(point.x)
-		console.log(2000 - playerStage.canvas.width)
 		if (point.x < 0) {
 			point.x = 0
 		} else if (point.x > (2000 - playerStage.canvas.width)) {
 			point.x = (2000 - playerStage.canvas.width)
 		}
-		if (point.y <0) {
+		if (point.y < 0) {
 			point.y = 0
-		} else if (point.y > (2000-playerStage.height/2)) {
-			point.y = (2000-playerStage.height/2)
+		} else if (point.y > (2000 - playerStage.height / 2)) {
+			point.y = (2000 - playerStage.height / 2)
 		}
 
 		gameStage.regX = point.x
