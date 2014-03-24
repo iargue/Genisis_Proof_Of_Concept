@@ -125,6 +125,7 @@ function monster(monster, x, y, player) {
 		this.alive = false
 		this.player.team.removePoints(1)
 		gameStage.removeChild(this.stageObject)
+		miniMapStage.removeChild(this.miniMapObject)
 	}
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {

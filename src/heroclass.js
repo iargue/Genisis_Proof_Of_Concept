@@ -294,11 +294,11 @@ function hero(hero, heroSpells, x, y, player) {
 		this.CMS = this.MS
 		this.CHP = this.HP
 		this.CMP = this.MP
-		this.stageObject.x = 800
-		this.stageObject.y = 500
 		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, 60, 10);
-		console.log(hero.player)
-		spawnHero(hero, hero.player.team.side)
+		console.log(this.player)
+		spawnHero(this, this.player.team.side)
+		this.moveWayPoint.x = this.stageObject.x
+		this.moveWayPoint.y = this.stageObject.y
 		gameStage.addChild(this.stageObject)
 		miniMapStage.addChild(this.miniMapObject)
 	}
