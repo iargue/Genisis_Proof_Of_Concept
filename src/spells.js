@@ -12,12 +12,16 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
 		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
 		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
 		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
-		this.effect = new effect(60, 7000, "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) { //Called whenever the player presses q to cast
-			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) { //Either spell isn't leveled, or its on CD.
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0 || distanceTo(x, y, attacker.stageObject.x, attacker.stageObject.y) > this.range) { //Either spell isn't leveled, or its on CD.
 				return false; //Todo: Add display text
 			}
 			bounds = { //Creates the size of the spell.
@@ -46,13 +50,17 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	singleTargetStun: function() {
-		this.level = 0,
-		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
-		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
-		this.damage = this.damagePerLevel[this.level],
-		this.coolDown = this.coolDownPerLevel[this.level],
-		this.currentCoolDown = 9999999,
-		this.effect = new effect(1, 3000, "stun"),
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "stun"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
@@ -86,13 +94,17 @@ var spellList = { //Constains a list of every spell in the game, Named.
 	},
 
 	aoeSlow: function() {
-		this.level = 0,
-		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
-		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
-		this.damage = this.damagePerLevel[this.level],
-		this.coolDown = this.coolDownPerLevel[this.level],
-		this.currentCoolDown = 9999999,
-		this.effect = new effect(60, 3000, "slow"),
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
@@ -129,13 +141,17 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
 	},
 	aoeStun: function() {
-		this.level = 0,
-		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600],
-		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900],
-		this.damage = this.damagePerLevel[this.level],
-		this.coolDown = this.coolDownPerLevel[this.level],
-		this.currentCoolDown = 9999999,
-		this.effect = new effect(1, 3000, "stun"),
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;
@@ -171,12 +187,17 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
 	},
 	aoeNuke: function() {
-		this.level = 0,
-		this.damagePerLevel = [0, 150, 400, 700, 800, 1000, 1250, 1400, 1650, 1900, 2199],
-		this.coolDownPerLevel = [0, 10000, 9500, 8000, 7500, 7000, 6500, 5000, 4500, 3000, 3600],
-		this.damage = this.damagePerLevel[this.level],
-		this.coolDown = this.coolDownPerLevel[this.level],
-		this.currentCoolDown = 9999999,
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
 				return false;

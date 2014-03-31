@@ -15,9 +15,16 @@ function levelSpell(hero, spellNumber) {
 	if ((hero.level / 3) < hero.spells[spellNumber].level) {
 		return
 	}
+
 	hero.spells[spellNumber].level += 1 //Increase level of spell
-	hero.spells[spellNumber].damage = hero.spells[spellNumber].damagePerLevel[hero.spells[spellNumber].level], //Damage based on level
-	hero.spells[spellNumber].coolDown = hero.spells[spellNumber].coolDownPerLevel[hero.spells[spellNumber].level], //Cooldown based on level
+	hero.spells[spellNumber].range = hero.spells[spellNumber].rangePerLevel[hero.spells[spellNumber].level]
+	hero.spells[spellNumber].damage = hero.spells[spellNumber].damagePerLevel[hero.spells[spellNumber].level] //Current damage based on level of spell
+	hero.spells[spellNumber].coolDown = hero.spells[spellNumber].coolDownPerLevel[hero.spells[spellNumber].level] //Current cooldown based on level of spell
+	hero.spells[spellNumber].damage = hero.spells[spellNumber].damagePerLevel[hero.spells[spellNumber].level] //Damage based on level
+	hero.spells[spellNumber].coolDown = hero.spells[spellNumber].coolDownPerLevel[hero.spells[spellNumber].level] //Cooldown based on level
+	if (hero.spells[spellNumber].effect) {
+		hero.spells[spellNumber].effect = new effect(hero.spells[spellNumber].effectAmountPerLevel[hero.spells[spellNumber].level], hero.spells[spellNumber].effectDurationPerLevel[hero.spells[spellNumber].level], "slow")
+	}
 	hero.spellLevels -= 1 //Hero has 1 less spell he can level up
 }
 
@@ -121,5 +128,11 @@ function moveTo(unit, targetX, targetY, steps) {
 function distance(firstUnit, secondUnit) {
 	var xDist = Math.abs(firstUnit.stageObject.x - secondUnit.stageObject.x)
 	var yDist = Math.abs(firstUnit.stageObject.y - secondUnit.stageObject.y)
+	return Math.sqrt(xDist * xDist + yDist * yDist);
+}
+
+function distanceTo(x, y, toX, toY) {
+	var xDist = Math.abs(x - toX)
+	var yDist = Math.abs(y - toY)
 	return Math.sqrt(xDist * xDist + yDist * yDist);
 }

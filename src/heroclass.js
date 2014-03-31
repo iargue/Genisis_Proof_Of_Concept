@@ -118,7 +118,6 @@ function hero(hero, heroSpells, x, y, player) {
 					if (percentage > 1) {
 						percentage = 1
 					}
-					console.log(percentage)
 					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 10, 14)
 					continue
 				case "1": //Key 2
