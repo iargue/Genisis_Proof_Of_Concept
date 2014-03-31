@@ -3,6 +3,21 @@
 // must also have this.active called in them to track if they are still active.
 
 
+textParticle = function(object, expireTime) { //This is used to draw temporary text on the Player Stage
+	this.stageObject = object, //The object created before hand is stored here to be removed.
+	this.appliedTime = new Date() //When this particle is created, we count down the time to expire.
+	this.expires = expireTime //How many MS it takes for this effect to expire.
+	this.active = true //Active or not. Duh.
+
+
+	this.update = function(event) { //This is called ever time.
+		if (new Date() - this.appliedTime > this.expires) { //More MS have elapsed then our expired time.
+			this.active = false //No longer active.
+			playerStage.removeChild(this.stageObject) //Object is removed from playerStage too
+		}
+	}
+}
+
 drawParticle = function(object, expireTime) { //This is used to draw temporary things on a map (Ping/spell aoe/attack AOE)
 	this.stageObject = object, //The object created before hand is stored here to be removed.
 	this.appliedTime = new Date() //When this particle is created, we count down the time to expire.

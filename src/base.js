@@ -8,6 +8,7 @@ var stage, timeCircle, tickCircle, unitList = [],
 	opponentTeam,
 	particleList = [],
 	playerBorder;
+	textList = [],
 
 
 function spawnAll() {

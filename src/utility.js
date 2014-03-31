@@ -11,6 +11,29 @@ function Clone(x) {
 		this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
+function displayText(text, color) {
+	var y = playerStage.canvas.height - 50
+	var blackList = []
+	for (var particle in particleList) {
+		blackList.push(particleList[particle].stageObject.y)
+	}
+	console.log(blackList)
+	while (true) { //Be cafefull with this one luke
+		if (blackList.indexOf(y) != -1) {
+			y -= 20
+		} else {
+			console.log(y)
+			var textObject = new createjs.Text(text, "12px Calibri", color);
+			textObject.x = playerStage.canvas.width/2
+			textObject.y = y
+			playerStage.addChild(textObject)
+			particleList.push(new textParticle(textObject, 2000))
+			break;
+		}
+		if (y < playerStage.canvas.height/2 +  playerStage.canvas.height/4 ) { break}
+	}
+}
+
 function levelSpell(hero, spellNumber) {
 	if ((hero.level / 3) < hero.spells[spellNumber].level) {
 		return

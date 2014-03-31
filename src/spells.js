@@ -22,7 +22,9 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) { //Called whenever the player presses q to cast
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0 || distanceTo(x, y, attacker.stageObject.x, attacker.stageObject.y) > this.range) { //Either spell isn't leveled, or its on CD.
+				displayText('Spell not ready', 'red')
 				return false; //Todo: Add display text
+
 			}
 			bounds = { //Creates the size of the spell.
 				height: 9,
