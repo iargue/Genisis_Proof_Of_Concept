@@ -2,6 +2,46 @@
 // but every particle effect must have a stageOjbect, and every particle must have na update function to be called. All Particle 
 // must also have this.active called in them to track if they are still active.
 
+skillShotParticle = function(object, distance, speed, attacker, spell) {
+	this.stageObject = object, //The object created before hand is stored here to be removed.
+
+	this.destination = {
+		x: Math.cos(this.stageObject.angle) * distance + this.stageObject.x,
+		y: Math.sin(this.stageObject.angle) * distance + this.stageObject.y
+	}, //When this particle is created, we count down the time to expire.
+	this.particleSpeed = speed,
+	this.attacker = attacker
+	this.spell = spell
+	this.active = true //Active or not. Duh.
+
+	this.update = function(event) {
+		if (this.attacker.alive == false || this.alive == false) {
+			this.active = false
+			return
+		}
+		bounds = {
+			height: this.stageObject.height,
+			width: this.stageObject.width,
+			x: this.stageObject.x,
+			y: this.stageObject.y,
+		}
+		collisionTree.retrieve(bounds, function(collidee) {
+			if (collidee.checkCollision(this.stageObject.x, this.stageObject.y, this.stageObject.radius)) {
+				this.alive = false
+				this.spell.onCollision(this.stageObject, collidee, this.attacker)
+				return
+			}
+		}, this);
+		if (this.stageObject.x == this.destination.x && this.stageObject.y == this.destination.y) {
+			this.active = false
+			this.spell.onRange(object, attacker)
+		} else {
+			steps = (((event.delta) / 100 * this.particleSpeed) / 10)
+			moveTo(this, this.destination.x, this.destination.y, steps)
+		}
+	}
+
+}
 
 textParticle = function(object, expireTime) { //This is used to draw temporary text on the Player Stage
 	this.stageObject = object, //The object created before hand is stored here to be removed.
@@ -52,6 +92,6 @@ bulletParticle = function(object, particleSpeed, target, parent) { //This create
 			this.destination.takeDamage(this.parent.AD, "AD", this.parent)
 		} else
 			steps = (((event.delta) / 100 * this.particleSpeed) / 10)
-			moveTo(this, this.destination.stageObject.x, this.destination.stageObject.y, steps)
+		moveTo(this, this.destination.stageObject.x, this.destination.stageObject.y, steps)
 	}
 }

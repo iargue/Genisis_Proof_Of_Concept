@@ -33,11 +33,11 @@ var QUAD = {}; // global var for the quadtree
 QUAD.init = function(args) {
 
     var node;
-    var TOP_LEFT     = 0;
-    var TOP_RIGHT    = 1;
-    var BOTTOM_LEFT  = 2;
+    var TOP_LEFT = 0;
+    var TOP_RIGHT = 1;
+    var BOTTOM_LEFT = 2;
     var BOTTOM_RIGHT = 3;
-    var PARENT       = 4;
+    var PARENT = 4;
 
     // assign default values
     args.maxChildren = args.maxChildren || 2;
@@ -47,7 +47,7 @@ QUAD.init = function(args) {
      * Node creator. You should never create a node manually. the algorithm takes
      * care of that for you.
      */
-    node = function (x, y, w, h, depth, maxChildren, maxDepth) {
+    node = function(x, y, w, h, depth, maxChildren, maxDepth) {
 
         var items = [], // holds all items
             nodes = []; // holds all child nodes
@@ -55,24 +55,28 @@ QUAD.init = function(args) {
         // returns a fresh node object
         return {
 
-            x : x, // top left point
-            y : y, // top right point
-            w : w, // width
-            h : h, // height
-            depth : depth, // depth level of the node
+            x: x, // top left point
+            y: y, // top right point
+            w: w, // width
+            h: h, // height
+            depth: depth, // depth level of the node
 
             /**
              * iterates all items that match the selector and invokes the supplied callback on them.
              */
-            retrieve : function (item, callback) {
+            retrieve: function(item, callback, instance) {
                 for (var i = 0; i < items.length; ++i) {
-                    callback(items[i]);
+                    if (instance != null) {
+                        callback.call(instance, items[i]);
+                    } else {
+                        callback(items[i])
+                    }
                 }
                 // check if node has subnodes
                 if (nodes.length) {
                     // call retrieve on all matching subnodes
                     this.findOverlappingNodes(item, function(dir) {
-                        nodes[dir].retrieve(item, callback);
+                        nodes[dir].retrieve(item, callback, instance);
                     });
                 }
             },
@@ -88,7 +92,7 @@ QUAD.init = function(args) {
              * the node gets divided and all items inside the "children"-array get
              * pushed down to the new subnodes.
              */
-            insert : function (item) {
+            insert: function(item) {
 
                 var i;
 
@@ -114,17 +118,17 @@ QUAD.init = function(args) {
             /**
              * Find a node the item should be inserted in.
              */
-            findInsertNode : function (item) {
+            findInsertNode: function(item) {
                 // left
                 if (item.stageObject._bounds.x + item.stageObject._bounds.width < x + (w / 2)) {
-                    if (item.stageObject._bounds.y+ item.stageObject._bounds.height < y + (h / 2)) return TOP_LEFT;
-                    if (item.stageObject._bounds.y>= y + (h / 2)) return BOTTOM_LEFT;
+                    if (item.stageObject._bounds.y + item.stageObject._bounds.height < y + (h / 2)) return TOP_LEFT;
+                    if (item.stageObject._bounds.y >= y + (h / 2)) return BOTTOM_LEFT;
                     return PARENT;
                 }
 
                 // right
                 if (item.stageObject._bounds.x >= x + (w / 2)) {
-                    if (item.stageObject._bounds.y+ item.stageObject._bounds.height < y + (h / 2)) return TOP_RIGHT;
+                    if (item.stageObject._bounds.y + item.stageObject._bounds.height < y + (h / 2)) return TOP_RIGHT;
                     if (item.stageObject._bounds.y >= y + (h / 2)) return BOTTOM_RIGHT;
                     return PARENT;
                 }
@@ -136,16 +140,16 @@ QUAD.init = function(args) {
              * Finds the regions the item overlaps with. See constants defined
              * above. The callback is called for every region the item overlaps.
              */
-            findOverlappingNodes : function (item, callback) {
+            findOverlappingNodes: function(item, callback) {
                 // left
                 if (item.x < x + (w / 2)) {
-                    if (item.y< y + (h / 2)) callback(TOP_LEFT);
-                    if (item.y+ item.height >= y + h/2) callback(BOTTOM_LEFT);
+                    if (item.y < y + (h / 2)) callback(TOP_LEFT);
+                    if (item.y + item.height >= y + h / 2) callback(BOTTOM_LEFT);
                 }
                 // right
                 if (item.x + item.width >= x + (w / 2)) {
-                    if (item.y< y + (h / 2)) callback(TOP_RIGHT);
-                    if (item.y+ item.height >= y + h/2) callback(BOTTOM_RIGHT);
+                    if (item.y < y + (h / 2)) callback(TOP_RIGHT);
+                    if (item.y + item.height >= y + h / 2) callback(BOTTOM_RIGHT);
                 }
             },
 
@@ -154,11 +158,11 @@ QUAD.init = function(args) {
              * to the nodes array of the current node. Then reinserts all
              * children.
              */
-            divide : function () {
+            divide: function() {
 
                 var width, height, i, oldChildren;
                 var childrenDepth = this.depth + 1;
-                
+
                 // set dimensions of the new nodes
                 width = (w / 2);
                 height = (h / 2);
@@ -181,7 +185,7 @@ QUAD.init = function(args) {
             /**
              * Clears the node and all its subnodes.
              */
-            clear : function () {
+            clear: function() {
                 for (var i = 0; i < nodes.length; i++) nodes[i].clear();
                 items.length = 0;
                 nodes.length = 0;
@@ -194,7 +198,7 @@ QUAD.init = function(args) {
              * with the nodes, i.e. accessing the bounds of the nodes to draw them
              * on a canvas for debugging etc...
              */
-            getNodes : function () {
+            getNodes: function() {
                 return nodes.length ? nodes : false;
             }
         };
@@ -202,11 +206,11 @@ QUAD.init = function(args) {
 
     return {
 
-        root : (function () {
+        root: (function() {
             return node(args.x, args.y, args.w, args.h, 0, args.maxChildren, args.maxDepth);
         }()),
 
-        insert : function (item) {
+        insert: function(item) {
 
             var len, i;
 
@@ -222,11 +226,11 @@ QUAD.init = function(args) {
             }
         },
 
-        retrieve : function (selector, callback) {
-            return this.root.retrieve(selector, callback);
+        retrieve: function(selector, callback, instance) {
+            return this.root.retrieve(selector, callback, instance);
         },
 
-        clear : function () {
+        clear: function() {
             this.root.clear();
         }
     };
