@@ -17,12 +17,10 @@ function displayText(text, color) {
 	for (var particle in particleList) {
 		blackList.push(particleList[particle].stageObject.y)
 	}
-	console.log(blackList)
 	while (true) { //Be cafefull with this one luke
 		if (blackList.indexOf(y) != -1) {
 			y -= 20
 		} else {
-			console.log(y)
 			var textObject = new createjs.Text(text, "12px Calibri", color);
 			textObject.x = playerStage.canvas.width/2
 			textObject.y = y

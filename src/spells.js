@@ -65,7 +65,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "stun"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
-				return false;
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
 			}
 			bounds = {
 				height: 9,
@@ -110,7 +111,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.cast = function(x, y, attacker) {
 
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
-				return false;
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
 			}
 			bounds = {
 				height: 150,
@@ -156,7 +158,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
-				return false;
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
 			}
 			bounds = {
 				height: 150,
@@ -202,7 +205,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
-				return false;
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
 			}
 			bounds = {
 				height: 150,
@@ -246,7 +250,8 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
 		this.cast = function(x, y, attacker) {
 			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
-				return false;
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
 			}
 
 			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill("black").drawRect(0, 0, 10, 20))
@@ -264,11 +269,10 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
 			object.rotation = 90 + angle //Rotate
 			gameStage.addChild(object)
-			particleList.push(new skillShotParticle(object, 355, 150, attacker, this))
+			particleList.push(new skillShotParticle(object, 475, 150, attacker, this))
+			this.currentCoolDown = new Date()
 		}
 		this.onCollision = function(object, collidee, attacker) { //Called when particle collides with a minion
-			console.log(this)
-			// console.log(this.damage)
 			collidee.takeDamage(this.damage, 'MD', attacker) //Deal damage to target
 			gameStage.removeChild(object) //Remove the "spear"
 		}
