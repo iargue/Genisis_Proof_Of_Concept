@@ -22,13 +22,15 @@ function displayText(text, color) {
 			y -= 20
 		} else {
 			var textObject = new createjs.Text(text, "12px Calibri", color);
-			textObject.x = playerStage.canvas.width/2
+			textObject.x = playerStage.canvas.width / 2
 			textObject.y = y
 			playerStage.addChild(textObject)
 			particleList.push(new textParticle(textObject, 2000))
 			break;
 		}
-		if (y < playerStage.canvas.height/2 +  playerStage.canvas.height/4 ) { break}
+		if (y < playerStage.canvas.height / 2 + playerStage.canvas.height / 4) {
+			break
+		}
 	}
 }
 
@@ -88,11 +90,7 @@ function spawnUnit(monsterNumber) {
 	blackList = []
 	nodeOkay = false
 	x = 10
-	if (activePlayer.team.side == 0) {
-		y = getRandom10(20, 960);
-	} else {
-		y = getRandom10(1020, 1960);
-	}
+	y = getRandom10(20, 960);
 
 
 	for (var i = 0; i < unitList.length; i++) {
@@ -124,17 +122,54 @@ function moveTo(unit, targetX, targetY, steps) {
 	towardsX = targetX - unit.stageObject.x;
 	towardsY = targetY - unit.stageObject.y;
 
+
+
 	// Normalize
+
 	toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
 	if (toPlayerLength > steps) {
 		towardsX = towardsX / toPlayerLength;
 		towardsY = towardsY / toPlayerLength;
 
 		// Move towards the player
+		if (unit.animationObject) {
+			var angle = Math.atan2(towardsY, towardsX);
+			angle = angle * (180 / Math.PI);
+			if (angle < 0) {
+				angle = 360 - (-angle)
+			}
+			// if (unit.animationObject.rotation <= Math.round(angle)) {
+			// 	unit.animationObject.rotation += Math.round(steps)
+			// } else if (unit.animationObject.rotation >= Math.round(angle)) {
+			// 	unit.animationObject.rotation -= Math.round(steps)
+			// }
+			unit.animationObject.rotation = angle //Rotate
+			// console.log(unit.animationObject.rotation)
+			if (90 < unit.animationObject.rotation && unit.animationObject.rotation < 300) {
+				unit.animationObject.direction = 1
+				unit.animationObject.scaleY = -1
+			} else {
+				unit.animationObject.direction = 1
+				unit.animationObject.scaleY = 1
+			}
+			unit.animationObject.isInIdleMode = false
+			if (unit.animationObject.currentAnimation.indexOf("walk") === -1 && unit.animationObject.direction === -1) {
+				unit.animationObject.gotoAndPlay("walk");
+			}
+			if (unit.animationObject.currentAnimation.indexOf("walk_h") === -1 && unit.animationObject.direction === 1) {
+				unit.animationObject.gotoAndPlay("walk_h");
+			}
+		}
 		unit.stageObject.x += towardsX * steps;
 		unit.stageObject.y += towardsY * steps;
 
 	} else {
+		if (unit.animationObject) {
+			unit.animationObject.gotoAndPlay("idle")
+			unit.animationObject.isInIdleMode = true
+			unit.animationObject.rotation = 0
+			unit.animationObject.scaleY = 1
+		}
 		unit.stageObject.x = targetX
 		unit.stageObject.y = targetY
 	}

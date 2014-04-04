@@ -7,9 +7,8 @@ var stage, timeCircle, tickCircle, unitList = [],
 	activeTeam,
 	opponentTeam,
 	particleList = [],
+	gameOptions,
 	playerBorder;
-	textList = [],
-
 
 function spawnAll() {
 	for (var i = 0; i < monsterList.length; i++) {
@@ -17,8 +16,10 @@ function spawnAll() {
 	}
 }
 
-function newGame(gameMode, gameOptions) {
-	if (gameMode == 'solo') {
+function newGame(gameOptions) {
+	console.log(contentManager)
+	console.log(contentManager.getResult('warrior'))
+	if (gameOptions.mode == 'solo') {
 		activeTeam = new team(0)
 		activeTeam.addPlayer(0, true, gameOptions.hero, gameOptions.spells)
 		opponentTeam = activeTeam
@@ -28,13 +29,18 @@ function newGame(gameMode, gameOptions) {
 	//Add story
 	//Add online
 	//Add tutorial
+
+	for (var i = 0; i < monsterList.length; i++) {
+		spawnUnit(i, 0);
+	}
 }
 
 function endGame(loser) {
 	console.log(Loser + ' Has lost this game. Sucker')
 }
 
-function init() {
+
+function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
@@ -53,14 +59,6 @@ function init() {
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / 10), Math.round(playerStage.canvas.height / 10)))
 	miniMapStage.addChild(playerBorder)
 
-	playerStage.canvas.oncontextmenu = function(e) {
-		e.preventDefault();
-	};
-	gameOptions = {
-		hero: 'warrior',
-		spells: [new spellList['nidSpear'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
-	}
-	newGame('solo', gameOptions);
 	bounds = {
 		x: 0,
 		y: 0,
@@ -68,10 +66,37 @@ function init() {
 		h: 2000,
 	}
 	collisionTree = QUAD.init(bounds);
+}
 
-	for (var i = 0; i < monsterList.length; i++) {
-		spawnUnit(i, 0);
+function loadImages() {
+	contentManager.loadManifest([{
+		id: "warrior",
+		src: "http://localhost:8888/img/warrior.png"
+	}]);
+
+}
+
+function handleComplete(e) {
+	newGame(gameOptions)
+}
+
+function init() {
+	createStage()
+	playerStage.canvas.oncontextmenu = function(e) {
+		e.preventDefault();
+	};
+	gameOptions = {
+		mode: 'solo',
+		hero: 'warrior',
+		spells: [new spellList['nidSpear'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
+
+
+	contentManager = new createjs.LoadQueue();
+	loadImages()
+	contentManager.on("complete", handleComplete, this);
+
+	// 
 
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);

@@ -23,8 +23,9 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stageObject = new createjs.Container(),
 	this.stageObject.x = x,
 	this.stageObject.y = y,
-	this.stageShape = new createjs.Shape(),
-	this.stageShape.graphics.beginFill(hero.color).drawCircle(0, 0, 25),
+	// this.stageShape = new createjs.Shape(),
+	// this.stageShape.graphics.beginFill(hero.color).drawCircle(0, 0, 25),
+
 	this.healthBar = new createjs.Shape(),
 	this.healthBar.graphics.beginFill("green").drawRect(-30, -60, 60, 10);
 	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
@@ -73,7 +74,19 @@ function hero(hero, heroSpells, x, y, player) {
 	this.miniMapObject.x = Math.round(this.stageObject.x / 10)
 	this.miniMapObject.y = Math.round(this.stageObject.y / 10)
 	miniMapStage.addChild(this.miniMapObject)
-
+	this.localSpriteSheet = new createjs.SpriteSheet({
+		framerate: 10,
+		images: [contentManager.getResult(hero.imageName)], //image to use
+		frames: hero.frames,
+		animations: hero.animations
+	}),
+	createjs.SpriteSheetUtils.addFlippedFrames(this.localSpriteSheet, true, false, false),
+	this.animationObject = new createjs.Sprite(this.localSpriteSheet),
+	this.animationObject.gotoAndPlay("idle"), //animate
+	this.animationObject.isInIdleMode = true,
+	// gameStage.addChild(this.animationObject)
+	this.animationObject.rotation = 0
+	this.stageObject.addChild(this.animationObject)
 
 	this.update = function(event) {
 		if (this.alive == false) { //Hero is dead
@@ -88,9 +101,9 @@ function hero(hero, heroSpells, x, y, player) {
 			this.updateSpellBar(event)
 			this.move(event) //Move the hero is he needs to be moved
 			this.handleCombat(event) //Handle targeting and dealing damage
+			this.animate(event)
 		}
 	},
-
 
 
 	this.move = function(event) {
@@ -107,6 +120,22 @@ function hero(hero, heroSpells, x, y, player) {
 			this.moving = false
 		}
 	},
+
+	this.animate = function(event) {
+		if (this.animationObject.isInIdleMode == false) {
+			// Checking if we're not already playing the animation
+			if (this.animationObject.currentAnimation.indexOf("walk") === -1 && this.animationObject.direction === -1) {
+				this.animationObject.gotoAndPlay("walk");
+			}
+			if (this.animationObject.currentAnimation.indexOf("walk_h") === -1 && this.animationObject.direction === 1) {
+				this.animationObject.gotoAndPlay("walk_h");
+			}
+		} else {
+			if (this.animationObject.currentAnimation.indexOf("idle") === -1 && this.animationObject.direction === 0) {
+				this.animationObject.gotoAndPlay("idle");
+			}
+		}
+	}
 
 
 	this.updateSpellBar = function(event) {

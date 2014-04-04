@@ -1,5 +1,5 @@
 var heroList = {
-	warrior : {
+	warrior: {
 		stats: {
 			AD: 30,
 			HP: 55,
@@ -12,8 +12,22 @@ var heroList = {
 			AS: 10,
 		},
 		color: "green",
+		imageName: 'warrior',
+		frames: {
+			width: 64,
+			height: 64,
+			regX: 32,
+			regY: 32,
+		},
+		animations: {
+			walk: [0, 9, true],
+			die: [10, 21, false],
+			jump: [22, 32],
+			celebrate: [33, 43],
+			idle: [44, 44]
+		},
 	},
-	archer : {
+	archer: {
 		stats: {
 			AD: 30,
 			HP: 55,
@@ -27,7 +41,7 @@ var heroList = {
 		},
 		color: "red",
 	},
-	mage : {
+	mage: {
 		stats: {
 			AD: 30,
 			HP: 55,

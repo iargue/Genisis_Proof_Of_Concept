@@ -10,10 +10,13 @@ function team(teamNumber) {
 
 	this.addPlayer = function(playerNumber, active, heroName, heroSpells) {
 		player = new player(this, active)
+		if (active) {
+			activePlayer = player
+		}
 		player.hero = new hero(heroList[heroName], heroSpells, 450, 450, player)
 		this.playerList.push(player)
 		spawnHero(player.hero, this.side)
-		
+
 	}
 
 	this.removePoints = function(pointsLost) {
