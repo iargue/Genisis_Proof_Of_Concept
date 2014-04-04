@@ -13,3 +13,10 @@ npm install
 
 
 grunt devserver
+
+
+
+Launch the game using
+
+
+http://localhost:8888/index.html
