@@ -309,8 +309,10 @@ function hero(hero, heroSpells, x, y, player) {
 		if (this.CHP <= 0) {
 			this.alive = false
 			this.deadTime = new Date()
-			gameStage.removeChild(this.stageObject)
-			miniMapStage.removeChild(this.miniMapObject)
+			// gameStage.removeChild(this.stageObject)
+			// miniMapStage.removeChild(this.miniMapObject)
+			this.animationObject.gotoAndPlay('die')
+
 		} else {
 			this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 		}
@@ -328,8 +330,9 @@ function hero(hero, heroSpells, x, y, player) {
 		spawnHero(this, this.player.team.side)
 		this.moveWayPoint.x = this.stageObject.x
 		this.moveWayPoint.y = this.stageObject.y
-		gameStage.addChild(this.stageObject)
-		miniMapStage.addChild(this.miniMapObject)
+		this.animationObject.gotoAndPlay('idle')
+		// gameStage.addChild(this.stageObject)
+		// miniMapStage.addChild(this.miniMapObject)
 	}
 
 	this.checkCollision = function(x, y, radius) {
