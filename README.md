@@ -10,4 +10,6 @@ This is just a proof of concept for a game that will eventually be created. Noth
 Requires Grunt Devserver to run.
 
 npm install
+
+
 grunt devserver
