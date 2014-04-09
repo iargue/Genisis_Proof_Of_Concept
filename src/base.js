@@ -86,13 +86,43 @@ function init() {
 	loadImages()
 	contentManager.on("complete", handleComplete, this);
 
+	console.log(playerStage)
+
 
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("stagemouseup", miniMapClick);
+	playerStage.addEventListener("stagemousemove", handleMouse);
 
+}
+
+function handleMouse(e) {
+	if (e.stageY >= playerStage.canvas.height - 30) {
+		if (gameStage.regY + playerStage.canvas.height < 2000) {
+			gameStage.regY += 10
+		}
+	}
+	if (e.stageX >= playerStage.canvas.width - 30) {
+		if (gameStage.regX + playerStage.canvas.width < 2000) {
+			gameStage.regX += 10
+		}
+
+	}
+	if (e.stageY < 30) {
+		if (gameStage.regY > 0) {
+			gameStage.regY -= 10
+		}
+
+	}
+	if (e.stageX < 30) {
+		if (gameStage.regX > 0) {
+			gameStage.regX -= 10
+		}
+	}
+	playerBorder.x = Math.round(gameStage.regX / 10)
+	playerBorder.y = Math.round(gameStage.regY / 10)
 }
 
 function handleKeyDown(e) {
@@ -103,11 +133,11 @@ function handleKeyDown(e) {
 		activePlayer.hero.levelSpell(e.keyCode)
 	} else {
 		switch (e.keyCode) {
-			case 40: //Down arrow key
+			case 40:
 				if (gameStage.regY + playerStage.canvas.height < 2000) {
 					gameStage.regY += 10
 				}
-				break
+				break;
 			case 39: // Right arrow key
 				if (gameStage.regX + playerStage.canvas.width < 2000) {
 					gameStage.regX += 10
@@ -156,10 +186,10 @@ function handleKeyDown(e) {
 			default:
 				activePlayer.hero.castSpell(e.keyCode)
 		}
-	}
 
-	playerBorder.x = Math.round(gameStage.regX / 10)
-	playerBorder.y = Math.round(gameStage.regY / 10)
+		playerBorder.x = Math.round(gameStage.regX / 10)
+		playerBorder.y = Math.round(gameStage.regY / 10)
+	}
 }
 
 function miniMapClick(event) {
