@@ -10,12 +10,6 @@ var stage, timeCircle, tickCircle, unitList = [],
 	gameOptions,
 	playerBorder;
 
-function spawnAll() {
-	for (var i = 0; i < monsterList.length; i++) {
-		spawnUnit(i, 0);
-	}
-}
-
 function newGame(gameOptions) {
 	console.log(contentManager)
 	console.log(contentManager.getResult('warrior'))
@@ -25,14 +19,10 @@ function newGame(gameOptions) {
 		opponentTeam = activeTeam
 		teamList.push(activeTeam)
 	}
-
 	//Add story
 	//Add online
 	//Add tutorial
 
-	for (var i = 0; i < monsterList.length; i++) {
-		spawnUnit(i, 0);
-	}
 }
 
 function endGame(loser) {
@@ -96,7 +86,6 @@ function init() {
 	loadImages()
 	contentManager.on("complete", handleComplete, this);
 
-	// 
 
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
@@ -133,6 +122,36 @@ function handleKeyDown(e) {
 				if (gameStage.regX > 0) {
 					gameStage.regX -= 10
 				}
+				break;
+			case 81:
+				spawnUnit(0, 0);
+				break;
+			case 87:
+				spawnUnit(1, 0);
+				break;
+			case 69:
+				spawnUnit(2, 0);
+				break;
+			case 82:
+				spawnUnit(3, 0);
+				break;
+			case 84:
+				spawnUnit(4, 0);
+				break;
+			case 65:
+				spawnUnit(5, 0);
+				break;
+			case 83:
+				spawnUnit(6, 0);
+				break;
+			case 68:
+				spawnUnit(7, 0);
+				break;
+			case 70:
+				spawnUnit(8, 0);
+				break;
+			case 71:
+				spawnUnit(9, 0);
 				break;
 			default:
 				activePlayer.hero.castSpell(e.keyCode)

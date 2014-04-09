@@ -2,8 +2,6 @@ function monster(monster, x, y, player) {
 	this.AD = monster.stats.AD * 5,
 	this.HP = monster.stats.HP * 10,
 	this.CHP = monster.stats.HP * 10,
-	this.MP = monster.stats.MP * 10,
-	this.CMP = monster.stats.MP * 10,
 	this.MD = monster.stats.MD * 5,
 	this.MR = monster.stats.MR * 5,
 	this.AR = monster.stats.AR * 5,

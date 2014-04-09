@@ -4,8 +4,6 @@ function hero(hero, heroSpells, x, y, player) {
 	this.AD = this.baseStats.AD,
 	this.HP = this.baseStats.HP * 10,
 	this.CHP = this.baseStats.HP * 10
-	this.MP = this.baseStats.MP * 5,
-	this.CMP = this.baseStats.CMP * 10,
 	this.MD = this.baseStats.MD,
 	this.MR = this.baseStats.MR,
 	this.AR = this.baseStats.AR,
@@ -288,8 +286,6 @@ function hero(hero, heroSpells, x, y, player) {
 		this.AD = this.baseStats.AD, //Normalize all stats based on value
 		this.HP = this.baseStats.HP * 10,
 		this.CHP = this.baseStats.HP * 10
-		this.MP = this.baseStats.MP * 5,
-		this.CMP = this.baseStats.CMP * 10,
 		this.MD = this.baseStats.MD,
 		this.MR = this.baseStats.MR,
 		this.AR = this.baseStats.AR,

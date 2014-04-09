@@ -28,9 +28,10 @@ function team(teamNumber) {
 }
 
 function player(team, active) {
-	this.team = team
+	this.team = team,
 	this.hero = {},
-	this.activePlayer = active
+	this.activePlayer = active,
+	this.summonLevel = 0
 	if (active) {
 		activePlayer = this
 	}
