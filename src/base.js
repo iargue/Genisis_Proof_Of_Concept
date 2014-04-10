@@ -8,7 +8,11 @@ var stage, timeCircle, tickCircle, unitList = [],
 	opponentTeam,
 	particleList = [],
 	gameOptions,
-	playerBorder;
+	playerBorder,
+	scrollDown = false,
+	scrollUp = false,
+	scrollLeft = false,
+	scrollRight = false;
 
 function newGame(gameOptions) {
 	console.log(contentManager)
@@ -98,31 +102,54 @@ function init() {
 
 }
 
-function handleMouse(e) {
-	if (e.stageY >= playerStage.canvas.height - 30) {
+function edgeScrolling(event) {
+	if (scrollDown) {
 		if (gameStage.regY + playerStage.canvas.height < 2000) {
-			gameStage.regY += 10
+			gameStage.regY += 5
 		}
 	}
-	if (e.stageX >= playerStage.canvas.width - 30) {
+	if (scrollRight) {
 		if (gameStage.regX + playerStage.canvas.width < 2000) {
-			gameStage.regX += 10
+			gameStage.regX += 5
 		}
 
 	}
-	if (e.stageY < 30) {
+	if (scrollUp) {
 		if (gameStage.regY > 0) {
-			gameStage.regY -= 10
+			gameStage.regY -= 5
 		}
 
 	}
-	if (e.stageX < 30) {
+	if (scrollLeft) {
 		if (gameStage.regX > 0) {
-			gameStage.regX -= 10
+			gameStage.regX -= 5
 		}
 	}
 	playerBorder.x = Math.round(gameStage.regX / 10)
 	playerBorder.y = Math.round(gameStage.regY / 10)
+}
+
+function handleMouse(e) {
+	if (e.stageY >= playerStage.canvas.height - 30) {
+		scrollDown = true
+		scrollUp = false
+	} else if (e.stageY < 30) {
+		scrollUp = true
+		scrollDown = false
+	} else {
+		scrollUp = false
+		scrollDown = false
+	}
+	if (e.stageX >= playerStage.canvas.width - 30) {
+		scrollRight = true
+		scrollLeft = false
+	} else if (e.stageX < 30) {
+		scrollLeft = true
+		scrollRight = false
+	} else {
+		scrollLeft = false
+		scrollRight = false
+	}
 }
 
 function handleKeyDown(e) {
@@ -215,6 +242,10 @@ function miniMapClick(event) {
 		playerBorder.x = Math.round(gameStage.regX / 10)
 		playerBorder.y = Math.round(gameStage.regY / 10)
 	}
+	scrollDown = false
+	scrollUp = false
+	scrollLeft = false
+	scrollRight = false
 }
 
 
@@ -235,6 +266,7 @@ function updateCollisionTree(event) {
 }
 
 function gameLoop(event) {
+	edgeScrolling(event)
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
