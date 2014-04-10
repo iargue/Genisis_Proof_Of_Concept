@@ -1,3 +1,29 @@
+function msToTime(duration) {
+	var milliseconds = parseInt((duration % 1000) / 100),
+		seconds = parseInt((duration / 1000) % 60),
+		minutes = parseInt((duration / (1000 * 60)) % 60),
+		hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+
+	hours = (hours < 10) ? "0" + hours : hours;
+	minutes = (minutes < 10) ? "0" + minutes : minutes;
+	seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+	return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
+
+function timeToMs(str) {
+	var p = str.split(':'),
+		s = 0,
+		m = 1;
+
+	while (p.length > 0) {
+		s += m * parseInt(p.pop(), 10);
+		m *= 60;
+	}
+
+	return s * 1000;
+}
+
 function getRandom10(min, max) {
 	return getRandomInt(min / 10, max / 10) * 10;
 }
@@ -120,6 +146,7 @@ function spawnUnit(monsterNumber) {
 		if (monsterNumber == 9) {
 			activePlayer.summonLevel += 1
 			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
+			activePlayer.income += monsterList[activePlayer.summonLevel][monsterNumber].incomeGain
 		} else {
 			unit = new monster(monsterList[activePlayer.summonLevel][monsterNumber], x, y, activePlayer)
 			opponentTeam.unitList.push(unit)

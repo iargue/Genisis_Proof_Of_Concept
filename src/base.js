@@ -7,6 +7,8 @@ var stage, timeCircle, tickCircle, unitList = [],
 	activeTeam,
 	opponentTeam,
 	particleList = [],
+	gameTime,
+	incomeTime,
 	gameOptions,
 	playerBorder,
 	scrollDown = false,
@@ -52,6 +54,14 @@ function createStage() {
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / 10), Math.round(playerStage.canvas.height / 10)))
 	miniMapStage.addChild(playerBorder)
+	gameTime = new createjs.Text('00:00:00', "12px Calibri", 'black');
+	gameTime.x = playerStage.canvas.width - 60
+	gameTime.y = playerStage.canvas.height - 60
+	playerStage.addChild(gameTime)
+	incomeTime = new createjs.Text('00:00:00', "12px Calibri", 'black');
+	incomeTime.x = playerStage.canvas.width - 60
+	incomeTime.y = playerStage.canvas.height - 40
+	playerStage.addChild(incomeTime)
 
 	bounds = {
 		x: 0,
@@ -267,6 +277,8 @@ function updateCollisionTree(event) {
 
 function gameLoop(event) {
 	edgeScrolling(event)
+	gameTime.text = msToTime(event.time)
+	incomeTime.text = msToTime(activePlayer.hero.goldTime + 20000)
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player

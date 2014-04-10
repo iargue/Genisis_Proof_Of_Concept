@@ -61,6 +61,7 @@ function hero(hero, heroSpells, x, y, player) {
 		y: y
 	}
 	this.gold = 100,
+	this.income = 3,
 	this.moving = false,
 	this.spawnTime = 5000 + (1000 * this.level),
 	this.deadTime = null,
@@ -85,6 +86,7 @@ function hero(hero, heroSpells, x, y, player) {
 	// gameStage.addChild(this.animationObject)
 	this.animationObject.rotation = 0
 	this.stageObject.addChild(this.animationObject)
+	this.goldTime = 45000
 
 	this.update = function(event) {
 		if (this.alive == false) { //Hero is dead
@@ -99,7 +101,8 @@ function hero(hero, heroSpells, x, y, player) {
 			this.updateSpellBar(event)
 			this.move(event) //Move the hero is he needs to be moved
 			this.handleCombat(event) //Handle targeting and dealing damage
-			this.animate(event)
+			// this.animate(event)
+			this.updatePassive(event)
 		}
 	},
 
@@ -119,22 +122,23 @@ function hero(hero, heroSpells, x, y, player) {
 		}
 	},
 
-	this.animate = function(event) {
-		if (this.animationObject.isInIdleMode == false) {
-			// Checking if we're not already playing the animation
-			if (this.animationObject.currentAnimation.indexOf("walk") === -1 && this.animationObject.direction === -1) {
-				this.animationObject.gotoAndPlay("walk");
-			}
-			if (this.animationObject.currentAnimation.indexOf("walk_h") === -1 && this.animationObject.direction === 1) {
-				this.animationObject.gotoAndPlay("walk_h");
-			}
-		} else {
-			if (this.animationObject.currentAnimation.indexOf("idle") === -1 && this.animationObject.direction === 0) {
-				this.animationObject.gotoAndPlay("idle");
+	this.updatePassive = function(event) {
+		if (event.time > 45000) {
+			if (this.goldTime + 20000 < event.time) {
+				this.gold += this.income
+				this.goldTime = event.time
 			}
 		}
-	}
+		if (this.CHP < this.HP) {
+			this.CHP += (((2 / 100) * this.HP) / (1000 / event.delta))
+			if (this.CHP > this.HP) {
+				this.CHP = this.HP
+			}
+		}
 
+		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
+
+	},
 
 	this.updateSpellBar = function(event) {
 		for (var spell in this.spells) {
@@ -187,7 +191,6 @@ function hero(hero, heroSpells, x, y, player) {
 		if (effect.effectType == "slow") {
 			this.effects.push(effect)
 			this.CMS -= (effect.effectAmount / 100) * this.MS
-
 		}
 		if (effect.effectType == "stun" && this.stunned == false) {
 			this.effects.push(effect)
