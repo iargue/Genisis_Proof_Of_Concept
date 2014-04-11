@@ -122,36 +122,17 @@ function spawnUnit(monsterNumber) {
 		y = getRandom10(1020, 1960)
 	}
 
-	// for (var i = 0; i < unitList.length; i++) {
-	// 	if (unitList[i].checkCollision(x, y, 16)) {
-	// 		blackList.push(y)
-	// 		if (blackList.length >= 54) {
-	// 			x += 10
-	// 			blackList = 0
-	// 			nodeOkay = true
-	// 		} else {
-	// 			nodeOkay = false
-	// 		}
-	// 		while (nodeOkay == false) {
-	// 			y = getRandom10(10, 560);
-	// 			if ($.inArray(y, blackList) === -1) {
-	// 				nodeOkay = true
-	// 			}
 
-	// 		}
-	// 	}
-	// }
-	console.log(monsterList)
 	if (activePlayer.hero.gold > monsterList[activePlayer.summonLevel][monsterNumber].cost) {
 		if (monsterNumber == 9) {
 			activePlayer.summonLevel += 1
 			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
-			activePlayer.income += monsterList[activePlayer.summonLevel][monsterNumber].incomeGain
 		} else {
 			unit = new monster(monsterList[activePlayer.summonLevel][monsterNumber], x, y, activePlayer)
 			opponentTeam.unitList.push(unit)
 			collisionTree.insert(unit)
 			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
+			activePlayer.hero.income += monsterList[activePlayer.summonLevel][monsterNumber].incomeGain
 		}
 	} else {
 		displayText("Not enough gold to summon", "red")
@@ -165,9 +146,6 @@ function moveTo(unit, targetX, targetY, steps) {
 	towardsX = targetX - unit.stageObject.x;
 	towardsY = targetY - unit.stageObject.y;
 
-
-
-	// Normalize
 
 	toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
 	if (toPlayerLength > steps) {

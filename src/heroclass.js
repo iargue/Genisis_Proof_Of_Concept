@@ -287,8 +287,8 @@ function hero(hero, heroSpells, x, y, player) {
 		}
 		this.level += 1 //Increase our level
 		this.AD = this.baseStats.AD, //Normalize all stats based on value
+		this.CHP += (this.baseStats.HP * 10) - this.HP
 		this.HP = this.baseStats.HP * 10,
-		this.CHP = this.baseStats.HP * 10
 		this.MD = this.baseStats.MD,
 		this.MR = this.baseStats.MR,
 		this.AR = this.baseStats.AR,
@@ -296,6 +296,9 @@ function hero(hero, heroSpells, x, y, player) {
 		this.spawnTime = 5000 + (1000 * this.level),
 		this.experienceToLevel = 50 + (this.level * 50), //Increase our experience needed to level.
 		this.spellLevels += 1 //Give us the ability to level up a new spell
+		if (this.CHP > this.HP) {
+			this.CHP = this.HP
+		}
 	},
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {

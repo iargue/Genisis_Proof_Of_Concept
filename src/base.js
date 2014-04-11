@@ -92,7 +92,7 @@ function init() {
 	gameOptions = {
 		mode: 'solo',
 		hero: 'warrior',
-		spells: [new spellList['nidSpear'], new spellList['singleTargetStun'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
+		spells: [new spellList['nidSpear'], new spellList['aoeSlow'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
 
 
