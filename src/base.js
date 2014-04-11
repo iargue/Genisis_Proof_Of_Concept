@@ -41,7 +41,7 @@ function createStage() {
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
 	gameStage.height = 2000;
-	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgreen").drawRect(0, 0, 2000, 2000));
+	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginBitmapFill(contentManager.getResult('background')).drawRect(0, 0, 2000, 2000));
 	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 1000, 2000, 5))
 	gameStage.addChild(border)
 	gameStage.addChild(playerSplit)
@@ -76,15 +76,14 @@ function loadImages() {
 	contentManager.loadManifest([{
 		id: "warrior",
 		src: "http://localhost:8888/img/warrior.png"
+	}, {
+		id: "background",
+		src: "http://localhost:8888/img/background.png"
 	}]);
 
 }
 
 function handleComplete(e) {
-	newGame(gameOptions)
-}
-
-function init() {
 	createStage()
 	playerStage.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
@@ -94,21 +93,19 @@ function init() {
 		hero: 'warrior',
 		spells: [new spellList['nidSpear'], new spellList['aoeSlow'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
 	}
-
-
-	contentManager = new createjs.LoadQueue();
-	loadImages()
-	contentManager.on("complete", handleComplete, this);
-
-	console.log(playerStage)
-
-
+	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("stagemouseup", miniMapClick);
 	playerStage.addEventListener("stagemousemove", handleMouse);
+}
+
+function init() {
+	contentManager = new createjs.LoadQueue();
+	loadImages()
+	contentManager.on("complete", handleComplete, this);
 
 }
 
