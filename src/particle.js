@@ -15,7 +15,7 @@ skillShotParticle = function(object, distance, speed, attacker, spell) {
 	this.active = true //Active or not. Duh.
 
 	this.update = function(event) {
-		if (this.attacker.alive == false || this.alive == false) {
+		if (this.attacker.alive == false || this.active == false) {
 			this.active = false
 			return
 		}
@@ -27,8 +27,8 @@ skillShotParticle = function(object, distance, speed, attacker, spell) {
 		}
 		collisionTree.retrieve(bounds, function(collidee) {
 			if (collidee.checkCollision(this.stageObject.x, this.stageObject.y, this.stageObject.radius)) {
-				this.alive = false
-				this.spell.onCollision(this.stageObject, collidee, this.attacker)
+				this.active = false
+				this.spell.onCollision(this.stageObject, collidee, this.attacker, this)
 				return
 			}
 		}, this);

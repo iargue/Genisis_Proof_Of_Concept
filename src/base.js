@@ -41,7 +41,7 @@ function createStage() {
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
 	gameStage.height = 2000;
-	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginBitmapFill(contentManager.getResult('background')).drawRect(0, 0, 2000, 2000));
+	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('lightgreen').drawRect(0, 0, 2000, 2000));
 	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 1000, 2000, 5))
 	gameStage.addChild(border)
 	gameStage.addChild(playerSplit)
@@ -91,7 +91,7 @@ function handleComplete(e) {
 	gameOptions = {
 		mode: 'solo',
 		hero: 'warrior',
-		spells: [new spellList['nidSpear'], new spellList['aoeSlow'], new spellList['aoeSlow'], new spellList['aoeStun'], new spellList['aoeNuke']]
+		spells: [new spellList['nidSpear'], new spellList['iceBall'], new spellList['aoeSlow'], new spellList['aoeStun'], new ultimateList['ultIceBall']]
 	}
 	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);
