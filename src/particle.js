@@ -2,6 +2,7 @@
 // but every particle effect must have a stageOjbect, and every particle must have na update function to be called. All Particle 
 // must also have this.active called in them to track if they are still active.
 
+
 skillShotParticle = function(object, distance, speed, attacker, spell) {
 	this.stageObject = object, //The object created before hand is stored here to be removed.
 

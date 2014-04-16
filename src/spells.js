@@ -325,7 +325,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 					}
 					gameStage.removeChild(object)
 					collidee.takeDamage(this.damage * (50 / 100), 'MD', attacker)
-					
+
 				},
 				onRange: function(object, attacker) {
 					gameStage.removeChild(object)
@@ -378,6 +378,132 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				explosionObject.rotation = explosionObject.angle * 180 / Math.PI
 				gameStage.addChild(explosionObject)
 				particleList.push(new skillShotParticle(explosionObject, 50, 100, attacker, shard))
+			}
+		}
+	},
+	arcLightening: function() {
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.chainsPerLevel = [0, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "slow"), //Create a new effect for a 60% slow that lasts for 7 seconds
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
+			}
+
+			bounds = { //Creates the size of the spell.
+				height: 250,
+				width: 250,
+				x: x - 250,
+				y: y - 250,
+			}
+
+			var targets = []; //Creates a blanket target object.
+			collisionTree.retrieve(bounds, function(collidee) { //Get every object that collides with our target spell
+				targets.push(collidee);
+			});
+			var initialTarget;
+			console.log(targets)
+			for (var target in targets) {
+				if (targets[target].checkCollision(x, y, 9)) {
+					initialTarget = targets[target]
+					break
+				}
+			}
+			if (initialTarget) {
+				this.currentCoolDown = new Date() // Set spell on CD
+				object = new createjs.Shape();
+				object.graphics.setStrokeStyle(2).moveTo(attacker.stageObject.x, attacker.stageObject.y).beginStroke('yellow').lineTo(x, y)
+				gameStage.addChild(object)
+				particleList.push(new drawParticle(object, 120))
+				initialTarget.takeDamage(this.damage, 'MD', attacker) //Deal damage
+				lastTarget = initialTarget;
+				for (var i = 0; i < this.chainsPerLevel[this.level]; i++) {
+					var newTarget;
+					for (var n = 0; n < targets.length; n++) {
+						if (targets[n] == lastTarget || targets[n] == initialTarget) {
+							continue
+						}
+						if (distance(lastTarget, targets[n]) < 100) { //Target is in range
+							console.log(targets[n])
+							newTarget = targets[n]; //This is who we are attacking now
+							break;
+						}
+					}
+					if (newTarget) { //If we did end up with a new target
+						newTarget.takeDamage(this.damage * (50 / 100), 'MD', attacker) //Deal damage
+						object = new createjs.Shape();
+						object.graphics.setStrokeStyle(2).moveTo(lastTarget.stageObject.x, lastTarget.stageObject.y).beginStroke('yellow').lineTo(x, y)
+						gameStage.addChild(object)
+						particleList.push(new drawParticle(object, 120))
+						lastTarget = newTarget
+					}
+				}
+			}
+		}
+	},
+	coneFire: function() {
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
+			}
+
+			bounds = { //Creates the size of the spell.
+				height: 350,
+				width: 350,
+				x: x - 150,
+				y: y - 150,
+			}
+
+			var targets = []; //Creates a blanket target object.
+			collisionTree.retrieve(bounds, function(collidee) { //Get every object that collides with our target spell
+				targets.push(collidee);
+			});
+
+			var angle = Math.atan2(y - attacker.stageObject.y, x - attacker.stageObject.x); //Find the angle of the mouseclick from the person.
+
+			destination = { //This is the upper point of our triangle. 150 units from the hero
+				x: Math.cos(angle + (30 * Math.PI / 180)) * 150 + attacker.stageObject.x,
+				y: Math.sin(angle + (30 * Math.PI / 180)) * 150 + attacker.stageObject.y
+			}
+			destination2 = { // This is the lower point of our triangle. 150 units from the hero.
+				x: Math.cos(angle - (30 * Math.PI / 180)) * 150 + attacker.stageObject.x,
+				y: Math.sin(angle - (30 * Math.PI / 180)) * 150 + attacker.stageObject.y
+			}
+			object = new createjs.Shape();
+			object.graphics.setStrokeStyle(2).beginStroke('red').moveTo(attacker.stageObject.x, attacker.stageObject.y).lineTo(destination.x, destination.y).lineTo(destination2.x, destination2.y).closePath()
+			//The above object draws a triangle between every point.
+			gameStage.addChild(object)
+			particleList.push(new drawParticle(object, 350)) //Creates the temporary particle for 350 seconds for the spell.
+			if (targets) { //If we did have collision with something.
+				for (var i = 0, n = targets.length; i < n; i++) { //Loop through our targets.
+					var target = targets[i];
+					if (isInTriangle(target.stageObject.x, target.stageObject.y, destination.x, destination.y, destination2.x, destination2.y, attacker.stageObject.x, attacker.stageObject.y)) {
+						//Our targets x,y are inside of the triangle (Could be improved. Waiting on sprites to add full object collision)
+						target.takeDamage(this.damage, 'MD', attacker) //Deal damage
+					}
+				}
+				this.currentCoolDown = new Date() // Set our cooldown
 			}
 		}
 	}
