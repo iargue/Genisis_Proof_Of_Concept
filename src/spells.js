@@ -506,5 +506,53 @@ var spellList = { //Constains a list of every spell in the game, Named.
 				this.currentCoolDown = new Date() // Set our cooldown
 			}
 		}
+	},
+	damageOverTime: function() {
+		this.level = 0, //Level of spell
+		this.damagePerLevel = [0, 11, 15, 25, 30, 38, 47, 49, 55, 61, 68], //Damage scaling per level. Balance goes here
+		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
+		this.rangePerLevel = [0, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]
+		this.effectDurationPerLevel = [0, 7000, 7500, 8000, 9000, 10000, 7000, 7000, 7000, 7000, 7000, 7000]
+		this.effectAmountPerLevel = [0, 40, 50, 60, 70, 80, 80, 80, 80, 80, 80, 80]
+		this.range = this.rangePerLevel[this.level]
+		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
+		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
+		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
+		this.cast = function(x, y, attacker) {
+			if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
+				displayText('Spell not ready', 'red')
+				return false; //Todo: Add display text
+			}
+
+			bounds = { //Creates the size of the spell.
+				height: 350,
+				width: 350,
+				x: x - 150,
+				y: y - 150,
+			}
+
+			var targets = []; //Creates a blanket target object.
+			collisionTree.retrieve(bounds, function(collidee) { //Get every object that collides with our target spell
+				if (collidee.checkCollision(x, y, 100)) {
+					targets.push(collidee)
+				}
+			});
+
+			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 100))
+			object.x = x
+			object.y = y
+			object.alpha = 0.5
+			object.radius = 100
+			gameStage.addChild(object)
+			particleList.push(new damageOverTimeParticle(object, bounds, this, attacker, 250, 2500))
+
+			if (targets) {
+				for (var i = 0, n = targets.length; i < n; i++) {
+					var target = targets[i];
+					target.takeDamage(this.damage, 'MD', attacker)
+				}
+				this.currentCoolDown = new Date()
+			}
+		}
 	}
 }

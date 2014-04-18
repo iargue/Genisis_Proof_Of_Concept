@@ -91,7 +91,7 @@ function handleComplete(e) {
 	gameOptions = {
 		mode: 'solo',
 		hero: 'warrior',
-		spells: [new spellList['nidSpear'], new spellList['coneFire'], new spellList['aoeSlow'], new spellList['aoeStun'], new ultimateList['ultIceBall']]
+		spells: [new spellList['nidSpear'], new spellList['coneFire'], new spellList['damageOverTime'], new spellList['aoeStun'], new ultimateList['ultIceBall']]
 	}
 	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);

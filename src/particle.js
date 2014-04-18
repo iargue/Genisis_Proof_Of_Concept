@@ -2,6 +2,35 @@
 // but every particle effect must have a stageOjbect, and every particle must have na update function to be called. All Particle 
 // must also have this.active called in them to track if they are still active.
 
+damageOverTimeParticle = function(object, bounds, spell, attacker, interval, duration) {
+	this.stageObject = object
+	this.bounds = bounds
+	this.spell = spell
+	this.attacker = attacker
+	this.interval = interval
+	this.lastDamage = new Date()
+	this.duration = duration
+	this.createdDate = new Date()
+	this.active = true
+
+	this.update = function(event) {
+		if (this.attacker.alive == false || this.active == false) {
+			this.active = false
+			return
+		}
+		if (new Date() - this.createdDate > this.duration) {
+			gameStage.removeChild(this.stageObject)
+			this.active = false
+		} else if ((new Date() - this.lastDamage) > this.interval) {
+			this.lastDamage = new Date()
+			collisionTree.retrieve(this.bounds, function(collidee) {
+				if (collidee.checkCollision(this.stageObject.x, this.stageObject.y, this.stageObject.radius)) {
+					collidee.takeDamage(this.spell.damage, "MD", this.attacker)
+				}
+			}, this);
+		}
+	}
+}
 
 skillShotParticle = function(object, distance, speed, attacker, spell) {
 	this.stageObject = object, //The object created before hand is stored here to be removed.
