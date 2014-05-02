@@ -1,0 +1,89 @@
+doctype html
+
+html(id="data-ng-app")
+	head
+		meta(charset="utf-8")
+		title The Game of Defense The Site
+		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
+		script(type="text/javascript", src="http://code.createjs.com/createjs-2013.12.12.min.js")
+		script(type="text/javascript", src="js/heroList.js")
+		script(type="text/javascript", src="js/enemyList.js")
+		script(type="text/javascript", src="js/skillList.js")
+		script(type="type/javascript", src="js/ultimateList.js")
+		link(rel="stylesheet", href="style/main.css")
+	body
+		section#GD-Home.page-wrap
+			div.service
+				div
+					input(type="search", results=5, placeholder="Explore Site...")
+				div
+					a(href="./Offline")
+						button.offline Play Now!
+				div
+					ul(data-ng-hide="session.loggedIn")
+						li
+							a(href="?login", onclick="session.login") Login
+						li
+							a(href="./Register") Register
+					ul(data-ng-show="session.loggedIn").hide
+						li
+							a(href="./Profile") {{session.user.userName}}
+						li
+							a(href="?logout", onclick="session.logout") Logout
+
+			header
+				img.content-header(src="assets/site-images/ok.png", alt="poop")
+				nav
+					a(href="bin/game-guide.html")
+						button.guide Game Guide
+					a(href="./Forums")
+						button.forums Forums
+					a(href="./Shop")
+						button.shop Shop
+
+			div.content 
+				div.news-item 
+					img(src="assets/site-image/simple.svg").news-image
+					div.news-info
+						a(href="newspageQuery")
+							h1 NEWS TITLE
+						p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu varius dolor, vitae commodo nunc. Maecenas pretium est a ante laoreet, sed ullamcorper nunc tristique. Morbi a interdum erat, nec semper enim. Mauris facilisis dui non nibh vestibulum, a rhoncus elit euismod. Duis consequat molestie purus, et ultrices eros aliquam at. Duis rutrum ac lectus eget dapibus. Etiam tincidunt turpis non diam ultricies, in dictum nisl adipiscing. Suspendisse mollis ante ac ligula ultrices, ac feugiat nisi malesuada. Pellentesque rutrum volutpat felis, ut egestas odio. Donec imperdiet facilisis metus eget convallis. Proin euismod libero sit amet nulla convallis, at consequat quam lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae gravida nulla.
+			div.footer
+				ul.footer-nav
+					li
+						a(href="./About") About 
+					li
+						a(href="./Merchandise") Merchandise 
+					li
+						a(href="./ReferAFriend") Refer A Friend 
+					li
+						a(href="./Support") Support 
+
+		section#GD-Login.hide
+			svg.logo
+			section.panel
+				h2 Account Login
+				label Username
+				input(type="text")
+				label Password
+				input(type="password")
+				label Remember username?
+				input.check(type="checkbox")
+				button Log In
+
+			section#account
+				div
+					p Need an account?
+					button.signup Sign Up
+				div
+					p Forgot your username or password?
+					button.forgot Remind Me
+
+		section#GD-Profile.hide
+
+
+		section#GD-About.hide
+
+
+		section#GD-Game-Guide.hide
+			

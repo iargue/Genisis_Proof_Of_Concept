@@ -1,0 +1,73 @@
+doctype html
+
+html
+	head
+		meta(charset="utf-8")
+		title Game of Defense
+		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
+		script(type="text/javascript", src="http://code.createjs.com/createjs-2013.12.12.min.js")
+		script(type="text/javascript", src="js/heroList.js")
+		script(type="text/javascript", src="js/enemyList.js")
+		script(type="text/javascript", src="js/skillList.js")
+		script(type="type/javascript", src="js/ultimateList.js")
+		link(rel="stylesheet", href="style/main.css")
+	body
+		section#GD-Game
+			canvas#gameCanvas Alternate content
+			section#game-panel
+				section.enemies.selector-container
+					button.enemy.selector-button(data-ng-repeat="minion in session.game.enemies")
+					button.shop.selector-button.hide(data-ng-repeat="item in session.shop.available")
+				div.switch
+					button#enemy
+					button#shop
+				section#info
+					image(data-ng-model="session.game.selected.image")
+					div.health
+					div.selected
+					div.ad
+					div.mp
+					div.mp
+				canvas#miniMap
+				div.switch
+					button#skill
+					button#inventory
+				section.items.selector-container
+					button.item.selector-button(data-ng-repeat="item in session.hero.inventory")
+					button.skill.selector-button.hide(data-ng-repeat="skill in session.hero.skills")
+		section#GD-Game-Setup.hide.page-wrap
+			span.step-menu
+				ol
+					li Mode 
+					div.arrow 
+						div.arrow-right
+					li Hero
+					div.arrow
+						div.arrow-right
+					li Skill 
+					div.arrow
+						div.arrow-right
+					li Ultimate
+			section.mode
+				div
+					h1 Mode 
+					p Choose 1 mode, this choice will decide the kind of game you will play.
+				div.selector-container
+					button.mode.selector-button(data-ng-repeat="mode in modeList")
+			section.heros
+				div
+					h1 Heros 
+					p Choose 1 epic hero, your selection will be who you will customize and battle with.
+				button.hero.selector-button(data-ng-repeat="hero in heroList")
+			section.skills
+				div
+					h1 Skills
+					p Choose 4 skills, your hero is training to become a master at using your selected skills. 
+				div.selector-container
+					button.skill.selector-button(data-ng-repeat="skill in skillList")
+			section.ultimates
+				div
+					h1 Ultimate Skill 
+					p Choose 1 ultimate skill, this might be the strongest skill your hero has!
+				div.selector-container
+					button.ultimate.selector-button(data-ng-repeat="ultimate in ultimateList")

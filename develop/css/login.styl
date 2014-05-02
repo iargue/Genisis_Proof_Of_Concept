@@ -1,0 +1,374 @@
+/*
+  Blacks
+  #24221C
+  #403D33
+  #807966
+  #CCC2A3
+  
+  Reds
+  #C40000
+  #8C0000
+  #590000
+*/
+
+body
+  width 100%
+  height 100%
+  margin 0
+  padding 0
+  font-family arial
+  background-color #807966
+
+.hide
+  display none
+
+/*
+  MIXINS
+*/
+border-radius(n)
+  -webkit-border-radius n
+  -moz-border-radius n
+  border-radius n
+
+box-sizing(n)
+  -webkit-box-sizing n
+  -moz-box-sizing n
+  box-sizing n
+
+display flex
+  display -webkit-box
+  display -moz-box
+  display -ms-flexbox
+  display -webkit-flex
+  display flex
+/*
+  MIXINS
+*/
+.page-wrap
+  max-width 1000px
+  min-width 600px
+  margin 0 auto
+  background-color #403D33
+
+#GD-Home
+  .service
+    background-color #24221C
+    display flex
+    >div
+      flex 1
+      input
+        width 90%
+        margin 5%
+      a button 
+        font-size 1em
+        width 90%
+        margin 5%
+      ul 
+        text-align right
+        font-size 1em
+        list-style none
+        padding 1em 0
+        margin 0
+        li
+          left 0
+          display inline
+          padding 0 1em
+          a
+            color #FF0000
+            text-decoration none
+  header
+    img 
+      position relative
+      width 100%
+      height 300px
+    >div
+      display flex
+      height 300px
+      >*
+        padding 0
+        flex 1
+    >nav 
+      display flex 
+      a button
+        font-size 1em
+      >*
+        flex 1 
+        button 
+          padding 1em 0 1em 0
+          width 100%
+        
+  .content
+    background-color #CCC2A3
+    .news-item
+      display flex
+      .news-image
+        flex 1
+        margin auto
+        height 200px
+        width 200px
+      .news-info
+        flex 3
+        margin 0
+  .footer
+    .footer-nav
+      text-align center
+      font-size 1em
+      list-style none
+      padding 1em
+      margin 0
+      li
+        display inline 
+        a 
+          color #FF0000
+          text-decoration none
+      li:nth-child(-n+3)::after
+        color #FFFFFF
+        padding 0.5em
+        content " | "
+
+
+#GD-Menu
+  table
+    width 100%
+    td
+      border 1px solid black
+  .header
+    height 20%
+    td
+      padding 2%
+      width 33.33%
+      height 100%
+      >button
+        float left
+        height 100%
+        width 50%
+      h1
+        margin 0
+  .panel
+    height 80%
+    tr
+      >td
+        vertical-align top
+    .news
+      >div
+        height 200px
+        border 1px solid black
+        padding 1% 2%
+    .menu-options
+      padding 2%
+      >h1
+        margin 0
+        //vertical-align center
+      >button
+        width 100%
+        padding 5%
+
+#GD-Login
+  #logo
+    top 10%
+    left 10%
+    width 25%
+    height 20%
+    border 20px solid black
+  .panel
+    top 40%
+    left 10%
+    width 25%
+    height 40%
+    >
+      width 100%
+    h2
+      height 20%
+    #login
+      height 50%
+      >
+        margin-left 5%
+      input
+        width 90%
+      .check
+      button
+        width 40% 
+        
+
+    #account
+      height 30%
+      >div
+        height 50%
+        >
+          height 100%
+        p
+          width 50%
+          margin-left 5%
+        button
+          width 50%
+
+#GD-Game-Setup
+  .step-menu
+    display fixed
+    background-color #24221C
+    ol 
+      display flex
+      color white
+      width 100%
+      list-style none
+      padding 0
+      margin 0
+      text-align center
+      li
+        background-color blue
+        font-size 1em
+        flex 10 0
+      .arrow 
+        flex 1 0
+        z-index 2
+        background-color yellow
+        .arrow-right
+          width 0
+          height 0
+          border-top 2em solid transparent
+          border-bottom 2em solid transparent
+          border-left 2em solid blue
+      li:nth-of-type(2n)
+          background-color yellow
+      div:nth-of-type(2n)
+        background-color blue
+        .arrow-right
+          border-left 2em solid yellow
+  section .selector-container
+    width 100%
+    height 200px
+    
+  
+
+/*
+  GD-Game
+*/  
+#GD-Game
+  #game
+    position absolute
+    width 100%
+    height 85%
+  #game-panel
+    display flex  
+    align-content stretch     
+    width 100%
+    height 15%
+    position fixed
+    top 85%
+    .switch
+      background-color #444
+      width 5%
+      display flex
+      -webkit-flex-flow column nowrap
+      flex-flow column nowrap
+      flex-direction column
+      >button
+        flex 1 0 50%
+    #info
+      background-color red
+      width 20%
+    #minimap
+      background-color blue
+      width 20%
+    .selector-container
+      background-color #222
+      width 25%
+      display flex
+      justify-content flex-start
+      overflow auto
+      .selector-button
+        flex 1 0 45%
+    .enemies    
+      -webkit-flex-flow row nowrap
+      flex-flow row nowrap
+    .items
+      -webkit-flex-flow row-reverse nowrap
+      flex-flow row-reverse nowrap
+
+@media all and (max-width: 1280px) and (min-width: 800px) 
+  #GD-Game #game-panel .selector-container .selector-button
+    flex 0 0 28.33%
+    padding-bottom 28.33%
+
+@media all and (min-width: 1281px)
+  #GD-Game #game-panel .selector-container .selector-button
+    flex 0 0 20%
+    padding-bottom 20%
+/*
+  GD-Game
+*/
+
+/*
+  Need media query
+*/  
+
+/*
+#barfpad
+  width 100%
+  height 100px
+  position absolute
+  display block
+  margin 0
+  border-bottom 1px solid black
+  overflow hidden
+  .navButton
+    width 90px
+    height 90px
+    position relative
+    margin 5px
+    border-radius 50%
+    border 1px solid black
+    float left
+  #barfchat
+    float right
+
+.barfpost
+  width 500px
+  height 100px
+  position absolute
+  left 50px
+  top 175px
+  border 1px solid black
+  border-top 15px solid green
+  > *
+    position relative
+    display inline-block
+  .userPic
+    width 90px
+    height 90px
+    left -22.5px
+    margin-top 5px
+
+    border-radius 50%
+    border 1px solid black
+    background-color white
+  .userInfoBox
+    width 257.5px
+    height 80px
+    left -12.5px
+    top -25px
+    bottom 0
+    margin-top 10px
+    > *
+      position relative
+    .userName
+      width 100%
+      height 40px
+      top 0
+
+      font-size 20px
+    .userBarf
+      width 99%
+      height 20px
+      bottom 0
+  .userLike
+    width 75px
+    height 100px
+    bottom 0
+    margin 0
+  .userNotLike
+    width 75px
+    height 100px
+    bottom 0
+    margin 0
+*/

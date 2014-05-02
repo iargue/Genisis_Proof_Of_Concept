@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Game of Defense</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+    <script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+    <script type="text/javascript" src="js/heroList.js"></script>
+    <script type="text/javascript" src="js/enemyList.js"></script>
+    <script type="text/javascript" src="js/skillList.js"></script>
+    <script type="type/javascript" src="js/ultimateList.js"></script>
+    <link rel="stylesheet" href="style/main.css">
+  </head>
+  <body>
+    <section id="GD-Game">
+      <canvas id="game" class="cool">Alternate content</canvas>
+      <section id="game-panel">
+        <section class="enemies selector-container">
+          <button data-ng-repeat="minion in session.game.enemies" class="enemy selector-button"></button>
+          <button data-ng-repeat="item in session.shop.available" class="shop selector-button hide"></button>
+        </section>
+        <div class="switch">
+          <button id="enemy"></button>
+          <button id="shop"></button>
+        </div>
+        <section id="info">
+          <image data-ng-model="session.game.selected.image"></image>
+          <div class="health"></div>
+          <div class="selected"></div>
+          <div class="ad"></div>
+          <div class="mp"></div>
+          <div class="mp"></div>
+        </section>
+        <canvas id="minimap"></canvas>
+        <div class="switch">
+          <button id="skill"></button>
+          <button id="inventory"></button>
+        </div>
+        <section class="items selector-container">
+          <button data-ng-repeat="item in session.hero.inventory" class="item selector-button"></button>
+          <button data-ng-repeat="skill in session.hero.skills" class="skill selector-button hide"></button>
+        </section>
+      </section>
+    </section>
+    <section id="GD-Game-Setup" class="hide page-wrap"><span class="step-menu">
+        <ol>
+          <li>Mode </li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Hero</li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Skill </li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Ultimate</li>
+        </ol></span>
+      <section class="mode">
+        <div>
+          <h1>Mode </h1>
+          <p>Choose 1 mode, this choice will decide the kind of game you will play.</p>
+        </div>
+        <div class="selector-container">
+          <button data-ng-repeat="mode in modeList" class="mode selector-button"></button>
+        </div>
+      </section>
+      <section class="heros">
+        <div>
+          <h1>Heros </h1>
+          <p>Choose 1 epic hero, your selection will be who you will customize and battle with.</p>
+        </div>
+        <button data-ng-repeat="hero in heroList" class="hero selector-button"></button>
+      </section>
+      <section class="skills">
+        <div>
+          <h1>Skills</h1>
+          <p>Choose 4 skills, your hero is training to become a master at using your selected skills. </p>
+        </div>
+        <div class="selector-container">
+          <button data-ng-repeat="skill in skillList" class="skill selector-button"></button>
+        </div>
+      </section>
+      <section class="ultimates">
+        <div>
+          <h1>Ultimate Skill </h1>
+          <p>Choose 1 ultimate skill, this might be the strongest skill your hero has!</p>
+        </div>
+        <div class="selector-container">
+          <button data-ng-repeat="ultimate in ultimateList" class="ultimate selector-button"></button>
+        </div>
+      </section>
+    </section>
+  </body>
+</html>
