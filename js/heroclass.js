@@ -28,16 +28,14 @@ function hero(hero, heroSpells, x, y, player) {
 	this.healthBar.graphics.beginFill("green").drawRect(-30, -60, 60, 10);
 	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
 	this.spellBar = {
-		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-30, -50, 11, 15)),
-		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 10, 14)),
-		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-18, -50, 11, 15)),
-		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-18, -50, 10, 14)),
-		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-6, -50, 11, 15)),
-		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-6, -50, 10, 14)),
-		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(6, -50, 11, 15)),
-		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(6, -50, 10, 14)),
-		spellFive: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(18, -50, 11, 15)),
-		spellFiveCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(18, -50, 10, 14)),
+		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-30, -50, 15, 15)),
+		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 14, 14)),
+		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-15, -50, 15, 15)),
+		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-15, -50, 14, 14)),
+		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(0, -50, 15, 15)),
+		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(0, -50, 14, 14)),
+		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(15, -50, 15, 15)),
+		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(15, -50, 14, 14)),
 	},
 	this.player = player,
 	this.stageObject.alpha = 0.9
@@ -48,12 +46,11 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stageObject.addChild(this.spellBar.spellTwo),
 	this.stageObject.addChild(this.spellBar.spellThree),
 	this.stageObject.addChild(this.spellBar.spellFour),
-	this.stageObject.addChild(this.spellBar.spellFive),
 	this.stageObject.addChild(this.spellBar.spellOneCooldown),
 	this.stageObject.addChild(this.spellBar.spellTwoCooldown),
 	this.stageObject.addChild(this.spellBar.spellThreeCooldown),
 	this.stageObject.addChild(this.spellBar.spellFourCooldown),
-	this.stageObject.addChild(this.spellBar.spellFiveCooldown),
+
 	this.effects = [],
 	this.hit = 11,
 	this.moveWayPoint = {
@@ -149,35 +146,28 @@ function hero(hero, heroSpells, x, y, player) {
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 10, 14)
+					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 14, 14)
 					continue
 				case "1": //Key 2
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-18, -50, percentage * 10, 14)
+					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-15, -50, percentage * 14, 14)
 					continue
 				case "2":
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellThreeCooldown.graphics.clear().beginFill("red").drawRect(-6, -50, percentage * 10, 14)
+					this.spellBar.spellThreeCooldown.graphics.clear().beginFill("red").drawRect(0, -50, percentage * 14, 14)
 					continue
 				case "3":
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellFourCooldown.graphics.clear().beginFill("red").drawRect(6, -50, percentage * 10, 14)
-					continue
-				case "4":
-					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
-					if (percentage > 1) {
-						percentage = 1
-					}
-					this.spellBar.spellFiveCooldown.graphics.clear().beginFill("red").drawRect(18, -50, percentage * 10, 14)
+					this.spellBar.spellFourCooldown.graphics.clear().beginFill("red").drawRect(15, -50, percentage * 14, 14)
 					continue
 			}
 
@@ -208,20 +198,17 @@ function hero(hero, heroSpells, x, y, player) {
 		if (playerStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
 			var point = gameStage.globalToLocal(playerStage.mouseX, playerStage.mouseY);
 			switch (keyCode) {
-				case 49: //Key 1
+				case 81: //Key Q
 					this.spells[0].cast(point.x, point.y, this) //Cast spell 1 with current mouse x and y
 					return false;
-				case 50: //Key 2
+				case 87: //Key W
 					this.spells[1].cast(point.x, point.y, this) //Cast Spell 2 with current mouse x and y
 					return false;
-				case 51:
+				case 69: // Key E
 					this.spells[2].cast(point.x, point.y, this)
 					return false;
-				case 52:
+				case 82: // Key R (ULTIMATE)
 					this.spells[3].cast(point.x, point.y, this)
-					return false;
-				case 53:
-					this.spells[4].cast(point.x, point.y, this)
 					return false;
 			}
 		}
@@ -231,21 +218,18 @@ function hero(hero, heroSpells, x, y, player) {
 	this.levelSpell = function(keyCode) {
 		if (this.spellLevels > 0) { //Do they even have the ability to level up a spell?
 			switch (keyCode) {
-				case 49: //Key 1
-					levelSpell(this, 0) //Spell 1. Level it up, passing hero object
-					return false;
-				case 50:
+				case 81://Key Q
+					levelSpell(this, 0)
+					break;
+				case 87: //Key W
 					levelSpell(this, 1)
-					return false;
-				case 51:
+					break;
+				case 69: //Key E
 					levelSpell(this, 2)
-					return false;
-				case 52:
+					break;
+				case 82: //Key R
 					levelSpell(this, 3)
-					return false;
-				case 53:
-					levelSpell(this, 4)
-					return false;
+					break;
 			}
 		}
 	},

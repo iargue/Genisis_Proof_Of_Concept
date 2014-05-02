@@ -91,7 +91,7 @@ function handleComplete(e) {
 	gameOptions = {
 		mode: 'solo',
 		hero: 'warrior',
-		spells: [new spellList['nidSpear'], new spellList['coneFire'], new spellList['damageOverTime'], new spellList['aoeStun'], new ultimateList['ultIceBall']]
+		spells: [new spellList['nidSpear'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
 	}
 	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);
@@ -187,19 +187,19 @@ function handleKeyDown(e) {
 					gameStage.regX -= 10
 				}
 				break;
-			case 81:
+			case 49:
 				spawnUnit(0, 0);
 				break;
-			case 87:
+			case 50:
 				spawnUnit(1, 0);
 				break;
-			case 69:
+			case 51:
 				spawnUnit(2, 0);
 				break;
-			case 82:
+			case 52:
 				spawnUnit(3, 0);
 				break;
-			case 84:
+			case 53:
 				spawnUnit(4, 0);
 				break;
 			case 65:
