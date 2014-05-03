@@ -2,6 +2,12 @@ module.exports = (grunt) ->
 	# Project configuration.
 	grunt.initConfig
 		# pkg: grunt.file.readJSON('package.json')
+		concurrent:
+			target1: ['watch','devserver']
+			# target2: ['devserver']
+			options: 
+                logConcurrentOutput: true
+
 		watch:
 			options:
 				livereload: true
@@ -20,6 +26,10 @@ module.exports = (grunt) ->
 				tasks: ['jade']
 				options:
 					event: ['all']
+
+		devserver:
+  			server: {}	
+
 		stylus:
 			compile:
 				files: 
@@ -38,6 +48,8 @@ module.exports = (grunt) ->
 					'build/bin/game.html': ['develop/partials/game.jade']
 					'build/bin/forum.html': ['develop/partials/forum.jade']
 					'build/bin/support.html': ['develop/partials/support.jade']
+
+
 	
 	# Load plugins that provide tasks.
 	grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -45,6 +57,7 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks 'grunt-contrib-coffee'
 	grunt.loadNpmTasks 'grunt-contrib-jade'
 	grunt.loadNpmTasks 'grunt-devserver'
+	grunt.loadNpmTasks 'grunt-concurrent'
 
 	# Default task.
-	grunt.registerTask 'default', ['watch']
+	grunt.registerTask 'default', ['concurrent:target1']
