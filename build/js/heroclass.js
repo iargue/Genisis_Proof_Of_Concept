@@ -67,8 +67,8 @@ function hero(hero, heroSpells, x, y, player) {
 	this.spellLevels = 1,
 	this.radius = 25,
 	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('green').drawCircle(0, 0, Math.round(this.radius / 10)))
-	this.miniMapObject.x = Math.round(this.stageObject.x / 10)
-	this.miniMapObject.y = Math.round(this.stageObject.y / 10)
+	this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
+	this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
 	miniMapStage.addChild(this.miniMapObject)
 	this.localSpriteSheet = new createjs.SpriteSheet({
 		framerate: 10,

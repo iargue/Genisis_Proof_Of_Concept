@@ -102,8 +102,8 @@ function spawnHero(hero, side) {
 					hero.stageObject.y = spawnListOne[spawn].y
 					hero.moveWayPoint.x = hero.stageObject.x
 					hero.moveWayPoint.y = hero.stageObject.y
-					hero.miniMapObject.x = Math.round(hero.stageObject.x / 10)
-					hero.miniMapObject.y = Math.round(hero.stageObject.y / 10)
+					hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width)
+					hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height)
 					return
 				}
 			}
@@ -195,8 +195,8 @@ function moveTo(unit, targetX, targetY, steps) {
 		unit.stageObject.y = targetY
 	}
 	if (unit.miniMapObject) {
-		unit.miniMapObject.x = Math.round(unit.stageObject.x / 10)
-		unit.miniMapObject.y = Math.round(unit.stageObject.y / 10)
+		unit.miniMapObject.x = Math.round(unit.stageObject.x / miniMapRatio.width)
+		unit.miniMapObject.y = Math.round(unit.stageObject.y / miniMapRatio.height)
 
 	}
 
