@@ -61,3 +61,4 @@ module.exports = (grunt) ->
 
 	# Default task.
 	grunt.registerTask 'default', ['concurrent:target1']
+	grunt.registerTask 'dev', ['devserver']
