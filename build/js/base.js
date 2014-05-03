@@ -75,10 +75,10 @@ function createStage() {
 function loadImages() {
 	contentManager.loadManifest([{
 		id: "warrior",
-		src: "http://localhost:8888/build/assets/gamewarrior.png"
+		src: "http://localhost:8888/build/assets/game/warrior.png"
 	}, {
 		id: "background",
-		src: "http://localhost:8888/build/assets/gamebackground.png"
+		src: "http://localhost:8888/build/assets/game/background.png"
 	}]);
 
 }

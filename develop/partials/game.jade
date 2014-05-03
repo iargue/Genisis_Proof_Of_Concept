@@ -5,7 +5,8 @@ html
 		meta(charset="utf-8")
 		title Game of Defense
 		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
-		script(type="text/javascript", src="http://code.createjs.com/createjs-2013.12.12.min.js")
+		script(type="text/javascript", src="../vendor/createjs.min.js")
+		script(type="text/javascript", src="../vendor/QuadTree.js")
 		script(type="text/javascript", src="../js/heroList.js")
 		script(type="text/javascript", src="../js/monsterList.js")
 		script(type="text/javascript", src="../js/spellList.js")
@@ -16,7 +17,7 @@ html
 		script(type="text/javascript", src="../js/particleClass.js")
 		script(type="text/javascript", src="../js/base.js")
 		link(rel="stylesheet", href="../style/main.css")
-	body
+	body(onload="init();")
 		section#GD-Game
 			canvas#gameCanvas Alternate content
 			section#game-panel
