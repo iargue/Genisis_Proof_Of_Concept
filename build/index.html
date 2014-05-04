@@ -4,11 +4,6 @@
     <meta charset="utf-8">
     <title>The Game of Defense The Site</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
-    <script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
-    <script type="text/javascript" src="js/heroList.js"></script>
-    <script type="text/javascript" src="js/enemyList.js"></script>
-    <script type="text/javascript" src="js/skillList.js"></script>
-    <script type="type/javascript" src="js/ultimateList.js"></script>
     <link rel="stylesheet" href="style/main.css">
   </head>
   <body>
@@ -37,7 +32,7 @@
             <button class="shop">Shop</button></a></nav>
       </header>
       <div class="content">
-        <div class="news-item"><img src="assets/site-image/simple.svg" class="news-image">
+        <div class="news-item"><img src="assets/site-images/simple.svg" class="news-image">
           <div class="news-info"><a href="newspageQuery">
               <h1>NEWS TITLE</h1></a>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu varius dolor, vitae commodo nunc. Maecenas pretium est a ante laoreet, sed ullamcorper nunc tristique. Morbi a interdum erat, nec semper enim. Mauris facilisis dui non nibh vestibulum, a rhoncus elit euismod. Duis consequat molestie purus, et ultrices eros aliquam at. Duis rutrum ac lectus eget dapibus. Etiam tincidunt turpis non diam ultricies, in dictum nisl adipiscing. Suspendisse mollis ante ac ligula ultrices, ac feugiat nisi malesuada. Pellentesque rutrum volutpat felis, ut egestas odio. Donec imperdiet facilisis metus eget convallis. Proin euismod libero sit amet nulla convallis, at consequat quam lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae gravida nulla.</p>
@@ -53,29 +48,37 @@
         </ul>
       </div>
     </section>
-    <section id="GD-Login" class="hide">
-      <svg class="logo"></svg>
-      <section class="panel">
-        <h2>Account Login</h2>
-        <label>Username</label>
-        <input type="text">
-        <label>Password</label>
-        <input type="password">
-        <label>Remember username?</label>
-        <input type="checkbox" class="check">
-        <button>Log In</button>
-      </section>
-      <section id="account">
-        <div>
-          <p>Need an account?</p>
-          <button class="signup">Sign Up</button>
-        </div>
-        <div>
-          <p>Forgot your username or password?</p>
-          <button class="forgot">Remind Me</button>
-        </div>
-      </section>
-    </section>
+    <table id="GD-Login">
+      <tbody>
+        <tr>
+          <th>Siege Login</th>
+        </tr>
+        <tr>
+          <td>
+            <label>Username</label>
+          </td>
+          <td>
+            <input type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Password</label>
+          </td>
+          <td>
+            <input type="password">
+          </td>
+        </tr>
+        <tr>
+          <td><a href="./Forgot">Forgot Username or Password?</a></td>
+        </tr>
+        <tr>
+          <td>
+            <button>Log In</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <section id="GD-Profile" class="hide"></section>
     <section id="GD-About" class="hide"></section>
     <section id="GD-Game-Guide" class="hide"></section>

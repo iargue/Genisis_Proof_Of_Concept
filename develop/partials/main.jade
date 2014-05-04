@@ -5,11 +5,6 @@ html(id="data-ng-app")
 		meta(charset="utf-8")
 		title The Game of Defense The Site
 		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
-		script(type="text/javascript", src="http://code.createjs.com/createjs-2013.12.12.min.js")
-		script(type="text/javascript", src="js/heroList.js")
-		script(type="text/javascript", src="js/enemyList.js")
-		script(type="text/javascript", src="js/skillList.js")
-		script(type="type/javascript", src="js/ultimateList.js")
 		link(rel="stylesheet", href="style/main.css")
 	body
 		section#GD-Home.page-wrap
@@ -43,7 +38,7 @@ html(id="data-ng-app")
 
 			div.content 
 				div.news-item 
-					img(src="assets/site-image/simple.svg").news-image
+					img(src="assets/site-images/simple.svg").news-image
 					div.news-info
 						a(href="newspageQuery")
 							h1 NEWS TITLE
@@ -59,25 +54,26 @@ html(id="data-ng-app")
 					li
 						a(href="./Support") Support 
 
-		section#GD-Login.hide
-			svg.logo
-			section.panel
-				h2 Account Login
-				label Username
-				input(type="text")
-				label Password
-				input(type="password")
-				label Remember username?
-				input.check(type="checkbox")
-				button Log In
-
-			section#account
-				div
-					p Need an account?
-					button.signup Sign Up
-				div
-					p Forgot your username or password?
-					button.forgot Remind Me
+		table#GD-Login
+			tbody
+				tr
+					th Siege Login
+				tr 
+					td 
+						label Username
+					td
+						input(type="text")
+				tr 
+					td
+						label Password
+					td
+						input(type="password")
+				tr 
+					td
+						a(href="./Forgot") Forgot Username or Password?
+				tr
+					td
+						button Log In
 
 		section#GD-Profile.hide
 

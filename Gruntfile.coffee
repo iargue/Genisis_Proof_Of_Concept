@@ -44,6 +44,7 @@ module.exports = (grunt) ->
 					pretty: true
 				files:
 					'build/index.html': ['develop/partials/main.jade']
+					'build/bin/register.html': ['develop/partials/register.jade']
 					'build/bin/shop.html': ['develop/partials/shop.jade']
 					'build/bin/game.html': ['develop/partials/game.jade']
 					'build/bin/forum.html': ['develop/partials/forum.jade']

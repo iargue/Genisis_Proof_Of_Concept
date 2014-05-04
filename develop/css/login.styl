@@ -19,9 +19,6 @@ body
   font-family arial
   background-color #807966
 
-.hide
-  display none
-
 /*
   MIXINS
 */
@@ -164,44 +161,31 @@ display flex
         padding 5%
 
 #GD-Login
-  #logo
-    top 10%
-    left 10%
-    width 25%
-    height 20%
-    border 20px solid black
-  .panel
-    top 40%
-    left 10%
-    width 25%
-    height 40%
-    >
-      width 100%
-    h2
-      height 20%
-    #login
-      height 50%
-      >
-        margin-left 5%
+  position fixed
+  padding 0
+  height 80%
+  width 50%
+  top 10%
+  left 25%
+  background-color white
+  margin-left auto
+  margin-right auto
+  overflow auto
+  tbody tr 
+    th
+      font-size 2em
+    td
+      display block
+      vertical-align center
+      text-align center 
+      align center
       input
-        width 90%
-      .check
-      button
-        width 40% 
-        
-
-    #account
-      height 30%
-      >div
-        height 50%
-        >
-          height 100%
-        p
-          width 50%
-          margin-left 5%
-        button
-          width 50%
-
+        width 80%
+        margin auto
+        padding 0
+      button 
+        padding 0 20%
+      
 #GD-Game-Setup
   .step-menu
     display fixed
@@ -285,6 +269,9 @@ display flex
     .items
       -webkit-flex-flow row-reverse nowrap
       flex-flow row-reverse nowrap
+
+.hide
+  display none
 
 @media all and (max-width: 1280px) and (min-width: 800px) 
   #GD-Game #game-panel .selector-container .selector-button
