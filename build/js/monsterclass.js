@@ -32,7 +32,7 @@ function monster(monster, x, y, player) {
 	this.effects = [],
 	this.hit = 11,
 	this.radius = 16,
-	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / 10)))
+	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius)))
 	miniMapStage.addChild(this.miniMapObject)
 	this.stageObject.setBounds(x, y, 16, 16),
 

@@ -35,9 +35,42 @@ function endGame(loser) {
 	console.log(Loser + ' Has lost this game. Sucker')
 }
 
+function updateStage(event) {
+	if (playerStage.canvas.height != playerStage.canvas.clientHeight || playerStage.canvas.width != playerStage.canvas.clientWidth) {
+		playerStage.canvas.height = playerStage.canvas.clientHeight
+		playerStage.canvas.width = playerStage.canvas.clientWidth
+		miniMapStage.canvas.height = miniMapStage.canvas.clientHeight
+		miniMapStage.canvas.width = miniMapStage.canvas.clientWidth
+		miniMapRatio = {
+			height: Math.round(2000 / miniMapStage.canvas.height),
+			width: Math.round(2000 / miniMapStage.canvas.width),
+			radius: Math.round((2000 + 2000) / (miniMapStage.canvas.height + miniMapStage.canvas.width))
+		}
+		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.canvas.width, miniMapStage.canvas.height)
+		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.canvas.height / 2, miniMapStage.canvas.width, 2)
+		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.width / miniMapRatio.width, playerStage.canvas.height / miniMapRatio.height)
+		gameTime.x = playerStage.canvas.width - 60
+		gameTime.y = playerStage.canvas.height - 60
+		incomeTime.x = playerStage.canvas.width - 60
+		incomeTime.y = playerStage.canvas.height - 40
+		if (gameStage.regY + playerStage.canvas.height > 2000) {
+			gameStage.regY = 2000 - playerStage.canvas.height
+		}
+		if (gameStage.regX + playerStage.canvas.width > 2000) {
+			gameStage.regX = 2000 - playerStage.canvas.width
+		}
+		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
+		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+	}
+	playerStage.update(event); //Finally update the stage with all of our changes.
+	miniMapStage.update(event)
+}
+
 
 function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
+	playerStage.canvas.height = playerStage.canvas.clientHeight
+	playerStage.canvas.width = playerStage.canvas.clientWidth
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
 	gameStage.height = 2000;
@@ -47,12 +80,20 @@ function createStage() {
 	gameStage.addChild(playerSplit)
 	playerStage.addChild(gameStage);
 	miniMapStage = new createjs.Stage("miniMap");
-	var mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, 200, 200));
-	var miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 100, 200, 5))
+	miniMapStage.canvas.height = miniMapStage.canvas.clientHeight
+	miniMapStage.canvas.width = miniMapStage.canvas.clientWidth
+	miniMapRatio = {
+		height: Math.round(2000 / miniMapStage.canvas.height),
+		width: Math.round(2000 / miniMapStage.canvas.width),
+		radius: Math.round((2000 + 2000) / (miniMapStage.canvas.height + miniMapStage.canvas.width))
+	}
+	console.log(miniMapRatio)
+	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.canvas.width, miniMapStage.canvas.height));
+	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.canvas.height / 2, miniMapStage.canvas.width, 2))
 	miniMapStage.addChild(mapBorder)
 	miniMapStage.addChild(miniPlayerSplit)
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
-	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / 10), Math.round(playerStage.canvas.height / 10)))
+	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)))
 	miniMapStage.addChild(playerBorder)
 	gameTime = new createjs.Text('00:00:00', "12px Calibri", 'black');
 	gameTime.x = playerStage.canvas.width - 60
@@ -132,8 +173,8 @@ function edgeScrolling(event) {
 			gameStage.regX -= 5
 		}
 	}
-	playerBorder.x = Math.round(gameStage.regX / 10)
-	playerBorder.y = Math.round(gameStage.regY / 10)
+	playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
+	playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 }
 
 function handleMouse(e) {
@@ -170,21 +211,29 @@ function handleKeyDown(e) {
 			case 40:
 				if (gameStage.regY + playerStage.canvas.height < 2000) {
 					gameStage.regY += 10
+				} else {
+					gameStage.regY = 2000 - playerStage.canvas.height
 				}
 				break;
 			case 39: // Right arrow key
 				if (gameStage.regX + playerStage.canvas.width < 2000) {
 					gameStage.regX += 10
+				} else {
+					gameStage.regX = 2000 - playerStage.canvas.width
 				}
 				break;
 			case 38: //Up arrow key
 				if (gameStage.regY > 0) {
 					gameStage.regY -= 10
+				} else {
+					gameStage.regY = 0
 				}
 				break;
 			case 37: // Left arrow key
 				if (gameStage.regX > 0) {
 					gameStage.regX -= 10
+				} else {
+					gameStage.regX = 0
 				}
 				break;
 			case 49:
@@ -221,16 +270,16 @@ function handleKeyDown(e) {
 				activePlayer.hero.castSpell(e.keyCode)
 		}
 
-		playerBorder.x = Math.round(gameStage.regX / 10)
-		playerBorder.y = Math.round(gameStage.regY / 10)
+		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
+		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 	}
 }
 
 function miniMapClick(event) {
 	if (miniMapStage.mouseInBounds == true) {
 		point = {
-			x: (event.stageX * 10) - (playerStage.canvas.width / 2),
-			y: (event.stageY * 10) - (playerStage.canvas.height / 2),
+			x: (event.stageX * miniMapRatio.width) - (playerStage.canvas.width / 2),
+			y: (event.stageY * miniMapRatio.height) - (playerStage.canvas.height / 2),
 		}
 		if (point.x < 0) {
 			point.x = 0
@@ -246,8 +295,8 @@ function miniMapClick(event) {
 		gameStage.regX = point.x
 		gameStage.regY = point.y
 
-		playerBorder.x = Math.round(gameStage.regX / 10)
-		playerBorder.y = Math.round(gameStage.regY / 10)
+		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
+		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 	}
 	scrollDown = false
 	scrollUp = false
@@ -294,7 +343,6 @@ function gameLoop(event) {
 	particleList = particleList.filter(function(x) { //Filter dead units from the player List
 		return x.active == true;
 	})
-	updateCollisionTree(event)
-	playerStage.update(event); //Finally update the stage with all of our changes.
-	miniMapStage.update(event)
+	updateCollisionTree(event);
+	updateStage(event);
 }
