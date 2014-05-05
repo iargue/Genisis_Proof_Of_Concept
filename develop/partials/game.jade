@@ -21,13 +21,14 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 		link(rel="stylesheet", href="../style/main.css")
 	body(onload="init();")
 		section#GD-Game(data-ng-controller="appCtrl")
-			canvas#gameCanvas Alternate content
+			canvas#gameCanvas
 			section#game-panel
 				section.enemies.selector-container
-					button.enemy.selector-button(data-ng-repeat="minion in spells")
+					button.enemy.selector-button(data-ng-repeat="monster in monsters")
+						img(src="{{contentManager.getResult(monster.icon)}}")
 					button.shop.selector-button.hide(data-ng-repeat="item in session.shop.available")
 				div.switch
-					button#enemy
+					button#enemy(data-ng-click="getSpells()")
 					button#shop
 				section#info
 					image(data-ng-model="session.game.selected.image")
@@ -41,8 +42,8 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 					button#skill
 					button#inventory
 				section.items.selector-container
-					button.item.selector-button(data-ng-repeat="item in session.hero.inventory")
-					button.skill.selector-button.hide(data-ng-repeat="skill in session.hero.skills")
+					button.skill.selector-button(data-ng-repeat="spell in spells")
+					button.item.selector-button.hide(data-ng-repeat="item in session.hero.inventory")
 		section#GD-Game-Setup.hide.page-wrap
 			span.step-menu
 				ol

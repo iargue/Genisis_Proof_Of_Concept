@@ -21,14 +21,14 @@
   </head>
   <body onload="init();">
     <section id="GD-Game" data-ng-controller="appCtrl">
-      <canvas id="gameCanvas">Alternate content</canvas>
+      <canvas id="gameCanvas"></canvas>
       <section id="game-panel">
         <section class="enemies selector-container">
-          <button data-ng-repeat="minion in spells" class="enemy selector-button"></button>
+          <button data-ng-repeat="monster in monsters" class="enemy selector-button"><img src="{{contentManager.getResult(monster.icon)}}"></button>
           <button data-ng-repeat="item in session.shop.available" class="shop selector-button hide"></button>
         </section>
         <div class="switch">
-          <button id="enemy"></button>
+          <button id="enemy" data-ng-click="getSpells()"></button>
           <button id="shop"></button>
         </div>
         <section id="info">
@@ -45,8 +45,8 @@
           <button id="inventory"></button>
         </div>
         <section class="items selector-container">
-          <button data-ng-repeat="item in session.hero.inventory" class="item selector-button"></button>
-          <button data-ng-repeat="skill in session.hero.skills" class="skill selector-button hide"></button>
+          <button data-ng-repeat="spell in spells" class="skill selector-button"></button>
+          <button data-ng-repeat="item in session.hero.inventory" class="item selector-button hide"></button>
         </section>
       </section>
     </section>

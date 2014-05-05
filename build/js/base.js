@@ -19,11 +19,17 @@ var stage, timeCircle, tickCircle, unitList = [],
 var appModule = angular.module('siegeApp', []);
 
 appModule.controller('appCtrl', function($scope){
-	$scope.test = [1, 2];
-	console.log(activePlayer);
-	//$scope.spells = activePlayer.hero.spells;
+	$scope.getSpells = function(){
+		$scope.spells = activePlayer.hero.spells;
+		console.log($scope.spells);
+		$scope.$apply();
+	}
+	$scope.getMonsters = function(){
+		$scope.monsters = monsterList[activePlayer.summonLevel];
+		console.log($scope.monsters);
+		$scope.$apply();
+	}
 });
-
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -32,6 +38,8 @@ function newGame(gameOptions) {
 		opponentTeam = activeTeam
 		teamList.push(activeTeam)
 	}
+	angular.element(document.getElementById("GD-Game")).scope().getSpells();
+	angular.element(document.getElementById("GD-Game")).scope().getMonsters();
 	//Add story
 	//Add online
 	//Add tutorial
