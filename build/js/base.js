@@ -138,9 +138,11 @@ function handleComplete(e) {
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown
+	playerStage.mouseMoveOutside = true;
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("stagemouseup", miniMapClick);
 	playerStage.addEventListener("stagemousemove", handleMouse);
+	log = true
 }
 
 function init() {
@@ -151,6 +153,7 @@ function init() {
 }
 
 function edgeScrolling(event) {
+	
 	if (scrollDown) {
 		if (gameStage.regY + playerStage.canvas.height < 2000) {
 			gameStage.regY += 5
@@ -178,9 +181,15 @@ function edgeScrolling(event) {
 }
 
 function handleMouse(e) {
+	// console.log(playerStage.canvas.height)
 	if (e.stageY >= playerStage.canvas.height - 30) {
-		scrollDown = true
-		scrollUp = false
+		if (e.stageY+1 != playerStage.canvas.height) {
+			scrollDown = true
+			scrollUp = false
+		} else {
+			scrollUp = false
+			scrollDown = false
+		}
 	} else if (e.stageY < 30) {
 		scrollUp = true
 		scrollDown = false
@@ -188,7 +197,7 @@ function handleMouse(e) {
 		scrollUp = false
 		scrollDown = false
 	}
-	if (e.stageX >= playerStage.canvas.width - 30) {
+	if (e.stageX >= playerStage.canvas.width - 30 ) {
 		scrollRight = true
 		scrollLeft = false
 	} else if (e.stageX < 30) {
@@ -201,9 +210,6 @@ function handleMouse(e) {
 }
 
 function handleKeyDown(e) {
-	if (!e) {
-		var e = window.event;
-	}
 	if (e.shiftKey) {
 		activePlayer.hero.levelSpell(e.keyCode)
 	} else {

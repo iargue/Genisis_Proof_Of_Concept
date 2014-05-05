@@ -67,9 +67,11 @@ function hero(hero, heroSpells, x, y, player) {
 	this.spellLevels = 1,
 	this.radius = 25,
 	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('green').drawCircle(0, 0,this.radius/ miniMapRatio.radius))
+	this.miniMapWayPoint = new createjs.Shape(new createjs.Graphics().setStrokeStyle(10/miniMapRatio.radius).moveTo(this.stageObject.x, this.stageObject.y).beginStroke('yellow').lineTo(this.stageObject.x, this.stageObject.y))
 	this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
 	this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
 	miniMapStage.addChild(this.miniMapObject)
+	miniMapStage.addChild(this.miniMapWayPoint)
 	this.localSpriteSheet = new createjs.SpriteSheet({
 		framerate: 10,
 		images: [contentManager.getResult(hero.imageName)], //image to use
@@ -84,7 +86,7 @@ function hero(hero, heroSpells, x, y, player) {
 	this.animationObject.rotation = 0
 	this.stageObject.addChild(this.animationObject)
 	this.goldTime = 45000
-	this.itemList = {}
+	this.itemList = []
 
 	this.update = function(event) {
 		if (this.alive == false) { //Hero is dead
@@ -118,6 +120,7 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
+		this.miniMapWayPoint.graphics.clear().setStrokeStyle(10/miniMapRatio.radius).moveTo(Math.round(this.stageObject.x/ miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).beginStroke('black').lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y/  miniMapRatio.height))
 	},
 
 	this.updatePassive = function(event) {
@@ -181,19 +184,28 @@ function hero(hero, heroSpells, x, y, player) {
 			displayText('You are currently wielding too many items', 'red')
 			return
 		} else if (itemList[itemID].cost > this.gold) {
-			displayText('You cannot afford this item', red)
+			displayText('You cannot afford this item', 'red')
 			return
+		} else if (itemList[itemID].unique == true) {
+			for (var item in this.itemList) {
+				console.log(item)
+				if (this.itemList[item] == itemList[itemID]) {
+					displayText('You already own one of this item', 'red')
+					return
+				}
+			}
 		}
-		console.log(itemList[itemID])
 		this.gold -= itemList[itemID].cost
+		this.itemList.push(itemList[itemID])
 		for (var stat in itemList[itemID].stats) {
 			this[stat] += itemList[itemID].stats[stat]
 		}
 
 	},
 
-	this.sellItem = function(item) {
-
+	this.sellItem = function(itemNumber) {
+		this.gold += this.itemList[itemNumber].cost / 2
+		this.itemList.splice( itemNumber, 1)
 	},
 
 	this.applyEffect = function(x) {
