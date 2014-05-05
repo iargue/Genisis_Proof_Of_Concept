@@ -126,6 +126,9 @@ function loadImages() {
 	}, {
 		id: "background",
 		src: "http://localhost:8888/build/assets/game/background.png"
+	}, {
+		id: "monster1",
+		src: "http://localhost:8888/build/assets/game/monster1.png"
 	}]);
 
 }

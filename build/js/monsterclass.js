@@ -21,19 +21,20 @@ function monster(monster, x, y, player) {
 	this.stageObject = new createjs.Container(),
 	this.stageObject.x = x,
 	this.stageObject.y = y,
-	this.stageShape = new createjs.Shape(),
-	this.stageShape.graphics.beginFill(monster.color).drawCircle(0, 0, 16),
+	this.stageShape = new createjs.Bitmap(contentManager.getResult(monster.icon)),
+	// this.stageShape = new createjs.Shape(),
+	// this.stageShape.graphics.beginFill(monster.color).drawCircle(0, 0, 16),
 	this.healthBar = new createjs.Shape(),
-	this.healthBar.graphics.beginFill("red").drawRect(-18, -30, 35, 8);
-	this.player = player
+	this.healthBar.graphics.beginFill("red").drawRect(-18, -30, 35, 8),
+	this.player = player,
 	gameStage.addChild(this.stageObject),
-	this.stageObject.addChild(this.stageShape)
+	this.stageObject.addChild(this.stageShape),
 	this.stageObject.addChild(this.healthBar),
 	this.effects = [],
 	this.hit = 11,
 	this.radius = 16,
-	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius)))
-	miniMapStage.addChild(this.miniMapObject)
+	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius))),
+	miniMapStage.addChild(this.miniMapObject),
 	this.stageObject.setBounds(x, y, 16, 16),
 
 
@@ -45,7 +46,7 @@ function monster(monster, x, y, player) {
 		this.move(event)
 		this.handleCombat(event)
 		this.stageObject.setBounds(this.stageObject.x, this.stageObject.y, 16, 16)
-	}
+	},
 
 
 	this.move = function(event) {
@@ -124,7 +125,7 @@ function monster(monster, x, y, player) {
 		this.player.team.removePoints(1)
 		gameStage.removeChild(this.stageObject)
 		miniMapStage.removeChild(this.miniMapObject)
-	}
+	},
 
 	this.takeDamage = function(damageAmount, damageType, attacker) {
 		if (damageType == "AD") {
@@ -142,7 +143,7 @@ function monster(monster, x, y, player) {
 		} else {
 			this.healthBar.graphics.clear().beginFill("red").drawRect(-18, -30, (this.CHP / this.HP) * 35, 8)
 		}
-	}
+	},
 
 
 
