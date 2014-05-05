@@ -1,10 +1,10 @@
 doctype html
 
-html
+html(id="data-ng-app", data-ng-app="siegeApp")
 	head
 		meta(charset="utf-8")
 		title Game of Defense
-		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
+		script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js")
 		script(type="text/javascript", src="../vendor/createjs.min.js")
 		script(type="text/javascript", src="../vendor/QuadTree.js")
 		script(type="text/javascript", src="../js/heroList.js")
@@ -20,11 +20,11 @@ html
 		script(type="text/javascript", src="../js/itemClass.js")
 		link(rel="stylesheet", href="../style/main.css")
 	body(onload="init();")
-		section#GD-Game
+		section#GD-Game(data-ng-controller="appCtrl")
 			canvas#gameCanvas Alternate content
 			section#game-panel
 				section.enemies.selector-container
-					button.enemy.selector-button(data-ng-repeat="minion in session.game.enemies")
+					button.enemy.selector-button(data-ng-repeat="minion in spells")
 					button.shop.selector-button.hide(data-ng-repeat="item in session.shop.available")
 				div.switch
 					button#enemy

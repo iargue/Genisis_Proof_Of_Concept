@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html id="data-ng-app" data-ng-app="siegeApp">
   <head>
     <meta charset="utf-8">
     <title>Game of Defense</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
     <script type="text/javascript" src="../vendor/createjs.min.js"></script>
     <script type="text/javascript" src="../vendor/QuadTree.js"></script>
     <script type="text/javascript" src="../js/heroList.js"></script>
@@ -20,11 +20,11 @@
     <link rel="stylesheet" href="../style/main.css">
   </head>
   <body onload="init();">
-    <section id="GD-Game">
+    <section id="GD-Game" data-ng-controller="appCtrl">
       <canvas id="gameCanvas">Alternate content</canvas>
       <section id="game-panel">
         <section class="enemies selector-container">
-          <button data-ng-repeat="minion in session.game.enemies" class="enemy selector-button"></button>
+          <button data-ng-repeat="minion in spells" class="enemy selector-button"></button>
           <button data-ng-repeat="item in session.shop.available" class="shop selector-button hide"></button>
         </section>
         <div class="switch">
