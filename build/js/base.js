@@ -16,9 +16,16 @@ var stage, timeCircle, tickCircle, unitList = [],
 	scrollLeft = false,
 	scrollRight = false;
 
+var appModule = angular.module('siegeApp', []);
+
+appModule.controller('appCtrl', function($scope){
+	$scope.test = [1, 2];
+	console.log(activePlayer);
+	//$scope.spells = activePlayer.hero.spells;
+});
+
+
 function newGame(gameOptions) {
-	console.log(contentManager)
-	console.log(contentManager.getResult('warrior'))
 	if (gameOptions.mode == 'solo') {
 		activeTeam = new team(0)
 		activeTeam.addPlayer(0, true, gameOptions.hero, gameOptions.spells)
@@ -87,7 +94,6 @@ function createStage() {
 		width: Math.round(2000 / miniMapStage.canvas.width),
 		radius: Math.round((2000 + 2000) / (miniMapStage.canvas.height + miniMapStage.canvas.width))
 	}
-	console.log(miniMapRatio)
 	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.canvas.width, miniMapStage.canvas.height));
 	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.canvas.height / 2, miniMapStage.canvas.width, 2))
 	miniMapStage.addChild(mapBorder)
@@ -149,7 +155,6 @@ function init() {
 	contentManager = new createjs.LoadQueue();
 	loadImages()
 	contentManager.on("complete", handleComplete, this);
-
 }
 
 function edgeScrolling(event) {

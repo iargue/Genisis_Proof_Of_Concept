@@ -91,10 +91,8 @@ function spawnHero(hero, side) {
 
 	]
 	if (side == 0) {
-		console.log(hero.player.team.playerList)
 		for (var player in hero.player.team.playerList) {
 			for (var spawn in spawnListOne) {
-				console.log(spawnListOne[spawn].x)
 				if (hero.player.team.playerList[player].hero.checkCollision(spawnListOne[spawn].x, spawnListOne[spawn].y, 60)) {
 					continue
 				} else {
