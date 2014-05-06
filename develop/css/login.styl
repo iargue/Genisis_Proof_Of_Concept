@@ -147,7 +147,82 @@ display flex
           padding 0
         button 
           padding 0 20%
-      
+
+/*
+  GD-Game
+*/  
+#GD-Game
+  width 100%
+  height 100%
+  position absolute
+  #gameCanvas
+    //position fixed
+    width 100%
+    height 80%
+  #game-panel
+    display flex  
+    align-content stretch   
+    position absolute  
+    width 100%
+    height 20%
+    bottom 0%
+    .switch
+      background-color #444
+      flex 2
+      display flex
+      -webkit-flex-flow column nowrap
+      flex-flow column nowrap
+      flex-direction column
+      >button
+        flex 1
+        margin 0
+      .chosen
+        background-color ButtonHighlight
+    #info 
+      flex 2
+      background-color blue
+      display flex
+      -webkit-flex-flow column nowrap
+      flex-flow column nowrap
+      flex-direction column 
+      >button
+        text-align center
+        flex 1
+        margin 0
+        border 0
+        outline 0
+      >button:nth-child(-n+3)
+        border-bottom 1px solid black
+    #selected
+      background-color red
+      flex 10
+      max-height 100%
+      overflow auto
+    #miniMap
+      flex 10
+    .selector-container
+      background-color #222
+      flex 11
+      display flex
+      //align-content flex-start
+      //justify-content flex-start
+      //align-items stretch
+      overflow auto
+      .selector-button
+        flex 0 0 25%
+        margin 0
+        //padding-bottom 25%
+        //margin auto
+        >img
+          width 100%
+    .enemies    
+      -webkit-flex-flow row wrap
+      flex-flow row wrap
+    .items
+      -webkit-flex-flow row-reverse wrap
+      flex-flow row-reverse wrap
+    
+
 #GD-Game-Setup
   .step-menu
     display fixed
@@ -183,61 +258,10 @@ display flex
   section .selector-container
     width 100%
     height 200px
-    
-  
-
-/*
-  GD-Game
-*/  
-#GD-Game
-  #gameCanvas
-    position absolute
-    width 100%
-    height 85%
-  #game-panel
-    display flex  
-    align-content stretch     
-    width 100%
-    height 15%
-    position fixed
-    top 85%
-    .switch
-      background-color #444
-      flex 1
-      display flex
-      -webkit-flex-flow column nowrap
-      flex-flow column nowrap
-      flex-direction column
-      >button
-        flex 1
-    #info
-      background-color red
-      flex 3
-      max-height 100%
-      overflow auto
-    #minimap
-      flex 3
-    .selector-container
-      background-color #222
-      flex 5
-      display flex
-      justify-content flex-start
-      overflow auto
-      .selector-button
-        flex 1 0 45%
-        >img
-          height 100%
-          width 100%
-    .enemies    
-      -webkit-flex-flow row nowrap
-      flex-flow row nowrap
-    .items
-      -webkit-flex-flow row-reverse nowrap
-      flex-flow row-reverse nowrap
 
 .hide
   display none
-
+/*
 @media all and (max-width: 1280px) and (min-width: 800px) 
   #GD-Game #game-panel .selector-container .selector-button
     flex 0 0 28.33%
@@ -247,3 +271,4 @@ display flex
   #GD-Game #game-panel .selector-container .selector-button
     flex 0 0 20%
     padding-bottom 20%
+*/

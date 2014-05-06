@@ -28,19 +28,25 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 						img(ng-src="{{getImage(monster)}}")
 					button.shop.selector-button.hide(data-ng-repeat="item in session.shop.available")
 				div.switch
-					button#enemy(data-ng-click="getSpells()")
-					button#shop
-				section#info
+					button#enemy.chosen(data-ng-click="getSpells()", ) Enemy
+					button#shop Shop
+				section#selected
 					image(data-ng-model="session.game.selected.image")
 					div.health
 					div.selected
 					div.ad
 					div.mp
 					div.mp
+				section#info
+					//- Have to resize text in this section in javascript
+					button#game-time In-game Time
+					button#time-to-income Countdown to Gold
+					button#gold Current Gold
+					button#health Current Health
 				canvas#miniMap
 				div.switch
-					button#skill
-					button#inventory
+					button#skill Spell
+					button#inventory Inventory
 				section.items.selector-container
 					button.skill.selector-button(data-ng-repeat="spell in spells")
 					button.item.selector-button.hide(data-ng-repeat="item in session.hero.inventory")
