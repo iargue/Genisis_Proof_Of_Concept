@@ -24,7 +24,7 @@
       <canvas id="gameCanvas"></canvas>
       <section id="game-panel">
         <section class="enemies selector-container">
-          <button data-ng-repeat="monster in monsters" class="enemy selector-button"><img src="{{contentManager.getResult(monster.icon)}}"></button>
+          <button data-ng-repeat="monster in monsters" class="enemy selector-button"><img ng-src="{{getImage(monster)}}"></button>
           <button data-ng-repeat="item in session.shop.available" class="shop selector-button hide"></button>
         </section>
         <div class="switch">

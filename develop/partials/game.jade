@@ -25,7 +25,7 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 			section#game-panel
 				section.enemies.selector-container
 					button.enemy.selector-button(data-ng-repeat="monster in monsters")
-						img(src="{{contentManager.getResult(monster.icon)}}")
+						img(ng-src="{{getImage(monster)}}")
 					button.shop.selector-button.hide(data-ng-repeat="item in session.shop.available")
 				div.switch
 					button#enemy(data-ng-click="getSpells()")

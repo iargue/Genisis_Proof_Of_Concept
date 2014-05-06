@@ -127,6 +127,7 @@ function spawnUnit(monsterNumber) {
 			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
 		} else {
 			unit = new monster(monsterList[activePlayer.summonLevel][monsterNumber], x, y, activePlayer)
+			angular.element(document.getElementById("GD-Game")).scope().getMonsters();
 			opponentTeam.unitList.push(unit)
 			collisionTree.insert(unit)
 			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
