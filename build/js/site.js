@@ -4,7 +4,7 @@ var siteModule = angular.module('siteApp', []);
 
 siteModule.controller('siteCtrl', function($scope){
 	var sessionCons = function(){
-		show: {
+		var show = {
 			home: true,
 			login: false,
 			register: false,
