@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html id="data-ng-app">
+<html id="data-ng-app" data-ng-app="siteApp">
   <head>
     <meta charset="utf-8">
     <title>The Game of Defense The Site</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+    <script type="text/javascript" src="js/site.js"></script>
     <link rel="stylesheet" href="style/main.css">
   </head>
-  <body>
-    <section id="GD-Home" class="page-wrap">
-      <div class="service">
-        <div>
-          <input type="search" results="5" placeholder="Explore Site...">
-        </div>
-        <div><a href="./bin/game.html">
-            <button class="offline">Play Now!</button></a></div>
-        <div>
-          <ul data-ng-hide="session.loggedIn">
-            <li><a href="?login" onclick="session.login">Login</a></li>
-            <li><a href="./Register">Register</a></li>
-          </ul>
-          <ul data-ng-show="session.loggedIn" class="hide">
-            <li><a href="./Profile">{{session.user.userName}}</a></li>
-            <li><a href="?logout" onclick="session.logout">Logout</a></li>
-          </ul>
-        </div>
+  <body data-ng-controller="siteCtrl">
+    <div class="service page-wrap">
+      <div>
+        <input type="search" results="5" placeholder="Explore Site...">
       </div>
+      <div><a href="./bin/game.html">
+          <button class="offline">Play Now!</button></a></div>
+      <div>
+        <ul data-ng-hide="session.loggedIn">
+          <li><a href="?login" onclick="session.login">Login</a></li>
+          <li><a href="./Register">Register</a></li>
+        </ul>
+        <ul data-ng-show="session.loggedIn" class="hide">
+          <li><a href="./Profile">{{session.user.userName}}</a></li>
+          <li><a href="?logout" onclick="session.logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+    <section id="GD-Site" class="page-wrap">
       <header><img src="assets/site-images/ok.png" alt="poop" class="content-header">
         <nav><a href="./bin/game-guide.html">
             <button class="guide">Game Guide</button></a><a href="./bin/forum.html">
@@ -48,39 +49,45 @@
         </ul>
       </div>
     </section>
-    <table id="GD-Login">
-      <tbody>
-        <tr>
-          <th>Siege Login</th>
-        </tr>
-        <tr>
-          <td>
-            <label>Username</label>
-          </td>
-          <td>
-            <input type="text">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label>Password</label>
-          </td>
-          <td>
-            <input type="password">
-          </td>
-        </tr>
-        <tr>
-          <td><a href="./Forgot">Forgot Username or Password?</a></td>
-        </tr>
-        <tr>
-          <td>
-            <button>Log In</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <section id="GD-Profile" class="hide"></section>
-    <section id="GD-About" class="hide"></section>
-    <section id="GD-Game-Guide" class="hide"></section>
+    <section id="GD-Login" class="hide">
+      <table>
+        <tbody>
+          <tr>
+            <th>Siege Login</th>
+          </tr>
+          <tr>
+            <td>
+              <label>Username</label>
+            </td>
+            <td>
+              <input type="text">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Password</label>
+            </td>
+            <td>
+              <input type="password">
+            </td>
+          </tr>
+          <tr>
+            <td><a href="./Forgot">Forgot Username or Password?</a></td>
+          </tr>
+          <tr>
+            <td>
+              <button>Log In</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="GD-Register" class="page-wrap hide"></section>
+    <section id="GD-Profile" class="page-wrap hide"></section>
+    <section id="GD-About" class="page-wrap hide"></section>
+    <section id="GD-Game-Guide" class="page-wrap hide"></section>
+    <section id="GD-Forum" class="page-wrap hide"></section>
+    <section id="GD-Shop" class="page-wrap hide"></section>
+    <section id="GD-Support" class="page-wrap hide"></section>
   </body>
 </html>

@@ -1,31 +1,31 @@
 doctype html
 
-html(id="data-ng-app")
+html(id="data-ng-app", data-ng-app="siteApp")
 	head
 		meta(charset="utf-8")
 		title The Game of Defense The Site
 		script(type="text/javascript", src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js")
+		script(type="text/javascript", src="js/site.js")
 		link(rel="stylesheet", href="style/main.css")
-	body
-		section#GD-Home.page-wrap
-			div.service
-				div
-					input(type="search", results=5, placeholder="Explore Site...")
-				div
-					a(href="./bin/game.html")
-						button.offline Play Now!
-				div
-					ul(data-ng-hide="session.loggedIn")
-						li
-							a(href="?login", onclick="session.login") Login
-						li
-							a(href="./Register") Register
-					ul(data-ng-show="session.loggedIn").hide
-						li
-							a(href="./Profile") {{session.user.userName}}
-						li
-							a(href="?logout", onclick="session.logout") Logout
-
+	body(data-ng-controller="siteCtrl")
+		div.service.page-wrap
+			div
+				input(type="search", results=5, placeholder="Explore Site...")
+			div
+				a(href="./bin/game.html")
+					button.offline Play Now!
+			div
+				ul(data-ng-hide="session.loggedIn")
+					li
+						a(href="?login", onclick="session.login") Login
+					li
+						a(href="./Register") Register
+				ul(data-ng-show="session.loggedIn").hide
+					li
+						a(href="./Profile") {{session.user.userName}}
+					li
+						a(href="?logout", onclick="session.logout") Logout
+		section#GD-Site.page-wrap
 			header
 				img.content-header(src="assets/site-images/ok.png", alt="poop")
 				nav
@@ -54,32 +54,40 @@ html(id="data-ng-app")
 					li
 						a(href="./Support") Support 
 
-		table#GD-Login
-			tbody
-				tr
-					th Siege Login
-				tr 
-					td 
-						label Username
-					td
-						input(type="text")
-				tr 
-					td
-						label Password
-					td
-						input(type="password")
-				tr 
-					td
-						a(href="./Forgot") Forgot Username or Password?
-				tr
-					td
-						button Log In
+		section#GD-Login.hide
+			table
+				tbody
+					tr
+						th Siege Login
+					tr 
+						td 
+							label Username
+						td
+							input(type="text")
+					tr 
+						td
+							label Password
+						td
+							input(type="password")
+					tr 
+						td
+							a(href="./Forgot") Forgot Username or Password?
+					tr
+						td
+							button Log In
 
-		section#GD-Profile.hide
-
-
-		section#GD-About.hide
+		section#GD-Register.page-wrap.hide
 
 
-		section#GD-Game-Guide.hide
+		section#GD-Profile.page-wrap.hide
+
+		section#GD-About.page-wrap.hide
+
+		section#GD-Game-Guide.page-wrap.hide
+
+		section#GD-Forum.page-wrap.hide
+
+		section#GD-Shop.page-wrap.hide 
+
+		section#GD-Support.page-wrap.hide
 			

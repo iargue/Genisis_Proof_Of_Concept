@@ -33,6 +33,7 @@ appModule.controller('appCtrl', function($scope){
 		var image = contentManager.getItem(monster.icon).src
 		return image
 	}
+	$scope.get
 });
 
 function newGame(gameOptions) {
