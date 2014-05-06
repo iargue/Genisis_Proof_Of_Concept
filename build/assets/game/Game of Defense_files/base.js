@@ -32,7 +32,6 @@ appModule.controller('appCtrl', function($scope) {
 		var image = contentManager.getItem('monster1').src
 		return image
 	}
-	$scope.get
 });
 
 function newGame(gameOptions) {

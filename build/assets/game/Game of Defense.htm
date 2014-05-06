@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://localhost:8888/build/bin/game.html -->
+<html id="data-ng-app" data-ng-app="siegeApp" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}</style>
+    <meta charset="utf-8">
+    <title>Game of Defense</title>
+    <script type="text/javascript" src="./Game of Defense_files/angular.min.js"></script><style type="text/css"></style>
+    <script type="text/javascript" src="./Game of Defense_files/createjs.min.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/QuadTree.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/heroList.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/monsterList.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/spellList.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/ultimateList.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/utility.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/heroClass.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/monsterClass.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/playerClass.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/particleClass.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/base.js"></script>
+    <script type="text/javascript" src="./Game of Defense_files/itemClass.js"></script>
+    <link rel="stylesheet" href="http://localhost:8888/build/style/main.css">
+  </head>
+  <body onload="init();">
+    <section id="GD-Game" data-ng-controller="appCtrl" class="ng-scope">
+      <canvas id="gameCanvas" height="428" width="1600"></canvas>
+      <section id="game-panel">
+        <section class="enemies selector-container">
+          <!-- ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters --><button data-ng-repeat="monster in monsters" class="enemy selector-button ng-scope"><img ng-src="http://localhost:8888/build/assets/game/monster1.png" src="./Game of Defense_files/monster1.png"></button><!-- end ngRepeat: monster in monsters -->
+          <!-- ngRepeat: item in session.shop.available -->
+        </section>
+        <div class="switch">
+          <button id="enemy" data-ng-click="getSpells()"></button>
+          <button id="shop"></button>
+        </div>
+        <section id="info">
+          <img data-ng-model="session.game.selected.image" class="ng-pristine ng-valid">
+          <div class="health"></div>
+          <div class="selected"></div>
+          <div class="ad"></div>
+          <div class="mp"></div>
+          <div class="mp"></div>
+        </section>
+        <canvas id="miniMap" height="75" width="300"></canvas>
+        <div class="switch">
+          <button id="skill"></button>
+          <button id="inventory"></button>
+        </div>
+        <section class="items selector-container">
+          <!-- ngRepeat: spell in spells --><button data-ng-repeat="spell in spells" class="skill selector-button ng-scope"></button><!-- end ngRepeat: spell in spells --><button data-ng-repeat="spell in spells" class="skill selector-button ng-scope"></button><!-- end ngRepeat: spell in spells --><button data-ng-repeat="spell in spells" class="skill selector-button ng-scope"></button><!-- end ngRepeat: spell in spells --><button data-ng-repeat="spell in spells" class="skill selector-button ng-scope"></button><!-- end ngRepeat: spell in spells -->
+          <!-- ngRepeat: item in session.hero.inventory -->
+        </section>
+      </section>
+    </section>
+    <section id="GD-Game-Setup" class="hide page-wrap"><span class="step-menu">
+        <ol>
+          <li>Mode </li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Hero</li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Skill </li>
+          <div class="arrow">
+            <div class="arrow-right"></div>
+          </div>
+          <li>Ultimate</li>
+        </ol></span>
+      <section class="mode">
+        <div>
+          <h1>Mode </h1>
+          <p>Choose 1 mode, this choice will decide the kind of game you will play.</p>
+        </div>
+        <div class="selector-container">
+          <!-- ngRepeat: mode in modeList -->
+        </div>
+      </section>
+      <section class="heros">
+        <div>
+          <h1>Heros </h1>
+          <p>Choose 1 epic hero, your selection will be who you will customize and battle with.</p>
+        </div>
+        <!-- ngRepeat: hero in heroList -->
+      </section>
+      <section class="skills">
+        <div>
+          <h1>Skills</h1>
+          <p>Choose 4 skills, your hero is training to become a master at using your selected skills. </p>
+        </div>
+        <div class="selector-container">
+          <!-- ngRepeat: skill in skillList -->
+        </div>
+      </section>
+      <section class="ultimates">
+        <div>
+          <h1>Ultimate Skill </h1>
+          <p>Choose 1 ultimate skill, this might be the strongest skill your hero has!</p>
+        </div>
+        <div class="selector-container">
+          <!-- ngRepeat: ultimate in ultimateList -->
+        </div>
+      </section>
+    </section>
+  
+</body></html>
