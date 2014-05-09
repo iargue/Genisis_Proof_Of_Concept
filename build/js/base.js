@@ -14,7 +14,8 @@ var stage, timeCircle, tickCircle, unitList = [],
 	scrollDown = false,
 	scrollUp = false,
 	scrollLeft = false,
-	scrollRight = false;
+	scrollRight = false,
+	castActive = false;
 
 var appModule = angular.module('siegeApp', []);
 
@@ -99,10 +100,16 @@ function updateStage(event) {
 		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
 
-		gameTime.x = playerStage.canvas.width * 0.3
-		gameTime.y = playerStage.canvas.height * 0.95
-		incomeTime.x = playerStage.canvas.width * 0.5
-		incomeTime.y = playerStage.canvas.height * 0.95
+		statusBar = new createjs.Container()
+		statusBar.x = playerStage.canvas.width * 0.25
+		statusBar.y = playerStage.canvas.height - 20
+		statusBar.height = 28
+		statusBar.width = playerStage.canvas.clientWidth * 0.5
+		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
+
+		gameTime.x = statusBar.width * 0.1
+		gameTime.y = incomeTime.y = statusBar.height * 0.10
+		incomeTime.x = statusBar.width * 0.73
 
 		if (gameStage.regY + playerStage.canvas.height > 2000) {
 			gameStage.regY = 2000 - playerStage.canvas.height
@@ -112,6 +119,9 @@ function updateStage(event) {
 		}
 		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
 		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+	}
+	if (leftSwap.swapViewId == 0) {
+		updateSpells(event)
 	}
 	playerStage.update(event); //Finally update the stage with all of our changes.
 	playerBar.update(event)
@@ -150,15 +160,6 @@ function createStage() {
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)))
 	miniMapStage.addChild(playerBorder)
-	gameTime = new createjs.Text('00:00:00', "12px Calibri", 'red');
-	playerStage.addChild(gameTime)
-	incomeTime = new createjs.Text('00:00:00', "12px Calibri", 'red');
-
-	gameTime.x = playerStage.canvas.width * 0.3
-	gameTime.y = playerStage.canvas.height * 0.95
-	incomeTime.x = playerStage.canvas.width * 0.5
-	incomeTime.y = playerStage.canvas.height * 0.95
-	playerStage.addChild(incomeTime)
 	playerBar.addChild(miniMapStage)
 	bounds = {
 		x: 0,
@@ -168,6 +169,37 @@ function createStage() {
 	}
 	collisionTree = QUAD.init(bounds);
 
+
+	statusBar = new createjs.Container()
+	statusBar.x = playerStage.canvas.width * 0.25
+	statusBar.y = playerStage.canvas.height - 20
+	statusBar.height = 28
+	statusBar.width = playerStage.canvas.clientWidth * 0.5
+	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
+	statusBar.addChild(statusBarObject)
+	playerStage.addChild(statusBar)
+
+	gameTime = new createjs.Text('Game Time 00:00:00', "14px Calibri", 'red');
+	incomeTime = new createjs.Text('Next Income 00:00:00', "14px Calibri", 'red');
+	gameTime.x = statusBar.width * 0.1
+	gameTime.y = incomeTime.y = statusBar.height * 0.10
+	incomeTime.x = statusBar.width * 0.73
+
+	leftSwap = new createjs.Container()
+	var hit = new createjs.Shape();
+	hit.graphics.beginFill("#000").drawRect(0, 0, statusBar.width * 0.1, statusBar.height);
+	leftSwap.hitArea = hit
+	leftSwap.textObject = new createjs.Text('Show Spells', "14px Calibri", 'red');
+	leftSwap.textObject.y = statusBar.height * 0.10
+	leftSwap.textObject.x = statusBar.width * 0.01
+	leftSwap.swapViewId = 1
+	leftSwap.addChild(leftSwap.textObject)
+	leftSwap.addEventListener('click', handleLeftSwap)
+
+
+	statusBar.addChild(leftSwap)
+	statusBar.addChild(gameTime)
+	statusBar.addChild(incomeTime)
 
 	informationStage = new createjs.Container();
 	informationStage.x = playerBar.canvas.width * 0.30
@@ -196,8 +228,10 @@ function createStage() {
 	shopStage.addChild(shopStageObject)
 	playerBar.addChild(shopStage)
 
-	
+}
 
+function handleLeftSwap(event) {
+	updateMonsterBar(event.target.swapViewId)
 }
 
 
@@ -205,6 +239,8 @@ function updateMonsterBar(view) {
 	monsterStage.removeAllChildren() // Clear everything from this section
 	monsterStage.addChild(monsterStageObject) //Add back our background
 	if (view == 0) { //View 0 is Monsters
+		leftSwap.swapViewId = 1
+		leftSwap.textObject.text = 'Show Spells'
 		buttonWidth = monsterStage.width / 4 //Calculate how much width we have for buttons
 		buttonHeight = monsterStage.height / 2 // Calculate the two levels for buttons
 		monsterButtons = [] //Create an object to store everything
@@ -212,7 +248,7 @@ function updateMonsterBar(view) {
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon)) //Add an image to the container. Based on monster icon
-			
+
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
 				monsterButtons[unit].x = buttonWidth * (unit - 4) //Since we are on row 2, we have to restart our x movement
@@ -230,13 +266,61 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
 			monsterStage.addChild(monsterButtons[unit]) //Add the container to the monsterStage container
 		}
-	} else if(view == 1) { //View 1 is Spells
+	} else if (view == 1) { //View 1 is Spells
+		leftSwap.textObject.text = 'Monsters'
+		leftSwap.swapViewId = 0
+		buttonWidth = monsterStage.width / 4 //Calculate how much width we have for buttons
+		buttonHeight = monsterStage.height // Calculate the two levels for buttons
+		spellButtons = [] //Create an object to store everything
+		for (var spell in activePlayer.hero.spells) { //Lets loop through all of the currently free monsters
+			var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current monster
+			spellButtons[spell] = new createjs.Container() //Container for the multiple objects we will be creating
+			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) //Add an image to the container. Based on monster icon
+			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
+			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
+			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
+			spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			spellButtons[spell].button.spellId = spell //Store a reference to what monster this button is for. Used when clicking
+			spellButtons[spell].button.scaleX = buttonWidth / spellButtons[spell].button.image.width //Scale the image down so it fits
+			spellButtons[spell].button.scaleY = buttonHeight / spellButtons[spell].button.image.height //Scale the image down so it fits
+			spellButtons[spell].levelButton.addEventListener('click', levelClick)
+			spellButtons[spell].addEventListener('click', spellClick) //When this button is clicked, call this function (monsterclick)
+			spellButtons[spell].addChild(spellButtons[spell].button) //Add to the container
+			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
+		}
+	}
+}
 
+function updateSpells(event) {
+	for (var spell in activePlayer.hero.spells) { //Lets loop through all of the currently free monsters
+		var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current monster
+		percentage = ((new Date() - spellObject.currentCoolDown) / spellObject.coolDown)
+		if (percentage > 1) {
+			percentage = 1
+		}
+		if (spellObject.level == 0) {
+			percentage = 0.1
+		}
+		if (activePlayer.hero.spellLevels > 0) {
+			spellButtons[spell].addChild(spellButtons[spell].levelButton)
+		} else {
+			spellButtons[spell].removeChild(spellButtons[spell].levelButton)
+		}
+		spellButtons[spell].button.alpha = percentage
 	}
 }
 
 function monsterClick(event) { //Called when a Monster button is clicked.
 	spawnUnit(event.target.monsterId) //Spawn the unit related to that button. This value is stored when the button is first created in updateMonsterBar
+}
+
+function spellClick(event) { //Called when a Monster button is clicked.
+	castActive = event.target.spellId 
+}
+
+function levelClick(event) { //Called when a Monster button is clicked.
+	castActive = false
+	levelSpell(activePlayer.hero, event.target.parent.button.spellId)
 }
 
 function loadImages() {
@@ -252,6 +336,15 @@ function loadImages() {
 	}, {
 		id: "pokemon",
 		src: "http://localhost:8888/build/assets/game/pokemon.png"
+	}, {
+		id: "fireball",
+		src: "http://localhost:8888/build/assets/game/fireball.png"
+	}, {
+		id: "iceball",
+		src: "http://localhost:8888/build/assets/game/iceball.png"
+	}, {
+		id: "plus",
+		src: "http://localhost:8888/build/assets/game/plus.png"
 	}]);
 
 }
@@ -287,7 +380,6 @@ function init() {
 }
 
 function edgeScrolling(event) {
-
 	if (scrollDown) {
 		if (gameStage.regY + playerStage.canvas.height < 2000) {
 			gameStage.regY += 5
@@ -419,12 +511,10 @@ function handleKeyDown(e) {
 
 function miniMapClick(event) {
 	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
-		console.log(event)
 		point = {
 			x: (event.localX * miniMapRatio.width) - (playerStage.canvas.width / 2),
 			y: (event.localY * miniMapRatio.height) - (playerStage.canvas.height / 2),
 		}
-		console.log(point)
 		if (point.x < 0) {
 			point.x = 0
 		} else if (point.x > (2000 - playerStage.canvas.width)) {
@@ -454,7 +544,17 @@ function miniMapClick(event) {
 
 function handleClick(event) {
 	if (playerStage.mouseInBounds == true && event.nativeEvent.which == 3) {
+		castActive = false;
 		activePlayer.hero.updateWaypoint(event);
+	}
+	if (castActive) {
+		if (playerStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
+			var point = gameStage.globalToLocal(playerStage.mouseX, playerStage.mouseY);
+			activePlayer.hero.spells[castActive].cast(point.x, point.y, activePlayer.hero)
+			castActive = false;
+		} else {
+			castActive = false;
+		}
 	}
 }
 
@@ -470,8 +570,8 @@ function updateCollisionTree(event) {
 
 function gameLoop(event) {
 	edgeScrolling(event)
-	gameTime.text = msToTime(event.time)
-	incomeTime.text = msToTime(activePlayer.hero.goldTime + 20000)
+	gameTime.text = 'Game Time ' + msToTime(event.time)
+	incomeTime.text = 'Next Income ' + msToTime(activePlayer.hero.goldTime + 20000)
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player

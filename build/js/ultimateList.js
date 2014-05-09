@@ -1,5 +1,6 @@
 ultimateList = {
 	ultIceBall: function() {
+		this.icon = 'iceball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here

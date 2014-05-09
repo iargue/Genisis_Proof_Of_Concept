@@ -9,6 +9,7 @@ function effect(effectAmount, effectDuration, effectType) {
 
 var spellList = { //Constains a list of every spell in the game, Named.
 	aoeSlow: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -57,6 +58,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
 	},
 	aoeStun: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -105,6 +107,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
 	},
 	aoeNuke: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -151,6 +154,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	nidSpear: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -194,6 +198,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	fireBall: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -283,6 +288,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	iceBall: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -382,6 +388,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	arcLightening: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -451,6 +458,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	coneFire: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -507,6 +515,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	damageOverTime: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 11, 15, 25, 30, 38, 47, 49, 55, 61, 68], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -555,6 +564,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		}
 	},
 	cupcakeTrap: function() {
+		this.icon = 'fireball',
 		this.level = 0, //Level of spell
 		this.damagePerLevel = [0, 11, 15, 25, 30, 38, 47, 49, 55, 61, 68], //Damage scaling per level. Balance goes here
 		this.coolDownPerLevel = [0, 5000, 4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 900], //Cooldown scaling per level. Balance goes here
@@ -564,7 +574,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
 		this.range = this.rangePerLevel[this.level]
 		this.damage = this.damagePerLevel[this.level], //Current damage based on level of spell
 		this.coolDown = this.coolDownPerLevel[this.level], //Current cooldown based on level of spell
-		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "stun"), 
+		this.effect = new effect(this.effectAmountPerLevel[this.level], this.effectDurationPerLevel[this.level], "stun"),
 		this.effectType = "stun"
 		this.currentCoolDown = 9999999, //Set this to a high number so next new date() check will pass.
 		this.cast = function(x, y, attacker) {
