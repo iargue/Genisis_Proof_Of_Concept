@@ -22,39 +22,7 @@
   <body onload="init();">
     <section id="GD-Game" data-ng-controller="appCtrl">
       <canvas id="gameCanvas"></canvas>
-      <section id="game-panel">
-        <section class="enemies selector-container">
-          <button data-ng-repeat="monster in monsters" class="enemy selector-button"><img ng-src="{{getImage(monster)}}"></button>
-          <button data-ng-repeat="item in session.shop.available" class="shop selector-button hide"></button>
-        </section>
-        <div class="switch">
-          <button id="enemy" data-ng-click="getSpells()" class="chosen">Enemy</button>
-          <button id="shop">Shop</button>
-        </div>
-        <section id="selected">
-          <image data-ng-model="session.game.selected.image"></image>
-          <div class="health"></div>
-          <div class="selected"></div>
-          <div class="ad"></div>
-          <div class="mp"></div>
-          <div class="mp"></div>
-        </section>
-        <section id="info">
-          <button id="game-time">In-game Time</button>
-          <button id="time-to-income">Countdown to Gold</button>
-          <button id="gold">Current Gold</button>
-          <button id="health">Current Health</button>
-        </section>
-        <canvas id="miniMap"></canvas>
-        <div class="switch">
-          <button id="skill">Spell</button>
-          <button id="inventory">Inventory</button>
-        </div>
-        <section class="items selector-container">
-          <button data-ng-repeat="spell in spells" class="skill selector-button"></button>
-          <button data-ng-repeat="item in session.hero.inventory" class="item selector-button hide"></button>
-        </section>
-      </section>
+      <canvas id="miniMap"></canvas>
     </section>
     <section id="GD-Game-Setup" class="hide page-wrap"><span class="step-menu">
         <ol>

@@ -22,7 +22,8 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 	body(onload="init();")
 		section#GD-Game(data-ng-controller="appCtrl")
 			canvas#gameCanvas
-			section#game-panel
+			canvas#miniMap
+			//-
 				section.enemies.selector-container
 					button.enemy.selector-button(data-ng-repeat="monster in monsters")
 						img(ng-src="{{getImage(monster)}}")
@@ -31,12 +32,20 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 					button#enemy.chosen(data-ng-click="getSpells()", ) Enemy
 					button#shop Shop
 				section#selected
-					image(data-ng-model="session.game.selected.image")
-					div.health
-					div.selected
-					div.ad
-					div.mp
-					div.mp
+					div#current-info
+						div
+							image(data-ng-model="session.game.selected.image")
+						div current hp
+					div#stats
+						div.ad 23
+						div.hp 532
+						div.mp 21
+						div.md 17
+						div.mr 26
+						div.ar 25
+						div.ms 21
+						div.rn 15
+						div.as 17		
 				section#info
 					//- Have to resize text in this section in javascript
 					button#game-time In-game Time
