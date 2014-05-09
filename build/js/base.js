@@ -78,15 +78,13 @@ function updateStage(event) {
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.width / miniMapRatio.width, playerStage.canvas.height / miniMapRatio.height)
 
 		// Information Stage is a container for player/monster/shop it info. Updates based on what is selected.
-		informationStage = new createjs.Container();
 		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
 		informationStage.y = 0
 		informationStage.height = playerBar.canvas.height
 		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height)
 
-		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)
-		monsterStage = new createjs.Container();
+		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		monsterStage = new createjs.Container();
 		monsterStage.x = 0 //Starts at the start of the bar
 		monsterStage.y = 0
 		monsterStage.height = playerBar.canvas.height
@@ -95,14 +93,12 @@ function updateStage(event) {
 
 
 		//shopStage is a container for all of the Shop's objects (Also contains player's inventory on switch)
-		shopStage = new createjs.Container();
 		shopStage.x = playerBar.canvas.width * 0.70
 		shopStage.y = 0
 		shopStage.height = playerBar.canvas.height
 		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
 
-		statusBar = new createjs.Container()
 		statusBar.x = playerStage.canvas.width * 0.25
 		statusBar.y = playerStage.canvas.height - 20
 		statusBar.height = 28
@@ -121,6 +117,12 @@ function updateStage(event) {
 		}
 		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
 		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+		if (leftSwap.swapViewId == 0) {
+			updateMonsterBar(1)
+		} else {
+			updateMonsterBar(0)
+		}
+		refreshMiniMap(event)
 	}
 	if (leftSwap.swapViewId == 0) {
 		updateSpells(event)
@@ -129,6 +131,23 @@ function updateStage(event) {
 	playerBar.update(event)
 }
 
+
+function refreshMiniMap(event) {
+	for (var team in teamList) { //We have to update each team
+		for (var player in teamList[team].playerList) { //Check each player on that team
+			var hero = teamList[team].playerList[player].hero
+			hero.miniMapObject.graphics.clear().beginFill('green').drawCircle(0, 0, hero.radius / miniMapRatio.radius)
+			hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width)
+			hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height)
+		}
+		for (var unit in teamList[team].unitList) {
+			var currentUnit = teamList[team].unitList[unit]
+			currentUnit.miniMapObject.graphics.clear().beginFill('red').drawCircle(0, 0, currentUnit.radius / miniMapRatio.radius)
+			currentUnit.miniMapObject.x = Math.round(currentUnit.stageObject.x / miniMapRatio.width)
+			currentUnit.miniMapObject.y = Math.round(currentUnit.stageObject.y / miniMapRatio.height)
+		}
+	}
+}
 
 function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
@@ -142,7 +161,7 @@ function createStage() {
 	gameStage.addChild(border)
 	gameStage.addChild(playerSplit)
 	playerStage.addChild(gameStage);
-	playerBar = new createjs.Stage("miniMap");
+	playerBar = new createjs.Stage("gamePanel");
 	playerBar.canvas.height = playerBar.canvas.clientHeight
 	playerBar.canvas.width = playerBar.canvas.clientWidth
 	miniMapStage = new createjs.Container();
@@ -311,6 +330,8 @@ function updateSpells(event) {
 		if (activePlayer.hero.spellLevels > 0) {
 			if ((activePlayer.hero.level / 3) >= spellObject.level) {
 				spellButtons[spell].addChild(spellButtons[spell].levelButton)
+			} else {
+				spellButtons[spell].removeChild(spellButtons[spell].levelButton)
 			}
 		} else {
 			spellButtons[spell].removeChild(spellButtons[spell].levelButton)

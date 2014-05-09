@@ -22,7 +22,7 @@ html(id="data-ng-app", data-ng-app="siegeApp")
 	body(onload="init();")
 		section#GD-Game(data-ng-controller="appCtrl")
 			canvas#gameCanvas
-			canvas#miniMap
+			canvas#gamePanel
 			//-
 				section.enemies.selector-container
 					button.enemy.selector-button(data-ng-repeat="monster in monsters")
