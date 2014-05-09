@@ -42,8 +42,7 @@ function newGame(gameOptions) {
 		opponentTeam = activeTeam
 		teamList.push(activeTeam)
 	}
-	angular.element(document.getElementById("GD-Game")).scope().getSpells();
-	angular.element(document.getElementById("GD-Game")).scope().getMonsters();
+	updateMonsterBar(0)
 	//Add story
 	//Add online
 	//Add tutorial
@@ -58,20 +57,53 @@ function updateStage(event) {
 	if (playerStage.canvas.height != playerStage.canvas.clientHeight || playerStage.canvas.width != playerStage.canvas.clientWidth) {
 		playerStage.canvas.height = playerStage.canvas.clientHeight
 		playerStage.canvas.width = playerStage.canvas.clientWidth
-		miniMapStage.canvas.height = miniMapStage.canvas.clientHeight
-		miniMapStage.canvas.width = miniMapStage.canvas.clientWidth
+		playerBar.canvas.height = playerBar.canvas.clientHeight
+		playerBar.canvas.width = playerBar.canvas.clientWidth
+
+		//miniMapStage is the container for the miniMap.
+		miniMapStage.x = playerBar.canvas.width * 0.50 //Starts at 50% of the playerBar's width
+		miniMapStage.y = 0
+		miniMapStage.height = playerBar.canvas.height
+		miniMapStage.width = playerBar.canvas.width * 0.20 //50% of the playerbars width is the size of this object.
 		miniMapRatio = {
-			height: Math.round(2000 / miniMapStage.canvas.height),
-			width: Math.round(2000 / miniMapStage.canvas.width),
-			radius: Math.round((2000 + 2000) / (miniMapStage.canvas.height + miniMapStage.canvas.width))
+			height: Math.round(2000 / miniMapStage.height),
+			width: Math.round(2000 / miniMapStage.width),
+			radius: Math.round((2000 + 2000) / (miniMapStage.height + miniMapStage.width))
 		}
-		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.canvas.width, miniMapStage.canvas.height)
-		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.canvas.height / 2, miniMapStage.canvas.width, 2)
+		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height)
+		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2)
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.width / miniMapRatio.width, playerStage.canvas.height / miniMapRatio.height)
-		gameTime.x = playerStage.canvas.width - 60
-		gameTime.y = playerStage.canvas.height - 60
-		incomeTime.x = playerStage.canvas.width - 60
-		incomeTime.y = playerStage.canvas.height - 40
+
+		// Information Stage is a container for player/monster/shop it info. Updates based on what is selected.
+		informationStage = new createjs.Container();
+		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
+		informationStage.y = 0
+		informationStage.height = playerBar.canvas.height
+		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
+		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height)
+
+		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)
+		monsterStage = new createjs.Container();
+		monsterStage.x = 0 //Starts at the start of the bar
+		monsterStage.y = 0
+		monsterStage.height = playerBar.canvas.height
+		monsterStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
+		monsterStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height)
+
+
+		//shopStage is a container for all of the Shop's objects (Also contains player's inventory on switch)
+		shopStage = new createjs.Container();
+		shopStage.x = playerBar.canvas.width * 0.70
+		shopStage.y = 0
+		shopStage.height = playerBar.canvas.height
+		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
+		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
+
+		gameTime.x = playerStage.canvas.width * 0.3
+		gameTime.y = playerStage.canvas.height * 0.95
+		incomeTime.x = playerStage.canvas.width * 0.5
+		incomeTime.y = playerStage.canvas.height * 0.95
+
 		if (gameStage.regY + playerStage.canvas.height > 2000) {
 			gameStage.regY = 2000 - playerStage.canvas.height
 		}
@@ -82,7 +114,7 @@ function updateStage(event) {
 		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 	}
 	playerStage.update(event); //Finally update the stage with all of our changes.
-	miniMapStage.update(event)
+	playerBar.update(event)
 }
 
 
@@ -98,30 +130,36 @@ function createStage() {
 	gameStage.addChild(border)
 	gameStage.addChild(playerSplit)
 	playerStage.addChild(gameStage);
-	miniMapStage = new createjs.Stage("miniMap");
-	miniMapStage.canvas.height = miniMapStage.canvas.clientHeight
-	miniMapStage.canvas.width = miniMapStage.canvas.clientWidth
+	playerBar = new createjs.Stage("miniMap");
+	playerBar.canvas.height = playerBar.canvas.clientHeight
+	playerBar.canvas.width = playerBar.canvas.clientWidth
+	miniMapStage = new createjs.Container();
+	miniMapStage.x = playerBar.canvas.width * 0.50
+	miniMapStage.y = 0
+	miniMapStage.height = playerBar.canvas.clientHeight
+	miniMapStage.width = playerBar.canvas.clientWidth * 0.20
 	miniMapRatio = {
-		height: Math.round(2000 / miniMapStage.canvas.height),
-		width: Math.round(2000 / miniMapStage.canvas.width),
-		radius: Math.round((2000 + 2000) / (miniMapStage.canvas.height + miniMapStage.canvas.width))
+		height: Math.round(2000 / miniMapStage.height),
+		width: Math.round(2000 / miniMapStage.width),
+		radius: Math.round((2000 + 2000) / (miniMapStage.height + miniMapStage.width))
 	}
-	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.canvas.width, miniMapStage.canvas.height));
-	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.canvas.height / 2, miniMapStage.canvas.width, 2))
+	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
+	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2))
 	miniMapStage.addChild(mapBorder)
 	miniMapStage.addChild(miniPlayerSplit)
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)))
 	miniMapStage.addChild(playerBorder)
-	gameTime = new createjs.Text('00:00:00', "12px Calibri", 'black');
-	gameTime.x = playerStage.canvas.width - 60
-	gameTime.y = playerStage.canvas.height - 60
+	gameTime = new createjs.Text('00:00:00', "12px Calibri", 'red');
 	playerStage.addChild(gameTime)
-	incomeTime = new createjs.Text('00:00:00', "12px Calibri", 'black');
-	incomeTime.x = playerStage.canvas.width - 60
-	incomeTime.y = playerStage.canvas.height - 40
-	playerStage.addChild(incomeTime)
+	incomeTime = new createjs.Text('00:00:00', "12px Calibri", 'red');
 
+	gameTime.x = playerStage.canvas.width * 0.3
+	gameTime.y = playerStage.canvas.height * 0.95
+	incomeTime.x = playerStage.canvas.width * 0.5
+	incomeTime.y = playerStage.canvas.height * 0.95
+	playerStage.addChild(incomeTime)
+	playerBar.addChild(miniMapStage)
 	bounds = {
 		x: 0,
 		y: 0,
@@ -129,6 +167,76 @@ function createStage() {
 		h: 2000,
 	}
 	collisionTree = QUAD.init(bounds);
+
+
+	informationStage = new createjs.Container();
+	informationStage.x = playerBar.canvas.width * 0.30
+	informationStage.y = 0
+	informationStage.height = playerBar.canvas.clientHeight
+	informationStage.width = playerBar.canvas.clientWidth * 0.20
+	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height));
+	informationStage.addChild(informationStageObject)
+	playerBar.addChild(informationStage)
+
+	monsterStage = new createjs.Container();
+	monsterStage.x = 0
+	monsterStage.y = 0
+	monsterStage.height = playerBar.canvas.clientHeight
+	monsterStage.width = playerBar.canvas.clientWidth * 0.30
+	monsterStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height));
+	monsterStage.addChild(monsterStageObject)
+	playerBar.addChild(monsterStage)
+
+	shopStage = new createjs.Container();
+	shopStage.x = playerBar.canvas.width * 0.70
+	shopStage.y = 0
+	shopStage.height = playerBar.canvas.clientHeight
+	shopStage.width = playerBar.canvas.clientWidth * 0.30
+	shopStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height));
+	shopStage.addChild(shopStageObject)
+	playerBar.addChild(shopStage)
+
+	
+
+}
+
+
+function updateMonsterBar(view) {
+	monsterStage.removeAllChildren() // Clear everything from this section
+	monsterStage.addChild(monsterStageObject) //Add back our background
+	if (view == 0) { //View 0 is Monsters
+		buttonWidth = monsterStage.width / 4 //Calculate how much width we have for buttons
+		buttonHeight = monsterStage.height / 2 // Calculate the two levels for buttons
+		monsterButtons = [] //Create an object to store everything
+		for (var unit in monsterList[activePlayer.summonLevel]) { //Lets loop through all of the currently free monsters
+			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
+			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
+			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon)) //Add an image to the container. Based on monster icon
+			
+			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
+				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
+				monsterButtons[unit].x = buttonWidth * (unit - 4) //Since we are on row 2, we have to restart our x movement
+			} else {
+				monsterButtons[unit].x = buttonWidth * unit //Since we are on row 1, we just increase the x by the width of a button for each unit
+			}
+			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
+			monsterButtons[unit].button.scaleX = buttonWidth / monsterButtons[unit].button.image.width //Scale the image down so it fits
+			monsterButtons[unit].button.scaleY = buttonHeight / monsterButtons[unit].button.image.height //Scale the image down so it fits
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px Calibri", 'gold'); //Add in the text for how much it costs
+			monsterButtons[unit].goldCost.x = buttonWidth - (monster.cost.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
+			monsterButtons[unit].goldCost.y = buttonHeight - 18 //Put it 18px off (Size of text)
+			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
+			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
+			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
+			monsterStage.addChild(monsterButtons[unit]) //Add the container to the monsterStage container
+		}
+	} else if(view == 1) { //View 1 is Spells
+
+	}
+}
+
+function monsterClick(event) { //Called when a Monster button is clicked.
+	spawnUnit(event.target.monsterId) //Spawn the unit related to that button. This value is stored when the button is first created in updateMonsterBar
 }
 
 function loadImages() {
@@ -153,7 +261,7 @@ function handleComplete(e) {
 	playerStage.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
-	miniMapStage.canvas.oncontextmenu = function(e) {
+	playerBar.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
 	gameOptions = {
@@ -167,7 +275,7 @@ function handleComplete(e) {
 	document.onkeydown = handleKeyDown
 	playerStage.mouseMoveOutside = true;
 	playerStage.addEventListener("stagemouseup", handleClick);
-	miniMapStage.addEventListener("stagemouseup", miniMapClick);
+	miniMapStage.addEventListener("click", miniMapClick);
 	playerStage.addEventListener("stagemousemove", handleMouse);
 	log = true
 }
@@ -205,6 +313,8 @@ function edgeScrolling(event) {
 	playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
 	playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 }
+
+
 
 function handleMouse(e) {
 	// console.log(playerStage.canvas.height)
@@ -308,11 +418,13 @@ function handleKeyDown(e) {
 }
 
 function miniMapClick(event) {
-	if (miniMapStage.mouseInBounds == true && event.nativeEvent.which == 1) {
+	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
+		console.log(event)
 		point = {
-			x: (event.stageX * miniMapRatio.width) - (playerStage.canvas.width / 2),
-			y: (event.stageY * miniMapRatio.height) - (playerStage.canvas.height / 2),
+			x: (event.localX * miniMapRatio.width) - (playerStage.canvas.width / 2),
+			y: (event.localY * miniMapRatio.height) - (playerStage.canvas.height / 2),
 		}
+		console.log(point)
 		if (point.x < 0) {
 			point.x = 0
 		} else if (point.x > (2000 - playerStage.canvas.width)) {
