@@ -75,6 +75,10 @@ function levelSpell(hero, spellNumber) {
 		hero.spells[spellNumber].effect = new effect(hero.spells[spellNumber].effectAmountPerLevel[hero.spells[spellNumber].level], hero.spells[spellNumber].effectDurationPerLevel[hero.spells[spellNumber].level], hero.spells[spellNumber].effectType)
 	}
 	hero.spellLevels -= 1 //Hero has 1 less spell he can level up
+	if (spellButtons) {
+		spellButtons[spellNumber].levelText.text = hero.spells[spellNumber].level//Add in the text for what level the spell is
+	}
+	
 }
 
 function spawnHero(hero, side) {

@@ -15,7 +15,9 @@ var stage, timeCircle, tickCircle, unitList = [],
 	scrollUp = false,
 	scrollLeft = false,
 	scrollRight = false,
-	castActive = false;
+	castActive = false,
+	monsterbuttons = null,
+	spellButtons = null;
 
 var appModule = angular.module('siegeApp', []);
 
@@ -247,8 +249,9 @@ function updateMonsterBar(view) {
 		for (var unit in monsterList[activePlayer.summonLevel]) { //Lets loop through all of the currently free monsters
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
-			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon)) //Add an image to the container. Based on monster icon
-
+			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
+			console.log(monster.icon)
+			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
 				monsterButtons[unit].x = buttonWidth * (unit - 4) //Since we are on row 2, we have to restart our x movement
@@ -256,8 +259,8 @@ function updateMonsterBar(view) {
 				monsterButtons[unit].x = buttonWidth * unit //Since we are on row 1, we just increase the x by the width of a button for each unit
 			}
 			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
-			monsterButtons[unit].button.scaleX = buttonWidth / monsterButtons[unit].button.image.width //Scale the image down so it fits
-			monsterButtons[unit].button.scaleY = buttonHeight / monsterButtons[unit].button.image.height //Scale the image down so it fits
+			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
+			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
 			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px Calibri", 'gold'); //Add in the text for how much it costs
 			monsterButtons[unit].goldCost.x = buttonWidth - (monster.cost.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
 			monsterButtons[unit].goldCost.y = buttonHeight - 18 //Put it 18px off (Size of text)
@@ -279,13 +282,17 @@ function updateMonsterBar(view) {
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
 			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
-			spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px Calibri", 'red'); //Add in the text for how much it costs
+			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
+			spellButtons[spell].levelText.y = buttonHeight - 18 //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			spellButtons[spell].x = buttonWidth * spell
 			spellButtons[spell].button.spellId = spell //Store a reference to what monster this button is for. Used when clicking
 			spellButtons[spell].button.scaleX = buttonWidth / spellButtons[spell].button.image.width //Scale the image down so it fits
 			spellButtons[spell].button.scaleY = buttonHeight / spellButtons[spell].button.image.height //Scale the image down so it fits
 			spellButtons[spell].levelButton.addEventListener('click', levelClick)
 			spellButtons[spell].addEventListener('click', spellClick) //When this button is clicked, call this function (monsterclick)
 			spellButtons[spell].addChild(spellButtons[spell].button) //Add to the container
+			spellButtons[spell].addChild(spellButtons[spell].levelText)
 			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
 		}
 	}
@@ -302,7 +309,9 @@ function updateSpells(event) {
 			percentage = 0.1
 		}
 		if (activePlayer.hero.spellLevels > 0) {
-			spellButtons[spell].addChild(spellButtons[spell].levelButton)
+			if ((activePlayer.hero.level / 3) >= spellObject.level) {
+				spellButtons[spell].addChild(spellButtons[spell].levelButton)
+			}
 		} else {
 			spellButtons[spell].removeChild(spellButtons[spell].levelButton)
 		}
@@ -315,7 +324,7 @@ function monsterClick(event) { //Called when a Monster button is clicked.
 }
 
 function spellClick(event) { //Called when a Monster button is clicked.
-	castActive = event.target.spellId 
+	castActive = event.target.spellId
 }
 
 function levelClick(event) { //Called when a Monster button is clicked.
@@ -334,8 +343,8 @@ function loadImages() {
 		id: "monster1",
 		src: "http://localhost:8888/build/assets/game/monster1.png"
 	}, {
-		id: "pokemon",
-		src: "http://localhost:8888/build/assets/game/pokemon.png"
+		id: "monsters",
+		src: "http://localhost:8888/build/assets/game/monsters.png"
 	}, {
 		id: "fireball",
 		src: "http://localhost:8888/build/assets/game/fireball.png"
