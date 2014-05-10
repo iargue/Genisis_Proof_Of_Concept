@@ -52,13 +52,14 @@ function updateStage(event) {
 		miniMapStage.height = playerBar.canvas.height
 		miniMapStage.width = playerBar.canvas.width * 0.20 //50% of the playerbars width is the size of this object.
 		miniMapRatio = {
-			height: Math.round(2000 / miniMapStage.height),
-			width: Math.round(2000 / miniMapStage.width),
-			radius: Math.round((2000 + 2000) / (miniMapStage.height + miniMapStage.width))
+			height: gameStage.height / miniMapStage.height,
+			width: gameStage.width / miniMapStage.width,
+			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
+		
 		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height)
-		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2)
-		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.width / miniMapRatio.width, playerStage.canvas.height / miniMapRatio.height)
+		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2 - 1, miniMapStage.width, 2);
+		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width , playerStage.canvas.clientHeight / miniMapRatio.height);
 
 		// Information Stage is a container for player/monster/shop it info. Updates based on what is selected.
 		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
@@ -67,7 +68,7 @@ function updateStage(event) {
 		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height)
 
-		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		monsterStage = new createjs.Container();
+		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		
 		monsterStage.x = 0 //Starts at the start of the bar
 		monsterStage.y = 0
 		monsterStage.height = playerBar.canvas.height
@@ -82,6 +83,8 @@ function updateStage(event) {
 		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
 
+		console.log(monsterStage.width + " and " + shopStage.width);
+
 		statusBar.x = playerStage.canvas.width * 0.25
 		statusBar.y = playerStage.canvas.height - 20
 		statusBar.height = 28
@@ -92,11 +95,11 @@ function updateStage(event) {
 		gameTime.y = incomeTime.y = statusBar.height * 0.10
 		incomeTime.x = statusBar.width * 0.73
 
-		if (gameStage.regY + playerStage.canvas.height > 2000) {
-			gameStage.regY = 2000 - playerStage.canvas.height
+		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
+			gameStage.regY = gameStage.height - playerStage.canvas.height
 		}
-		if (gameStage.regX + playerStage.canvas.width > 2000) {
-			gameStage.regX = 2000 - playerStage.canvas.width
+		if (gameStage.regX + playerStage.canvas.width > gameStage.width) {
+			gameStage.regX = gameStage.width - playerStage.canvas.width
 		}
 		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
 		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
@@ -120,8 +123,8 @@ function refreshMiniMap(event) {
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			var hero = teamList[team].playerList[player].hero
 			hero.miniMapObject.graphics.clear().beginFill('green').drawCircle(0, 0, hero.radius / miniMapRatio.radius)
-			hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width)
-			hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height)
+			hero.miniMapObject.x = hero.stageObject.x / miniMapRatio.width
+			hero.miniMapObject.y = hero.stageObject.y / miniMapRatio.height
 		}
 		for (var unit in teamList[team].unitList) {
 			var currentUnit = teamList[team].unitList[unit]
@@ -160,16 +163,16 @@ function createStage() {
 	miniMapStage.height = playerBar.canvas.clientHeight;
 	miniMapStage.width = playerBar.canvas.clientWidth * 0.20;
 	miniMapRatio = {
-		height: Math.round(gameStage.width / miniMapStage.height),
-		width: Math.round(gameStage.height / miniMapStage.width),
-		radius: Math.round((gameStage.width + gameStage.height) / (miniMapStage.height + miniMapStage.width))
+		height: gameStage.height / miniMapStage.height,
+		width: gameStage.width / miniMapStage.width,
+		radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 	}
 	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
 	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2));
 	miniMapStage.addChild(mapBorder);
 	miniMapStage.addChild(miniPlayerSplit);
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY);
-	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)));
+	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height));
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
@@ -198,7 +201,6 @@ function createStage() {
 	leftSwap.swapViewId = 1;
 	leftSwap.addChild(leftSwap.textObject);
 	leftSwap.addEventListener('click', handleLeftSwap);
-
 
 	statusBar.addChild(leftSwap)
 	statusBar.addChild(gameTime)
@@ -243,7 +245,7 @@ function updateShopBar(view) {
 	shopStage.addChild(shopStageObject)
 	if (view == 0) { //View 0 is the item shop. Fuck yeah
 		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
-		buttonHeight = shopStage.height - 5 // Calculate the two levels for buttons
+		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
 		itemButtons = []
 		for (var item in itemList) { //Lets loop through all of the currently free items
 			var itemObject = itemList[item] //Store a reference to the current item
@@ -432,12 +434,12 @@ function init() {
 
 function edgeScrolling(event) {
 	if (scrollDown) {
-		if (gameStage.regY + playerStage.canvas.height < 2000) {
+		if (gameStage.regY + playerStage.canvas.height < gameStage.height) {
 			gameStage.regY += 5
 		}
 	}
 	if (scrollRight) {
-		if (gameStage.regX + playerStage.canvas.width < 2000) {
+		if (gameStage.regX + playerStage.canvas.width < gameStage.width) {
 			gameStage.regX += 5
 		}
 
@@ -453,6 +455,7 @@ function edgeScrolling(event) {
 			gameStage.regX -= 5
 		}
 	}
+	//MARKED
 	playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
 	playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
 }
@@ -587,6 +590,7 @@ function miniMapClick(event) {
 	scrollLeft = false
 	scrollRight = false
 	if (miniMapStage.mouseInBounds == true && event.nativeEvent.which == 3) {
+		castActive = false;
 		activePlayer.hero.updateWaypoint(event, true);
 	}
 }
