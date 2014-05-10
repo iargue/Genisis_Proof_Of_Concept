@@ -19,25 +19,6 @@ var stage, timeCircle, tickCircle, unitList = [],
 	monsterbuttons = null,
 	spellButtons = null;
 
-var appModule = angular.module('siegeApp', []);
-
-appModule.controller('appCtrl', function($scope) {
-	$scope.getSpells = function() {
-		$scope.spells = activePlayer.hero.spells;
-		console.log($scope.spells);
-		$scope.$apply();
-	}
-	$scope.getMonsters = function() {
-		$scope.monsters = monsterList[activePlayer.summonLevel];
-		$scope.$apply();
-	}
-	$scope.getImage = function(monster) {
-		var image = contentManager.getItem('monster1').src
-		return image
-	}
-	$scope.get
-});
-
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
 		activeTeam = new team(0)
@@ -151,45 +132,44 @@ function refreshMiniMap(event) {
 
 function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
-	playerStage.canvas.height = playerStage.canvas.clientHeight
-	playerStage.canvas.width = playerStage.canvas.clientWidth
+	playerStage.canvas.height = playerStage.canvas.clientHeight;
+	playerStage.canvas.width = playerStage.canvas.clientWidth;
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
 	gameStage.height = 2000;
-	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('lightgreen').drawRect(0, 0, 2000, 2000));
-	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 1000, 2000, 5))
-	gameStage.addChild(border)
-	gameStage.addChild(playerSplit)
-	playerStage.addChild(gameStage);
-	playerBar = new createjs.Stage("gamePanel");
-	playerBar.canvas.height = playerBar.canvas.clientHeight
-	playerBar.canvas.width = playerBar.canvas.clientWidth
-	miniMapStage = new createjs.Container();
-	miniMapStage.x = playerBar.canvas.width * 0.50
-	miniMapStage.y = 0
-	miniMapStage.height = playerBar.canvas.clientHeight
-	miniMapStage.width = playerBar.canvas.clientWidth * 0.20
-	miniMapRatio = {
-		height: Math.round(2000 / miniMapStage.height),
-		width: Math.round(2000 / miniMapStage.width),
-		radius: Math.round((2000 + 2000) / (miniMapStage.height + miniMapStage.width))
-	}
-	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
-	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2))
-	miniMapStage.addChild(mapBorder)
-	miniMapStage.addChild(miniPlayerSplit)
-	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY)
-	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)))
-	miniMapStage.addChild(playerBorder)
-	playerBar.addChild(miniMapStage)
+	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('lightgreen').drawRect(0, 0, gameStage.width, gameStage.height));
+	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, gameStage.height / 2, gameStage.width, 5));
+	gameStage.addChild(border);
+	gameStage.addChild(playerSplit);
 	bounds = {
 		x: 0,
 		y: 0,
-		w: 2000,
-		h: 2000,
+		w: gameStage.width,
+		h: gameStage.height,
 	}
 	collisionTree = QUAD.init(bounds);
-
+	playerStage.addChild(gameStage);
+	playerBar = new createjs.Stage("gamePanel");
+	playerBar.canvas.height = playerBar.canvas.clientHeight;
+	playerBar.canvas.width = playerBar.canvas.clientWidth;
+	miniMapStage = new createjs.Container();
+	miniMapStage.x = playerBar.canvas.width * 0.50;
+	miniMapStage.y = 0;
+	miniMapStage.height = playerBar.canvas.clientHeight;
+	miniMapStage.width = playerBar.canvas.clientWidth * 0.20;
+	miniMapRatio = {
+		height: Math.round(gameStage.width / miniMapStage.height),
+		width: Math.round(gameStage.height / miniMapStage.width),
+		radius: Math.round((gameStage.width + gameStage.height) / (miniMapStage.height + miniMapStage.width))
+	}
+	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
+	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2));
+	miniMapStage.addChild(mapBorder);
+	miniMapStage.addChild(miniPlayerSplit);
+	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY);
+	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, Math.round(playerStage.canvas.width / miniMapRatio.width), Math.round(playerStage.canvas.height / miniMapRatio.height)));
+	miniMapStage.addChild(playerBorder);
+	playerBar.addChild(miniMapStage);
 
 	statusBar = new createjs.Container()
 	statusBar.x = playerStage.canvas.width * 0.25
@@ -318,8 +298,8 @@ function updateMonsterBar(view) {
 }
 
 function updateSpells(event) {
-	for (var spell in activePlayer.hero.spells) { //Lets loop through all of the currently free monsters
-		var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current monster
+	for (var spell in activePlayer.hero.spells) { //Lets loop through all of the currently free spells
+		var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current spell
 		percentage = ((new Date() - spellObject.currentCoolDown) / spellObject.coolDown)
 		if (percentage > 1) {
 			percentage = 1
@@ -439,7 +419,6 @@ function edgeScrolling(event) {
 
 
 function handleMouse(e) {
-	// console.log(playerStage.canvas.height)
 	if (e.stageY >= playerStage.canvas.height - 30) {
 		if (e.stageY + 1 != playerStage.canvas.height) {
 			scrollDown = true
@@ -571,7 +550,6 @@ function miniMapClick(event) {
 	}
 }
 
-
 function handleClick(event) {
 	if (playerStage.mouseInBounds == true && event.nativeEvent.which == 3) {
 		castActive = false;
@@ -588,7 +566,6 @@ function handleClick(event) {
 	}
 }
 
-
 function updateCollisionTree(event) {
 	collisionTree.clear();
 	for (var team in teamList) {
@@ -599,9 +576,9 @@ function updateCollisionTree(event) {
 }
 
 function gameLoop(event) {
-	edgeScrolling(event)
-	gameTime.text = 'Game Time ' + msToTime(event.time)
-	incomeTime.text = 'Next Income ' + msToTime(activePlayer.hero.goldTime + 20000)
+	edgeScrolling(event);
+	gameTime.text = 'Game Time ' + msToTime(event.time);
+	incomeTime.text = 'Next Income ' + msToTime(activePlayer.hero.goldTime + 20000);
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
@@ -615,7 +592,7 @@ function gameLoop(event) {
 		})
 	}
 	for (var particle in particleList) {
-		particleList[particle].update(event)
+		particleList[particle].update(event);
 	}
 	particleList = particleList.filter(function(x) { //Filter dead units from the player List
 		return x.active == true;
