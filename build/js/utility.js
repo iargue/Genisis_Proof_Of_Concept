@@ -76,9 +76,9 @@ function levelSpell(hero, spellNumber) {
 	}
 	hero.spellLevels -= 1 //Hero has 1 less spell he can level up
 	if (spellButtons) {
-		spellButtons[spellNumber].levelText.text = hero.spells[spellNumber].level//Add in the text for what level the spell is
+		spellButtons[spellNumber].levelText.text = hero.spells[spellNumber].level //Add in the text for what level the spell is
 	}
-	
+
 }
 
 function spawnHero(hero, side) {
@@ -153,32 +153,42 @@ function moveTo(unit, targetX, targetY, steps) {
 
 		// Move towards the player
 		if (unit.animationObject) {
-			var angle = Math.atan2(towardsY, towardsX);
-			angle = angle * (180 / Math.PI);
-			if (angle < 0) {
-				angle = 360 - (-angle)
-			}
+			// var angle = Math.atan2(towardsY, towardsX);
+			// angle = angle * (180 / Math.PI);
+			// if (angle < 0) {
+			// 	angle = 360 - (-angle)
+			// }
 			// if (unit.animationObject.rotation <= Math.round(angle)) {
 			// 	unit.animationObject.rotation += Math.round(steps)
 			// } else if (unit.animationObject.rotation >= Math.round(angle)) {
 			// 	unit.animationObject.rotation -= Math.round(steps)
 			// }
-			unit.animationObject.rotation = angle //Rotate
+			// unit.animationObject.rotation = angle //Rotate
 			// console.log(unit.animationObject.rotation)
-			if (90 < unit.animationObject.rotation && unit.animationObject.rotation < 300) {
-				unit.animationObject.direction = 1
-				unit.animationObject.scaleY = -1
+			// if (90 < unit.animationObject.rotation && unit.animationObject.rotation < 300) {
+			// 	unit.animationObject.direction = 1
+			// 	unit.animationObject.scaleY = -1
+			// } else {
+			// 	unit.animationObject.direction = 1
+			// 	unit.animationObject.scaleY = 1
+			// }
+			if (towardsX > 0) {
+				if (unit.animationObject.direction != 1) {
+					unit.animationObject.direction = 1
+					unit.animationObject.gotoAndPlay("walk_h");
+				} else if (unit.animationObject.currentAnimation.indexOf("walk_h") === -1) {
+					unit.animationObject.gotoAndPlay("walk_h");
+				}
+
 			} else {
-				unit.animationObject.direction = 1
-				unit.animationObject.scaleY = 1
+				if (unit.animationObject.direction != -1) {
+					unit.animationObject.direction = -1
+					unit.animationObject.gotoAndPlay("walk");
+				} else if (unit.animationObject.currentAnimation.indexOf("walk") === -1) {
+					unit.animationObject.gotoAndPlay("walk");
+				}
 			}
 			unit.animationObject.isInIdleMode = false
-			if (unit.animationObject.currentAnimation.indexOf("walk") === -1 && unit.animationObject.direction === -1) {
-				unit.animationObject.gotoAndPlay("walk");
-			}
-			if (unit.animationObject.currentAnimation.indexOf("walk_h") === -1 && unit.animationObject.direction === 1) {
-				unit.animationObject.gotoAndPlay("walk_h");
-			}
 		}
 		unit.stageObject.x += towardsX * steps;
 		unit.stageObject.y += towardsY * steps;
