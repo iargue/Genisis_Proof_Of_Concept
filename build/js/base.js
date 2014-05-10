@@ -88,7 +88,7 @@ function updateStage(event) {
 		statusBar.width = playerStage.canvas.clientWidth * 0.5
 		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
 
-		gameTime.x = statusBar.width * 0.1
+		gameTime.x = statusBar.width * 0.65 - (gameTime.text.length * 14)
 		gameTime.y = incomeTime.y = statusBar.height * 0.10
 		incomeTime.x = statusBar.width * 0.73
 
@@ -182,17 +182,17 @@ function createStage() {
 	statusBar.addChild(statusBarObject)
 	playerStage.addChild(statusBar)
 
-	gameTime = new createjs.Text('Game Time 00:00:00', "14px Calibri", 'red');
-	incomeTime = new createjs.Text('Next Income 00:00:00', "14px Calibri", 'red');
-	gameTime.x = statusBar.width * 0.1
+	gameTime = new createjs.Text('Game Time 00:00:00  ', "14px Calibri", 'black');
+	incomeTime = new createjs.Text('  00:00:00 Next Income', "14px Calibri", 'black');
+	gameTime.x = (statusBar.width * 0.50) - (gameTime.getMeasuredWidth())
 	gameTime.y = incomeTime.y = statusBar.height * 0.10
-	incomeTime.x = statusBar.width * 0.73
+	incomeTime.x = statusBar.width * 0.50
 
 	leftSwap = new createjs.Container()
 	var hit = new createjs.Shape();
 	hit.graphics.beginFill("#000").drawRect(0, 0, statusBar.width * 0.1, statusBar.height);
 	leftSwap.hitArea = hit
-	leftSwap.textObject = new createjs.Text('Show Spells', "14px Calibri", 'red');
+	leftSwap.textObject = new createjs.Text('Show Spells', "14px Calibri", 'black');
 	leftSwap.textObject.y = statusBar.height * 0.10
 	leftSwap.textObject.x = statusBar.width * 0.01
 	leftSwap.swapViewId = 1
@@ -209,7 +209,7 @@ function createStage() {
 	informationStage.y = 0
 	informationStage.height = playerBar.canvas.clientHeight
 	informationStage.width = playerBar.canvas.clientWidth * 0.20
-	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height));
+	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height));
 	informationStage.addChild(informationStageObject)
 	playerBar.addChild(informationStage)
 
@@ -231,6 +231,14 @@ function createStage() {
 	shopStage.addChild(shopStageObject)
 	playerBar.addChild(shopStage)
 
+}
+
+function updateDisplay(view, target) {
+	informationStage.removeAllChildren
+	switch (view) {
+		case 1:
+			return
+	}
 }
 
 function handleLeftSwap(event) {
@@ -618,8 +626,8 @@ function updateCollisionTree(event) {
 
 function gameLoop(event) {
 	edgeScrolling(event);
-	gameTime.text = 'Game Time ' + msToTime(event.time);
-	incomeTime.text = 'Next Income ' + msToTime(activePlayer.hero.goldTime + 20000);
+	gameTime.text = 'Game Time ' + msToTime(event.time) + "  ";
+	incomeTime.text = "  " + msToTime((activePlayer.hero.goldTime + 20000) - event.time) + ' Next Income'
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
