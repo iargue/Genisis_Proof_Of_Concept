@@ -173,31 +173,31 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
-	statusBar = new createjs.Container()
-	statusBar.x = playerStage.canvas.width * 0.25
-	statusBar.y = playerStage.canvas.height - 20
-	statusBar.height = 28
-	statusBar.width = playerStage.canvas.clientWidth * 0.5
+	statusBar = new createjs.Container();
+	statusBar.x = playerStage.canvas.width * 0.25;
+	statusBar.y = playerStage.canvas.height - 20;
+	statusBar.height = 28;
+	statusBar.width = playerStage.canvas.clientWidth * 0.5;
 	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
-	statusBar.addChild(statusBarObject)
-	playerStage.addChild(statusBar)
+	statusBar.addChild(statusBarObject);
+	playerStage.addChild(statusBar);
 
 	gameTime = new createjs.Text('Game Time 00:00:00', "14px Calibri", 'red');
 	incomeTime = new createjs.Text('Next Income 00:00:00', "14px Calibri", 'red');
-	gameTime.x = statusBar.width * 0.1
-	gameTime.y = incomeTime.y = statusBar.height * 0.10
-	incomeTime.x = statusBar.width * 0.73
+	gameTime.x = statusBar.width * 0.1;
+	gameTime.y = incomeTime.y = statusBar.height * 0.10;
+	incomeTime.x = statusBar.width * 0.73;
 
-	leftSwap = new createjs.Container()
+	leftSwap = new createjs.Container();
 	var hit = new createjs.Shape();
 	hit.graphics.beginFill("#000").drawRect(0, 0, statusBar.width * 0.1, statusBar.height);
-	leftSwap.hitArea = hit
+	leftSwap.hitArea = hit;
 	leftSwap.textObject = new createjs.Text('Show Spells', "14px Calibri", 'red');
-	leftSwap.textObject.y = statusBar.height * 0.10
-	leftSwap.textObject.x = statusBar.width * 0.01
-	leftSwap.swapViewId = 1
-	leftSwap.addChild(leftSwap.textObject)
-	leftSwap.addEventListener('click', handleLeftSwap)
+	leftSwap.textObject.y = statusBar.height * 0.10;
+	leftSwap.textObject.x = statusBar.width * 0.01;
+	leftSwap.swapViewId = 1;
+	leftSwap.addChild(leftSwap.textObject);
+	leftSwap.addEventListener('click', handleLeftSwap);
 
 
 	statusBar.addChild(leftSwap)

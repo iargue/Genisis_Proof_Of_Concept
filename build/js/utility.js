@@ -8,7 +8,7 @@ function msToTime(duration) {
 	minutes = (minutes < 10) ? "0" + minutes : minutes;
 	seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-	return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+	return hours + ":" + minutes + ":" + seconds;
 }
 
 function timeToMs(str) {
@@ -38,20 +38,20 @@ function Clone(x) {
 }
 
 function displayText(text, color) {
-	var y = playerStage.canvas.height - 50
+	var y = playerStage.canvas.height - 50;
 	var blackList = []
 	for (var particle in particleList) {
 		blackList.push(particleList[particle].stageObject.y)
 	}
 	while (true) { //Be cafefull with this one luke
 		if (blackList.indexOf(y) != -1) {
-			y -= 20
+			y -= 20;
 		} else {
 			var textObject = new createjs.Text(text, "12px Calibri", color);
-			textObject.x = playerStage.canvas.width / 2
-			textObject.y = y
-			playerStage.addChild(textObject)
-			particleList.push(new textParticle(textObject, 2000))
+			textObject.x = playerStage.canvas.width / 2;
+			textObject.y = y;
+			playerStage.addChild(textObject);
+			particleList.push(new textParticle(textObject, 2000));
 			break;
 		}
 		if (y < playerStage.canvas.height / 2 + playerStage.canvas.height / 4) {
@@ -96,36 +96,36 @@ function spawnHero(hero, side) {
 		for (var player in hero.player.team.playerList) {
 			for (var spawn in spawnListOne) {
 				if (hero.player.team.playerList[player].hero.checkCollision(spawnListOne[spawn].x, spawnListOne[spawn].y, 60)) {
-					continue
+					continue;
 				} else {
-					hero.stageObject.x = spawnListOne[spawn].x
-					hero.stageObject.y = spawnListOne[spawn].y
-					hero.moveWayPoint.x = hero.stageObject.x
-					hero.moveWayPoint.y = hero.stageObject.y
-					hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width)
-					hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height)
-					return
+					hero.stageObject.x = spawnListOne[spawn].x;
+					hero.stageObject.y = spawnListOne[spawn].y;
+					hero.moveWayPoint.x = hero.stageObject.x;
+					hero.moveWayPoint.y = hero.stageObject.y;
+					hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width);
+					hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height);
+					return;
 				}
 			}
 		}
 	}
-	console.log('nope')
+	console.log('nope');
 }
 
 function spawnUnit(monsterNumber) {
-	blackList = []
-	nodeOkay = false
+	blackList = [];
+	nodeOkay = false;
 	x = 10
 	if (opponentTeam == activeTeam) {
 		y = getRandom10(20, 960);
 	} else {
-		y = getRandom10(1020, 1960)
+		y = getRandom10(1020, 1960);
 	}
 
 	if (activePlayer.hero.gold > monsterList[activePlayer.summonLevel][monsterNumber].cost) {
 		if (monsterNumber == 9) {
-			activePlayer.summonLevel += 1
-			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost
+			activePlayer.summonLevel += 1;
+			activePlayer.hero.gold -= monsterList[activePlayer.summonLevel][monsterNumber].cost;
 		} else {
 			unit = new monster(monsterList[activePlayer.summonLevel][monsterNumber], x, y, activePlayer)
 			opponentTeam.unitList.push(unit)

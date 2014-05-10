@@ -3,30 +3,30 @@
 // must also have this.active called in them to track if they are still active.
 
 trapParticle = function(object, bounds, spell, attacker, duration, effect) {
-	this.stageObject = object
-	this.bounds = bounds
-	this.spell = spell
-	this.attacker = attacker
-	this.duration = duration
-	this.effect = effect
-	this.createdDate = new Date()
-	this.active = true
+	this.stageObject = object;
+	this.bounds = bounds;
+	this.spell = spell;
+	this.attacker = attacker;
+	this.duration = duration;
+	this.effect = effect;
+	this.createdDate = new Date();
+	this.active = true;
 
 	this.update = function(event) {
 		if (this.attacker.alive == false || this.active == false) {
-			this.active = false
-			return
+			this.active = false;
+			return;
 		}
 		if (new Date() - this.createdDate > this.duration) {
-			gameStage.removeChild(this.stageObject)
-			this.active = false
+			gameStage.removeChild(this.stageObject);
+			this.active = false;
 		} else {
 			collisionTree.retrieve(this.bounds, function(collidee) {
 				if (collidee.checkCollision(this.stageObject.x, this.stageObject.y, this.stageObject.radius)) {
-					collidee.takeDamage(this.spell.damage, "MD", this.attacker)
-					gameStage.removeChild(this.stageObject)
-					this.active = false
-					collidee.applyEffect(this.effect)
+					collidee.takeDamage(this.spell.damage, "MD", this.attacker);
+					gameStage.removeChild(this.stageObject);
+					this.active = false;
+					collidee.applyEffect(this.effect);
 				}
 			}, this);
 		}
@@ -113,8 +113,8 @@ textParticle = function(object, expireTime) { //This is used to draw temporary t
 
 	this.update = function(event) { //This is called ever time.
 		if (new Date() - this.appliedTime > this.expires) { //More MS have elapsed then our expired time.
-			this.active = false //No longer active.
-			playerStage.removeChild(this.stageObject) //Object is removed from playerStage too
+			this.active = false; //No longer active.
+			playerStage.removeChild(this.stageObject); //Object is removed from playerStage too
 		}
 	}
 }
@@ -143,16 +143,16 @@ bulletParticle = function(object, particleSpeed, target, parent) { //This create
 
 	this.update = function(event) {
 		if (this.destination.alive == false || this.parent.alive == false) {
-			this.active = false
-			gameStage.removeChild(this.stageObject)
-			return
+			this.active = false;
+			gameStage.removeChild(this.stageObject);
+			return;
 		}
 		if (this.destination.checkCollision(this.stageObject.x, this.stageObject.y, this.stageObject.radius)) {
-			this.active = false
-			gameStage.removeChild(this.stageObject)
-			this.destination.takeDamage(this.parent.AD, "AD", this.parent)
+			this.active = false;
+			gameStage.removeChild(this.stageObject);
+			this.destination.takeDamage(this.parent.AD, "AD", this.parent);
 		} else
-			steps = (((event.delta) / 100 * this.particleSpeed) / 10)
+			steps = (((event.delta) / 100 * this.particleSpeed) / 10);
 		moveTo(this, this.destination.stageObject.x, this.destination.stageObject.y, steps)
 	}
 }
