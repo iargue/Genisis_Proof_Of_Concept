@@ -200,7 +200,7 @@ function hero(hero, heroSpells, x, y, player) {
 		for (var stat in itemList[itemID].stats) {
 			this[stat] += itemList[itemID].stats[stat]
 		}
-
+		console.log(this.itemList)
 	},
 
 	this.sellItem = function(itemNumber) {

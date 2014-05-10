@@ -17,6 +17,7 @@ var stage, timeCircle, tickCircle, unitList = [],
 	scrollRight = false,
 	castActive = false,
 	monsterbuttons = null,
+	lastClickedItem = null,
 	spellButtons = null;
 
 var appModule = angular.module('siegeApp', []);
@@ -24,7 +25,6 @@ var appModule = angular.module('siegeApp', []);
 appModule.controller('appCtrl', function($scope) {
 	$scope.getSpells = function() {
 		$scope.spells = activePlayer.hero.spells;
-		console.log($scope.spells);
 		$scope.$apply();
 	}
 	$scope.getMonsters = function() {
@@ -46,6 +46,7 @@ function newGame(gameOptions) {
 		teamList.push(activeTeam)
 	}
 	updateMonsterBar(0)
+	updateShopBar(0)
 	//Add story
 	//Add online
 	//Add tutorial
@@ -256,6 +257,43 @@ function handleLeftSwap(event) {
 }
 
 
+function updateShopBar(view) {
+	shopStage.removeAllChildren()
+	shopStage.addChild(shopStageObject)
+	if (view == 0) { //View 0 is the item shop. Fuck yeah
+		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
+		buttonHeight = shopStage.height - 5 // Calculate the two levels for buttons
+		itemButtons = []
+		for (var item in itemList) { //Lets loop through all of the currently free items
+			var itemObject = itemList[item] //Store a reference to the current item
+			itemButtons[item] = new createjs.Container() //Container for the multiple objects we will be creating
+			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base)) //Add an image to the container. Based on item icon
+			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px Calibri", 'black'); //Add in the text for how much it costs
+			itemButtons[item].costText.x = buttonWidth - (itemObject.cost.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
+			itemButtons[item].costText.y = buttonHeight - 18 //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			itemButtons[item].x = buttonWidth * item
+			itemButtons[item].y = 5
+			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
+			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
+			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
+			itemButtons[item].addEventListener('click', itemClick) //When this button is clicked, call this function (itemclick)
+			itemButtons[item].addChild(itemButtons[item].button) //Add to the container
+			itemButtons[item].addChild(itemButtons[item].costText)
+			shopStage.addChild(itemButtons[item]) //Add the container to the shopStage container
+		}
+	}
+}
+
+function itemClick(event) {
+	if (lastClickedItem == event.target.itemId) {
+		activePlayer.hero.buyItem(itemId)
+		lastClickedItem = null
+	} else {
+		lastClickedItem == event.target.itemId
+	}
+}
+
 function updateMonsterBar(view) {
 	monsterStage.removeAllChildren() // Clear everything from this section
 	monsterStage.addChild(monsterStageObject) //Add back our background
@@ -269,7 +307,6 @@ function updateMonsterBar(view) {
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
-			console.log(monster.icon)
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
@@ -375,6 +412,9 @@ function loadImages() {
 	}, {
 		id: "plus",
 		src: "http://localhost:8888/build/assets/game/plus.png"
+	}, {
+		id: "shop",
+		src: "http://localhost:8888/build/assets/game/shop.png"
 	}]);
 
 }
@@ -439,7 +479,6 @@ function edgeScrolling(event) {
 
 
 function handleMouse(e) {
-	// console.log(playerStage.canvas.height)
 	if (e.stageY >= playerStage.canvas.height - 30) {
 		if (e.stageY + 1 != playerStage.canvas.height) {
 			scrollDown = true
