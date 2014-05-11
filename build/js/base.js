@@ -65,7 +65,7 @@ function updateStage(event) {
 		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
 		informationStage.y = 0
 		informationStage.height = playerBar.canvas.height
-		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
+		informationStage.width = playerBar.canvas\.width * 0.20 //20% of the playerbars width is the size of this object.
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height)
 
 		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		
@@ -143,7 +143,7 @@ function createStage() {
 	gameStage.width = 2000;
 	gameStage.height = 2000;
 	var border = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('lightgreen').drawRect(0, 0, gameStage.width, gameStage.height));
-	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, gameStage.height / 2, gameStage.width, 5));
+	var playerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, gameStage.height / 2 - 3, gameStage.width, 6));
 	gameStage.addChild(border);
 	gameStage.addChild(playerSplit);
 	bounds = {
@@ -274,6 +274,14 @@ function itemClick(event) {
 		lastClickedItem = null
 	} else {
 		lastClickedItem == event.target.itemId
+	}
+}
+
+function updateInfoBar(selected) {
+	informationStage.removeAllChildren()
+	informationStage.addChild(informationStageObject)
+	if(selected){
+		
 	}
 }
 
@@ -496,17 +504,17 @@ function handleKeyDown(e) {
 	} else {
 		switch (e.keyCode) {
 			case 40:
-				if (gameStage.regY + playerStage.canvas.height < 2000) {
+				if (gameStage.regY + playerStage.canvas.height < gameStage.height) {
 					gameStage.regY += 10
 				} else {
-					gameStage.regY = 2000 - playerStage.canvas.height
+					gameStage.regY = gameStage.height - playerStage.canvas.height
 				}
 				break;
 			case 39: // Right arrow key
-				if (gameStage.regX + playerStage.canvas.width < 2000) {
+				if (gameStage.regX + playerStage.canvas.width < gameStage.width) {
 					gameStage.regX += 10
 				} else {
-					gameStage.regX = 2000 - playerStage.canvas.width
+					gameStage.regX = playerStage - playerStage.canvas.width
 				}
 				break;
 			case 38: //Up arrow key
