@@ -206,7 +206,7 @@ function createStage() {
 	leftSwap.addEventListener('click', handleLeftSwap);
 
 	rightSwap = new createjs.Container();
-	rightSwap.textObject = new createjs.Text('Show Shop', textSize + "px Arial", 'black');
+	rightSwap.textObject = new createjs.Text('Show Inventory', textSize + "px Arial", 'black');
 	var hit2 = new createjs.Shape();
 	hit2.graphics.beginFill("#000").drawRect(0, 0, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, textSize + textPadding * 2);
 	rightSwap.hitArea = hit2;
@@ -265,11 +265,15 @@ function updateShopBar(view) {
 			itemButtons[item] = new createjs.Container() //Container for the multiple objects we will be creating
 			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base)) //Add an image to the container. Based on item icon
 			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
+			if (item > 3) { //We have added 4 units to this row, lets move it down 1.
+				itemButtons[item].y = buttonHeight //This puts it in row 2 instead of 1.
+				itemButtons[item].x = buttonWidth * (item % 4) //Since we are on row 2, we have to restart our x movement
+			} else {
+				itemButtons[item].x = buttonWidth * item //Since we are on row 1, we just increase the x by the width of a button for each unit
+			}
 			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px Arial", 'black'); //Add in the text for how much it costs
-			itemButtons[item].costText.x = buttonWidth - (itemObject.cost.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
-			itemButtons[item].costText.y = buttonHeight - 18 //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
-			itemButtons[item].x = buttonWidth * item
-			itemButtons[item].y = 5
+			itemButtons[item].costText.x = buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
+			itemButtons[item].costText.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
 			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
 			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
 			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
@@ -314,16 +318,16 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
-				monsterButtons[unit].x = buttonWidth * (unit - 4) //Since we are on row 2, we have to restart our x movement
+				monsterButtons[unit].x = buttonWidth * (unit % 4) //Since we are on row 2, we have to restart our x movement
 			} else {
 				monsterButtons[unit].x = buttonWidth * unit //Since we are on row 1, we just increase the x by the width of a button for each unit
 			}
 			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
 			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
 			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
-			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px Arial", 'gold'); //Add in the text for how much it costs
-			monsterButtons[unit].goldCost.x = buttonWidth - (monster.cost.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
-			monsterButtons[unit].goldCost.y = buttonHeight - 18 //Put it 18px off (Size of text)
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px Arial", 'black'); //Add in the text for how much it costs
+			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
+			monsterButtons[unit].goldCost.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
 			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
