@@ -26,6 +26,12 @@ function newGame(gameOptions) {
 		activeTeam.addPlayer(0, true, gameOptions.hero, gameOptions.spells)
 		opponentTeam = activeTeam
 		teamList.push(activeTeam)
+	} else if (gameOptions.mode == 'online') {
+		activeTeam = new team(0)
+		activeTeam.addPlayer(0, true, gameOptions.currentPlayer.hero, gameOptions.currentPlayer.spells)
+		opponentTeam = new team(1)
+		opponentTeam.addPlayer(0, true, gameOptions.opponentPlayer.hero, gameOptions.opponentPlayer.spells)
+		teamList.push(activeTeam)
 	}
 	updateMonsterBar(0)
 	updateShopBar(0)
@@ -56,10 +62,10 @@ function updateStage(event) {
 			width: gameStage.width / miniMapStage.width,
 			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
-		
+
 		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height)
 		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2 - 1, miniMapStage.width, 2);
-		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width , playerStage.canvas.clientHeight / miniMapRatio.height);
+		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
 
 		// Information Stage is a container for player/monster/shop it info. Updates based on what is selected.
 		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
@@ -174,8 +180,8 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
-	textSize = 14;		// Used for maintaining text scaling for statusBar
-	textPadding = 2;	// Vertical Padding for readability
+	textSize = 14; // Used for maintaining text scaling for statusBar
+	textPadding = 2; // Vertical Padding for readability
 
 	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px Arial", 'black');
 	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px Arial", 'black');
@@ -297,8 +303,8 @@ function itemClick(event) {
 function updateInfoBar(selected) {
 	informationStage.removeAllChildren()
 	informationStage.addChild(informationStageObject)
-	if(selected){
-		
+	if (selected) {
+
 	}
 }
 
@@ -316,6 +322,7 @@ function updateMonsterBar(view) {
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
+			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth , buttonHeight));
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
 				monsterButtons[unit].x = buttonWidth * (unit % 4) //Since we are on row 2, we have to restart our x movement
@@ -330,6 +337,7 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].goldCost.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
 			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
+			monsterButtons[unit].addChild(monsterButtons[unit].buttonBorder)
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
 			monsterStage.addChild(monsterButtons[unit]) //Add the container to the monsterStage container
 		}
@@ -432,7 +440,7 @@ function handleComplete(e) {
 	playerStage.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
-	playerBar.oncontextmenu = function(e) {
+	playerBar.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
 	gameOptions = {
@@ -614,7 +622,7 @@ function miniMapClick(event) {
 	scrollUp = false
 	scrollLeft = false
 	scrollRight = false
-	if (miniMapStage.mouseInBounds == true && event.nativeEvent.which == 3) {
+	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 3) {
 		castActive = false;
 		activePlayer.hero.updateWaypoint(event, true);
 	}

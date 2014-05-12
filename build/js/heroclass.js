@@ -289,9 +289,10 @@ function hero(hero, heroSpells, x, y, player) {
 	this.updateWaypoint = function(event, miniMap) { //Simply updates our hero's Waypoint based on clicks
 		if (miniMap) {
 			// var point = gameStage.localToLocal(event.stageX * miniMapRatio.width, event.stageY * miniMapRatio.height, miniMapStage);
+			var globalPoint = miniMapStage.globalToLocal(event.stageX, event.stageY)
 			point = {
-				x: event.stageX * miniMapRatio.width,
-				y: event.stageY * miniMapRatio.height
+				x: globalPoint.x * miniMapRatio.width,
+				y: globalPoint.y * miniMapRatio.height
 			}
 			if (this.player.team.side == 0 && point.y > 1000 - this.radius) {
 				return;
