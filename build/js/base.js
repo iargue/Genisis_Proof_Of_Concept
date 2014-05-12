@@ -66,7 +66,7 @@ function updateStage(event) {
 		informationStage.y = 0
 		informationStage.height = playerBar.canvas.height
 		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
-		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("red").drawRect(0, 0, informationStage.width, informationStage.height)
+		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height)
 
 		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		
 		monsterStage.x = 0 //Starts at the start of the bar
@@ -83,17 +83,15 @@ function updateStage(event) {
 		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
 
-		console.log(monsterStage.width + " and " + shopStage.width);
-
-		statusBar.x = playerStage.canvas.width * 0.25
-		statusBar.y = playerStage.canvas.height - 20
-		statusBar.height = 28
-		statusBar.width = playerStage.canvas.clientWidth * 0.5
+		statusBar.height = textSize + textPadding * 2
+		statusBar.width = gameTime.getMeasuredWidth() + incomeTime.getMeasuredWidth() + textPadding * 4
+		statusBar.x = (playerStage.canvas.width * 0.5) - (statusBar.width / 2);
+		statusBar.y = playerStage.canvas.height - statusBar.height
 		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
 
-		gameTime.x = statusBar.width * 0.5 - (gameTime.getMeasuredWidth())
-		gameTime.y = incomeTime.y = statusBar.height * 0.10
-		incomeTime.x = statusBar.width * 0.50
+		gameTime.x = textPadding
+		gameTime.y = incomeTime.y = textPadding
+		incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
 
 		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
 			gameStage.regY = gameStage.height - playerStage.canvas.height
@@ -176,33 +174,48 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
+	textSize = 14;		// Used for maintaining text scaling for statusBar
+	textPadding = 2;	// Vertical Padding for readability
+
+	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px Arial", 'black');
+	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px Arial", 'black');
+
 	statusBar = new createjs.Container();
-	statusBar.x = playerStage.canvas.width * 0.25;
-	statusBar.y = playerStage.canvas.height - 20;
-	statusBar.height = 28;
-	statusBar.width = playerStage.canvas.clientWidth * 0.5;
+	statusBar.height = textSize + textPadding * 2;
+	statusBar.width = gameTime.getMeasuredWidth() + incomeTime.getMeasuredWidth() + textPadding * 4;
+	statusBar.x = (playerStage.canvas.width * 0.5) - (statusBar.width / 2);
+	statusBar.y = playerStage.canvas.height - statusBar.height
 	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
 	statusBar.addChild(statusBarObject);
 	playerStage.addChild(statusBar);
 
-	gameTime = new createjs.Text('Game Time 00:00:00   ', "14px Arial", 'black');
-	incomeTime = new createjs.Text('   Next Income 00:00:00', "14px Arial", 'black');
-	gameTime.x = statusBar.width * 0.50 - gameTime.getMeasuredWidth();
-	gameTime.y = incomeTime.y = statusBar.height * 0.10;
-	incomeTime.x = statusBar.width * 0.50;
+	gameTime.x = textPadding
+	gameTime.y = incomeTime.y = textPadding
+	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
 
 	leftSwap = new createjs.Container();
+	leftSwap.textObject = new createjs.Text('Show Spells', textSize + "px Arial", 'black');
+	// Are we using quadtree to handle clicks outside the game? Certainly createjs has a method for this.
 	var hit = new createjs.Shape();
-	hit.graphics.beginFill("#000").drawRect(0, 0, statusBar.width * 0.1, statusBar.height);
+	hit.graphics.beginFill("#000").drawRect(0, 0, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, textSize + textPadding * 2);
 	leftSwap.hitArea = hit;
-	leftSwap.textObject = new createjs.Text('Show Spells', "14px Arial", 'black');
-	leftSwap.textObject.y = statusBar.height * 0.10;
-	leftSwap.textObject.x = statusBar.width * 0.01;
+	leftSwap.textObject.x = textPadding;
+	leftSwap.textObject.y = playerStage.canvas.height - (textSize + textPadding * 2);
 	leftSwap.swapViewId = 1;
 	leftSwap.addChild(leftSwap.textObject);
 	leftSwap.addEventListener('click', handleLeftSwap);
 
-	statusBar.addChild(leftSwap)
+	rightSwap = new createjs.Container();
+	rightSwap.textObject = new createjs.Text('Show Shop', textSize + "px Arial", 'black');
+	var hit2 = new createjs.Shape();
+	hit2.graphics.beginFill("#000").drawRect(0, 0, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, textSize + textPadding * 2);
+	rightSwap.hitArea = hit2;
+	rightSwap.textObject.y = playerStage.canvas.height - (textSize + textPadding * 2);
+	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding * 2);
+	rightSwap.addChild(rightSwap.textObject);
+
+	playerStage.addChild(leftSwap)
+	playerStage.addChild(rightSwap)
 	statusBar.addChild(gameTime)
 	statusBar.addChild(incomeTime)
 
@@ -630,8 +643,8 @@ function updateCollisionTree(event) {
 
 function gameLoop(event) {
 	edgeScrolling(event);
-	gameTime.text = 'Game Time ' + msToTime(event.time) + "   ";
-	incomeTime.text = '   ' + msToTime((activePlayer.hero.goldTime + 20000) - event.time) + ' Next Income';
+	gameTime.text = 'Game Time ' + msToTime(event.time);
+	incomeTime.text = 'Next Income ' + msToTime((activePlayer.hero.goldTime + 20000) - event.time);
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
