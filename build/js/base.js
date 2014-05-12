@@ -99,8 +99,8 @@ function updateStage(event) {
 		if (gameStage.regX + playerStage.canvas.width > gameStage.width) {
 			gameStage.regX = gameStage.width - playerStage.canvas.width
 		}
-		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
-		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+		playerBorder.x = gameStage.regX / miniMapRatio.width
+		playerBorder.y = gameStage.regY / miniMapRatio.height
 		if (leftSwap.swapViewId == 0) {
 			updateMonsterBar(1)
 		} else {
@@ -127,8 +127,8 @@ function refreshMiniMap(event) {
 		for (var unit in teamList[team].unitList) {
 			var currentUnit = teamList[team].unitList[unit]
 			currentUnit.miniMapObject.graphics.clear().beginFill('red').drawCircle(0, 0, currentUnit.radius / miniMapRatio.radius)
-			currentUnit.miniMapObject.x = Math.round(currentUnit.stageObject.x / miniMapRatio.width)
-			currentUnit.miniMapObject.y = Math.round(currentUnit.stageObject.y / miniMapRatio.height)
+			currentUnit.miniMapObject.x = currentUnit.stageObject.x / miniMapRatio.width
+			currentUnit.miniMapObject.y = currentUnit.stageObject.y / miniMapRatio.height
 		}
 	}
 }
@@ -477,8 +477,8 @@ function edgeScrolling(event) {
 		}
 	}
 	//MARKED
-	playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
-	playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+	playerBorder.x = gameStage.regX / miniMapRatio.width
+	playerBorder.y = gameStage.regY / miniMapRatio.height
 }
 
 
@@ -578,8 +578,8 @@ function handleKeyDown(e) {
 				activePlayer.hero.castSpell(e.keyCode)
 		}
 
-		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
-		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+		playerBorder.x = gameStage.regX / miniMapRatio.width
+		playerBorder.y = gameStage.regY / miniMapRatio.height
 	}
 }
 
@@ -591,20 +591,20 @@ function miniMapClick(event) {
 		}
 		if (point.x < 0) {
 			point.x = 0
-		} else if (point.x > (2000 - playerStage.canvas.width)) {
-			point.x = (2000 - playerStage.canvas.width)
+		} else if (point.x > (gameStage.width - playerStage.canvas.width)) {
+			point.x = (gameStage.width - playerStage.canvas.width)
 		}
 		if (point.y < 0) {
 			point.y = 0
-		} else if (point.y > (2000 - playerStage.height / 2)) {
-			point.y = (2000 - playerStage.height / 2)
+		} else if (point.y > (gameStage.height - playerStage.canvas.height)) {
+			point.y = (gameStage.height - playerStage.canvas.height)
 		}
 
 		gameStage.regX = point.x
 		gameStage.regY = point.y
 
-		playerBorder.x = Math.round(gameStage.regX / miniMapRatio.width)
-		playerBorder.y = Math.round(gameStage.regY / miniMapRatio.height)
+		playerBorder.x = gameStage.regX / miniMapRatio.width
+		playerBorder.y = gameStage.regY / miniMapRatio.height
 	}
 	scrollDown = false
 	scrollUp = false
