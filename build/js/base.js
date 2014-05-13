@@ -21,7 +21,13 @@ var stage, unitList = [],
 	castActive = false,
 	monsterbuttons = null,
 	lastClickedItem = null,
+	viewTarget = [null, null],
 	spellButtons = null;
+
+var textFont = "Calibri"
+var textSize = 14; // Used for maintaining text scaling for statusBar
+var smallText = 12;
+var textPadding = 2; // Vertical Padding for readability
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -38,6 +44,7 @@ function newGame(gameOptions) {
 	}
 	updateMonsterBar(0)
 	updateShopBar(0)
+	updateInfoBar('hero', activePlayer.hero)
 	//Add story
 	//Add online
 	//Add tutorial
@@ -115,6 +122,7 @@ function updateStage(event) {
 		} else {
 			updateMonsterBar(0)
 		}
+		updateInfoBar(viewTarget[0], viewTarget[1])
 		refreshMiniMap(event)
 	}
 	if (leftSwap.swapViewId == 0) {
@@ -182,32 +190,6 @@ function createStage() {
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height));
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
-
-	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px Arial", 'black');
-	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px Arial", 'black');
-
-	leftSwap = new createjs.Container();
-	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px Arial", 'black');
-	leftSwap.textObject.x = textPadding
-	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
-	var hit = new createjs.Shape();
-	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	leftSwap.hitArea = hit;
-	leftSwap.swapViewId = 1;
-	leftSwap.addChild(leftSwap.textObject);
-	leftSwap.addEventListener('click', handleLeftSwap);
-	playerStage.addChild(leftSwap)
-
-	rightSwap = new createjs.Container();
-	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px Arial", 'black');
-	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
-	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
-	var hit2 = new createjs.Shape();	
-	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	rightSwap.hitArea = hit2;
-	rightSwap.swapViewId = 1;
-	rightSwap.addChild(rightSwap.textObject);
-	playerStage.addChild(rightSwap)
 
 	statusBar = new createjs.Container();
 	statusBar.height = textSize + textPadding * 2;
@@ -278,9 +260,15 @@ function updateShopBar(view) {
 			} else {
 				itemButtons[item].x = buttonWidth * item //Since we are on row 1, we just increase the x by the width of a button for each unit
 			}
+<<<<<<< HEAD
 			itemButtons[item].costText = new createjs.Text(itemObject.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
 			itemButtons[item].costText.x = textPadding //buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
 			itemButtons[item].costText.y = textPadding // buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+=======
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
+			itemButtons[item].costText.x = buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
+			itemButtons[item].costText.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+>>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
 			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
 			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
@@ -294,18 +282,113 @@ function updateShopBar(view) {
 
 function itemClick(event) {
 	if (lastClickedItem == event.target.itemId) {
-		activePlayer.hero.buyItem(itemId)
-		lastClickedItem = null
+		activePlayer.hero.buyItem(itemId);
+		lastClickedItem = null;
 	} else {
-		lastClickedItem == event.target.itemId
+		lastClickedItem == event.target.itemId;
 	}
 }
 
-function updateInfoBar(selected) {
-	informationStage.removeAllChildren()
-	informationStage.addChild(informationStageObject)
-	if (selected) {
-
+function updateInfoBar(type, object) {
+	viewTarget = [type, object]
+	informationStage.removeAllChildren();
+	informationStage.addChild(informationStageObject);
+	switch (type) {
+		case 'hero':
+			informationBar = new createjs.Container();
+			iconWidth = informationStage.width * 0.3
+			iconHeight = informationStage.height * 0.5
+			spellWidth = (informationStage.width * 0.5) / 4
+			spellHeight = informationStage.height * 0.25
+			statWidth = informationStage.width / 4
+			statHeight = (informationStage.height * 0.5) / 2
+			informationBar.grid = []
+			informationBar.grid[0] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, iconWidth, iconHeight));
+			informationBar.grid[1] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width * 0.2, informationStage.height * 0.25));
+			informationBar.grid[1].x = informationStage.width * 0.3
+			informationBar.grid[2] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width * 0.2, informationStage.height * 0.25));
+			informationBar.grid[2].x = informationStage.width * 0.3
+			informationBar.grid[2].y = informationStage.height * 0.25
+			informationBar.grid[3] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width * 0.5, informationStage.height * 0.25));
+			informationBar.grid[3].x = informationStage.width * 0.5
+			informationBar.grid[3].y = informationStage.height * 0.25
+			object.icon.scaleX = iconWidth / object.icon.spriteSheet._frameWidth
+			object.icon.scaleY = iconHeight / object.icon.spriteSheet._frameHeight
+			object.icon.spriteSheet._regX = object.icon.getTransformedBounds().width / 2
+			object.icon.spriteSheet._regY = object.icon.getTransformedBounds().height / 2
+			object.icon.x = object.icon.spriteSheet._regX % (iconHeight)
+			object.icon.y = object.icon.spriteSheet._regY % (iconWidth)
+			informationBar.healthBar = new createjs.Shape(new createjs.Graphics().beginFill("green").drawRect(0, 0, informationStage.width * 0.5, informationStage.height * 0.25))
+			informationBar.healthBar.x = informationStage.width * 0.5
+			informationBar.healthBarText = new createjs.Text(object.CHP + '/' + object.HP, textSize + "px " + textFont, 'white');
+			informationBar.healthBarText.scaleX = ((informationStage.width * 0.5) / 2) / (informationBar.healthBarText.getMeasuredWidth())
+			informationBar.healthBarText.scaleY = ((informationStage.height * 0.25) / 2) / (informationBar.healthBarText.getMeasuredHeight())
+			informationBar.healthBarText.x = (informationStage.width * 0.5) + (informationBar.healthBarText.getTransformedBounds().width / 2)
+			informationBar.healthBarText.y = (informationBar.healthBarText.getTransformedBounds().height / 2)
+			informationBar.levelText = new createjs.Text(' Level ', textSize + "px " + textFont, 'black');
+			informationBar.levelText.scaleX = (informationStage.width * 0.2) / informationBar.levelText.getMeasuredWidth()
+			informationBar.levelText.scaleY = (informationStage.height * 0.2) / informationBar.levelText.getMeasuredHeight()
+			informationBar.levelText.x = informationStage.width * 0.3
+			informationBar.levelText.y = (informationStage.height * 0.25) - informationBar.levelText.getTransformedBounds().height
+			informationBar.heroText = new createjs.Text(object.level, textSize + "px " + textFont, 'black');
+			informationBar.heroText.scaleX = ((informationStage.width * 0.2) / 2) / informationBar.heroText.getMeasuredWidth()
+			informationBar.heroText.scaleY = ((informationStage.height * 0.25)) / informationBar.heroText.getMeasuredHeight()
+			informationBar.heroText.x = informationStage.width * 0.35
+			informationBar.heroText.y = (informationStage.height * 0.25)
+			informationBar.spellButtons = []
+			for (var spell in object.spells) {
+				spellObject = object.spells[spell]
+				informationBar.spellButtons[spell] = new createjs.Container();
+				informationBar.spellButtons[spell].icon = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) //Add an image to the container. Based on monster icon
+				informationBar.spellButtons[spell].iconBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, spellWidth, spellHeight));
+				informationBar.spellButtons[spell].x = (informationStage.width * 0.5) + (spellWidth * spell)
+				informationBar.spellButtons[spell].y = informationStage.height * 0.25
+				informationBar.spellButtons[spell].icon.scaleX = spellWidth / informationBar.spellButtons[spell].icon.image.width //Scale the image down so it fits
+				informationBar.spellButtons[spell].icon.scaleY = spellHeight / informationBar.spellButtons[spell].icon.image.height //Scale the image down so it fits
+				informationBar.spellButtons[spell].addChild(informationBar.spellButtons[spell].icon)
+				informationBar.spellButtons[spell].addChild(informationBar.spellButtons[spell].iconBorder)
+				informationBar.addChild(informationBar.spellButtons[spell])
+			}
+			informationBar.statButtons = [];
+			var count = 0
+			var statPosition = (informationStage.height * 0.5)
+			for (var stat in object.baseStats) {
+				if (stat == 'HP') {
+					stat = 'CMS'
+				}
+				informationBar.statButtons[stat] = new createjs.Container();
+				informationBar.statButtons[stat].textObject = new createjs.Text(' ' + stat + " : " + object[stat] + ' ', textSize + "px " + textFont, 'black');
+				informationBar.statButtons[stat].textBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, statWidth, statHeight));
+				if (count > 3) {
+					count = 0;
+					statPosition = (informationStage.height * 0.75)
+				}
+				informationBar.statButtons[stat].x = statWidth * count
+				informationBar.statButtons[stat].y = statPosition
+				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth() //Scale the image down so it fits
+				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
+				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textObject)
+				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textBorder)
+				informationStage.addChild(informationBar.statButtons[stat])
+				count++;
+			}
+			for (var gridID in informationBar.grid) {
+				informationBar.addChild(informationBar.grid[gridID])
+			}
+			informationBar.addChild(object.icon)
+			informationBar.addChild(informationBar.healthBar)
+			informationBar.addChild(informationBar.healthBarText)
+			informationBar.addChild(informationBar.levelText)
+			informationBar.addChild(informationBar.heroText)
+			informationStage.addChild(informationBar)
+			//Hereo stuff here
+			return
+		case 'monster':
+			//Monster stuff here
+			return
+		case 'item':
+			//item stuff here
+			return
 	}
 }
 
@@ -324,7 +407,7 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
 			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().beginLinearGradientFill(["#777","#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
-			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth , buttonHeight));
+			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight));
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
 				monsterButtons[unit].x = buttonWidth * (unit % 4) //Since we are on row 2, we have to restart our x movement
@@ -334,7 +417,11 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
 			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
 			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
+<<<<<<< HEAD
 			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
+=======
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
+>>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
 			monsterButtons[unit].goldCost.y = textPadding //buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
@@ -357,7 +444,11 @@ function updateMonsterBar(view) {
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
 			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
+<<<<<<< HEAD
 			spellButtons[spell].levelText = new createjs.Text(spellObject.level, largeTextSize + "px Arial", 'red'); //Add in the text for how much it costs
+=======
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px " + textFont, 'red'); //Add in the text for how much it costs
+>>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
 			spellButtons[spell].levelText.y = buttonHeight - largeTextSize //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
 			spellButtons[spell].x = buttonWidth * spell
@@ -590,7 +681,7 @@ function handleKeyDown(e) {
 				spawnUnit(9, 0);
 				break;
 			default:
-				activePlayer.hero.castSpell(e.keyCode)
+				activePlayer.hero.castSpell(e.keyCode);
 		}
 
 		playerBorder.x = gameStage.regX / miniMapRatio.width

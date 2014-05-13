@@ -81,6 +81,8 @@ function hero(hero, heroSpells, x, y, player) {
 	createjs.SpriteSheetUtils.addFlippedFrames(this.localSpriteSheet, true, false, false),
 	this.animationObject = new createjs.Sprite(this.localSpriteSheet),
 	this.animationObject.gotoAndPlay("idle"), //animate
+	this.icon = new createjs.Sprite(this.localSpriteSheet),
+	this.icon.gotoAndStop("idle"),
 	this.animationObject.isInIdleMode = true,
 	// gameStage.addChild(this.animationObject)
 	this.animationObject.rotation = 0

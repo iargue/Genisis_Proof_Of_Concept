@@ -2,14 +2,14 @@ var heroList = {
 	warrior: {
 		stats: {
 			AD: 30,
-			HP: 55,
-			MP: 5,
-			MD: 5,
-			MR: 5,
+			MD: 10,
 			AR: 50,
+			MR: 5,
+			HP: 55,
 			MS: 11,
-			RN: 15,
 			AS: 10,
+			RN: 15,
+
 		},
 		color: "green",
 		imageName: 'warrior',
@@ -31,7 +31,6 @@ var heroList = {
 		stats: {
 			AD: 30,
 			HP: 55,
-			MP: 5,
 			MD: 5,
 			MR: 5,
 			AR: 5,
@@ -45,7 +44,6 @@ var heroList = {
 		stats: {
 			AD: 30,
 			HP: 55,
-			MP: 5,
 			MD: 5,
 			MR: 5,
 			AR: 5,
