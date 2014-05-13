@@ -191,6 +191,32 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
+	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px " + textFont, 'black');
+	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px " + textFont, 'black');
+
+	leftSwap = new createjs.Container();
+	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px " + textFont, 'black');
+	leftSwap.textObject.x = textPadding
+	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
+	var hit = new createjs.Shape();
+	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	leftSwap.hitArea = hit;
+	leftSwap.swapViewId = 1;
+	leftSwap.addChild(leftSwap.textObject);
+	leftSwap.addEventListener('click', handleLeftSwap);
+	playerStage.addChild(leftSwap)
+
+	rightSwap = new createjs.Container();
+	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px " + textFont, 'black');
+	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
+	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
+	var hit2 = new createjs.Shape();	
+	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	rightSwap.hitArea = hit2;
+	rightSwap.swapViewId = 1;
+	rightSwap.addChild(rightSwap.textObject);
+	playerStage.addChild(rightSwap)
+
 	statusBar = new createjs.Container();
 	statusBar.height = textSize + textPadding * 2;
 	statusBar.width = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding * 2) - (leftSwap.textObject.getMeasuredWidth() + textPadding * 2);
@@ -260,15 +286,12 @@ function updateShopBar(view) {
 			} else {
 				itemButtons[item].x = buttonWidth * item //Since we are on row 1, we just increase the x by the width of a button for each unit
 			}
-<<<<<<< HEAD
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, largeTextSize + "px " + textFont, 'black'); //Add in the text for how much it costs
 			itemButtons[item].costText.x = textPadding //buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
 			itemButtons[item].costText.y = textPadding // buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
-=======
 			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
 			itemButtons[item].costText.x = buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
 			itemButtons[item].costText.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
->>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
 			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
 			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
@@ -417,11 +440,8 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
 			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
 			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
-<<<<<<< HEAD
-			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
-=======
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, largeTextSize + "px " + textFont, 'black'); //Add in the text for how much it costs
 			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
->>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
 			monsterButtons[unit].goldCost.y = textPadding //buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
@@ -444,11 +464,8 @@ function updateMonsterBar(view) {
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
 			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
-<<<<<<< HEAD
-			spellButtons[spell].levelText = new createjs.Text(spellObject.level, largeTextSize + "px Arial", 'red'); //Add in the text for how much it costs
-=======
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, largeTextSize + "px " + textFont, 'red'); //Add in the text for how much it costs
 			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px " + textFont, 'red'); //Add in the text for how much it costs
->>>>>>> 720a3db2fccf69d3afc93917c159b5f9cb7302db
 			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
 			spellButtons[spell].levelText.y = buttonHeight - largeTextSize //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
 			spellButtons[spell].x = buttonWidth * spell
