@@ -47,7 +47,7 @@ function displayText(text, color) {
 		if (blackList.indexOf(y) != -1) {
 			y -= 20;
 		} else {
-			var textObject = new createjs.Text(text, "12px Calibri", color);
+			var textObject = new createjs.Text(text, "12px " + textFont, color);
 			textObject.x = playerStage.canvas.width / 2;
 			textObject.y = y;
 			playerStage.addChild(textObject);
