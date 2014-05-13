@@ -1,4 +1,4 @@
-var stage, timeCircle, tickCircle, unitList = [],
+var stage, unitList = [],
 	playerList = [],
 	keys = [],
 	collisionTree,
@@ -8,6 +8,9 @@ var stage, timeCircle, tickCircle, unitList = [],
 	opponentTeam,
 	particleList = [],
 	gameTime,
+	largeTextSize = 18,
+	textSize = 14,
+	textPadding = 2,
 	incomeTime,
 	gameOptions,
 	playerBorder,
@@ -180,16 +183,36 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
-	textSize = 14; // Used for maintaining text scaling for statusBar
-	textPadding = 2; // Vertical Padding for readability
-
 	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px Arial", 'black');
 	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px Arial", 'black');
 
+	leftSwap = new createjs.Container();
+	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px Arial", 'black');
+	leftSwap.textObject.x = textPadding
+	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
+	var hit = new createjs.Shape();
+	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	leftSwap.hitArea = hit;
+	leftSwap.swapViewId = 1;
+	leftSwap.addChild(leftSwap.textObject);
+	leftSwap.addEventListener('click', handleLeftSwap);
+	playerStage.addChild(leftSwap)
+
+	rightSwap = new createjs.Container();
+	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px Arial", 'black');
+	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
+	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
+	var hit2 = new createjs.Shape();	
+	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	rightSwap.hitArea = hit2;
+	rightSwap.swapViewId = 1;
+	rightSwap.addChild(rightSwap.textObject);
+	playerStage.addChild(rightSwap)
+
 	statusBar = new createjs.Container();
 	statusBar.height = textSize + textPadding * 2;
-	statusBar.width = gameTime.getMeasuredWidth() + incomeTime.getMeasuredWidth() + textPadding * 4;
-	statusBar.x = (playerStage.canvas.width * 0.5) - (statusBar.width / 2);
+	statusBar.width = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding * 2) - (leftSwap.textObject.getMeasuredWidth() + textPadding * 2);
+	statusBar.x = leftSwap.textObject.getMeasuredWidth() + textPadding * 2;
 	statusBar.y = playerStage.canvas.height - statusBar.height
 	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
 	statusBar.addChild(statusBarObject);
@@ -198,30 +221,7 @@ function createStage() {
 	gameTime.x = textPadding
 	gameTime.y = incomeTime.y = textPadding
 	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
-
-	leftSwap = new createjs.Container();
-	leftSwap.textObject = new createjs.Text('Show Spells', textSize + "px Arial", 'black');
-	// Are we using quadtree to handle clicks outside the game? Certainly createjs has a method for this.
-	var hit = new createjs.Shape();
-	hit.graphics.beginFill("#000").drawRect(0, 0, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, textSize + textPadding * 2);
-	leftSwap.hitArea = hit;
-	leftSwap.textObject.x = textPadding;
-	leftSwap.textObject.y = playerStage.canvas.height - (textSize + textPadding * 2);
-	leftSwap.swapViewId = 1;
-	leftSwap.addChild(leftSwap.textObject);
-	leftSwap.addEventListener('click', handleLeftSwap);
-
-	rightSwap = new createjs.Container();
-	rightSwap.textObject = new createjs.Text('Show Inventory', textSize + "px Arial", 'black');
-	var hit2 = new createjs.Shape();
-	hit2.graphics.beginFill("#000").drawRect(0, 0, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, textSize + textPadding * 2);
-	rightSwap.hitArea = hit2;
-	rightSwap.textObject.y = playerStage.canvas.height - (textSize + textPadding * 2);
-	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding * 2);
-	rightSwap.addChild(rightSwap.textObject);
-
-	playerStage.addChild(leftSwap)
-	playerStage.addChild(rightSwap)
+	
 	statusBar.addChild(gameTime)
 	statusBar.addChild(incomeTime)
 
@@ -255,6 +255,7 @@ function createStage() {
 }
 
 function handleLeftSwap(event) {
+	console.log(event);
 	updateMonsterBar(event.target.swapViewId)
 }
 
@@ -277,9 +278,9 @@ function updateShopBar(view) {
 			} else {
 				itemButtons[item].x = buttonWidth * item //Since we are on row 1, we just increase the x by the width of a button for each unit
 			}
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px Arial", 'black'); //Add in the text for how much it costs
-			itemButtons[item].costText.x = buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
-			itemButtons[item].costText.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
+			itemButtons[item].costText.x = textPadding //buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
+			itemButtons[item].costText.y = textPadding // buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
 			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
 			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
 			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
@@ -321,6 +322,7 @@ function updateMonsterBar(view) {
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
+			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().beginLinearGradientFill(["#777","#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
 			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth , buttonHeight));
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
@@ -332,10 +334,11 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
 			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
 			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
-			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px Arial", 'black'); //Add in the text for how much it costs
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, largeTextSize + "px Arial", 'black'); //Add in the text for how much it costs
 			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
-			monsterButtons[unit].goldCost.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
+			monsterButtons[unit].goldCost.y = textPadding //buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
+			monsterButtons[unit].addChild(monsterButtons[unit].buttonBackground)
 			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
 			monsterButtons[unit].addChild(monsterButtons[unit].buttonBorder)
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
@@ -354,9 +357,9 @@ function updateMonsterBar(view) {
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
 			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
-			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px Arial", 'red'); //Add in the text for how much it costs
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, largeTextSize + "px Arial", 'red'); //Add in the text for how much it costs
 			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
-			spellButtons[spell].levelText.y = buttonHeight - 18 //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			spellButtons[spell].levelText.y = buttonHeight - largeTextSize //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
 			spellButtons[spell].x = buttonWidth * spell
 			spellButtons[spell].button.spellId = spell //Store a reference to what monster this button is for. Used when clicking
 			spellButtons[spell].button.scaleX = buttonWidth / spellButtons[spell].button.image.width //Scale the image down so it fits
@@ -612,11 +615,11 @@ function miniMapClick(event) {
 			point.y = (gameStage.height - playerStage.canvas.height)
 		}
 
-		gameStage.regX = point.x
-		gameStage.regY = point.y
+		gameStage.regX = point.x;
+		gameStage.regY = point.y;
 
-		playerBorder.x = gameStage.regX / miniMapRatio.width
-		playerBorder.y = gameStage.regY / miniMapRatio.height
+		playerBorder.x = gameStage.regX / miniMapRatio.width;
+		playerBorder.y = gameStage.regY / miniMapRatio.height;
 	}
 	scrollDown = false
 	scrollUp = false
