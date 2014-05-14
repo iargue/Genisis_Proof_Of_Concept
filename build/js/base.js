@@ -23,11 +23,10 @@ var stage, unitList = [],
 	lastClickedItem = null,
 	viewTarget = [null, null],
 	spellButtons = null;
-
-var textFont = "Calibri"
-var textSize = 14; // Used for maintaining text scaling for statusBar
-var smallText = 12;
-var textPadding = 2; // Vertical Padding for readability
+	textSize = 14, // Used for maintaining text scaling for statusBar
+	smallText = 12,
+	textPadding = 2, // Vertical Padding for readability
+	textFont = "Calibri"
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -62,47 +61,41 @@ function updateStage(event) {
 		playerBar.canvas.height = playerBar.canvas.clientHeight
 		playerBar.canvas.width = playerBar.canvas.clientWidth
 
-		//miniMapStage is the container for the miniMap.
-		miniMapStage.x = playerBar.canvas.width * 0.50 //Starts at 50% of the playerBar's width
-		miniMapStage.y = 0
-		miniMapStage.height = playerBar.canvas.height
-		miniMapStage.width = playerBar.canvas.width * 0.20 //50% of the playerbars width is the size of this object.
+		miniMapStage.x = playerBar.canvas.width * 0.5
+		miniMapStage.y = playerBar.canvas.height * 0.2
+		miniMapStage.height = playerBar.canvas.height * 0.8
+		miniMapStage.width = playerBar.canvas.width * 0.2
 		miniMapRatio = {
 			height: gameStage.height / miniMapStage.height,
 			width: gameStage.width / miniMapStage.width,
 			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
-
-		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height)
-		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2 - 1, miniMapStage.width, 2);
+		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
+		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
 
-		// Information Stage is a container for player/monster/shop it info. Updates based on what is selected.
-		informationStage.x = playerBar.canvas.width * 0.30 //Starts at 30% of the bar
-		informationStage.y = 0
-		informationStage.height = playerBar.canvas.height
-		informationStage.width = playerBar.canvas.width * 0.20 //20% of the playerbars width is the size of this object.
+		informationStage.x = playerBar.canvas.width * 0.3
+		informationStage.y = playerBar.canvas.height * 0.2
+		informationStage.height = playerBar.canvas.height * 0.8
+		informationStage.width = playerBar.canvas.width * 0.2
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height)
 
-		//Monster Stage is a container for all of the Monster's you can buy (Also contains spell objects on switch)		
-		monsterStage.x = 0 //Starts at the start of the bar
-		monsterStage.y = 0
-		monsterStage.height = playerBar.canvas.height
-		monsterStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
+		monsterStage.x = 0
+		monsterStage.y = playerBar.canvas.height * 0.2
+		monsterStage.height = playerBar.canvas.height * 0.8
+		monsterStage.width = playerBar.canvas.width * 0.3
 		monsterStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height)
 
-
-		//shopStage is a container for all of the Shop's objects (Also contains player's inventory on switch)
 		shopStage.x = playerBar.canvas.width * 0.70
 		shopStage.y = 0
 		shopStage.height = playerBar.canvas.height
 		shopStage.width = playerBar.canvas.width * 0.30 //30% of the playerbars width is the size of this object.
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
 
-		statusBar.height = textSize + textPadding * 2
-		statusBar.width = gameTime.getMeasuredWidth() + incomeTime.getMeasuredWidth() + textPadding * 4
-		statusBar.x = (playerStage.canvas.width * 0.5) - (statusBar.width / 2);
-		statusBar.y = playerStage.canvas.height - statusBar.height
+		statusBar.x = 0
+		statusBar.y = 0
+		statusBar.height = playerBar.canvas.height * 0.2
+		statusBar.width = playerBar.canvas.width
 		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
 
 		gameTime.x = textPadding
@@ -174,11 +167,57 @@ function createStage() {
 	playerBar = new createjs.Stage("gamePanel");
 	playerBar.canvas.height = playerBar.canvas.clientHeight;
 	playerBar.canvas.width = playerBar.canvas.clientWidth;
+
+	statusBar = new createjs.Container();
+	statusBar.x = 0
+	statusBar.y = 0
+	statusBar.height = playerBar.canvas.height * 0.2
+	statusBar.width = playerBar.canvas.width
+	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
+	statusBar.addChild(statusBarObject);
+	playerBar.addChild(statusBar);
+
+	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px " + textFont, 'black');
+	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px " + textFont, 'black');
+	gameTime.x = textPadding
+	gameTime.y = incomeTime.y = textPadding
+	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
+	statusBar.addChild(gameTime)
+	statusBar.addChild(incomeTime)
+
+	leftSwap = new createjs.Container();
+	leftSwap.x = 0
+	leftSwap.y = 0
+	leftSwap.height = playerBar.canvas.height * 0.2
+	leftSwap.width = playerBar.canvas.width * 0.05
+	leftSwapObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("green").drawRect(0, 0, leftSwap.width, leftSwap.height))
+	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px " + textFont, 'black');
+	leftSwap.textObject.x = textPadding
+	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
+	var hit = new createjs.Shape();
+	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	leftSwap.hitArea = hit;
+	leftSwap.swapViewId = 1;
+	leftSwap.addChild(leftSwap.textObject);
+	leftSwap.addEventListener('click', handleLeftSwap);
+	statusBar.addChild(leftSwap)
+
+	rightSwap = new createjs.Container();
+	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px " + textFont, 'black');
+	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
+	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
+	var hit2 = new createjs.Shape();
+	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
+	rightSwap.hitArea = hit2;
+	rightSwap.swapViewId = 1;
+	rightSwap.addChild(rightSwap.textObject);
+	statusBar.addChild(rightSwap)
+
 	miniMapStage = new createjs.Container();
-	miniMapStage.x = playerBar.canvas.width * 0.50;
-	miniMapStage.y = 0;
-	miniMapStage.height = playerBar.canvas.clientHeight;
-	miniMapStage.width = playerBar.canvas.clientWidth * 0.20;
+	miniMapStage.x = playerBar.canvas.width * 0.5
+	miniMapStage.y = playerBar.canvas.height * 0.2
+	miniMapStage.height = playerBar.canvas.height * 0.8
+	miniMapStage.width = playerBar.canvas.width * 0.2
 	miniMapRatio = {
 		height: gameStage.height / miniMapStage.height,
 		width: gameStage.width / miniMapStage.width,
@@ -193,75 +232,32 @@ function createStage() {
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
-	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px " + textFont, 'black');
-	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px " + textFont, 'black');
-
-	leftSwap = new createjs.Container();
-	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px " + textFont, 'black');
-	leftSwap.textObject.x = textPadding
-	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
-	var hit = new createjs.Shape();
-	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	leftSwap.hitArea = hit;
-	leftSwap.swapViewId = 1;
-	leftSwap.addChild(leftSwap.textObject);
-	leftSwap.addEventListener('click', handleLeftSwap);
-	playerStage.addChild(leftSwap)
-
-	rightSwap = new createjs.Container();
-	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px " + textFont, 'black');
-	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
-	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
-	var hit2 = new createjs.Shape();
-	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	rightSwap.hitArea = hit2;
-	rightSwap.swapViewId = 1;
-	rightSwap.addChild(rightSwap.textObject);
-	playerStage.addChild(rightSwap)
-
-	statusBar = new createjs.Container();
-	statusBar.height = textSize + textPadding * 2;
-	statusBar.width = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding * 2) - (leftSwap.textObject.getMeasuredWidth() + textPadding * 2);
-	statusBar.x = leftSwap.textObject.getMeasuredWidth() + textPadding * 2;
-	statusBar.y = playerStage.canvas.height - statusBar.height
-	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
-	statusBar.addChild(statusBarObject);
-	playerStage.addChild(statusBar);
-
-	gameTime.x = textPadding
-	gameTime.y = incomeTime.y = textPadding
-	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
-
-	statusBar.addChild(gameTime)
-	statusBar.addChild(incomeTime)
-
 	informationStage = new createjs.Container();
-	informationStage.x = playerBar.canvas.width * 0.30
-	informationStage.y = 0
-	informationStage.height = playerBar.canvas.clientHeight
-	informationStage.width = playerBar.canvas.clientWidth * 0.20
+	informationStage.x = playerBar.canvas.width * 0.3
+	informationStage.y = playerBar.canvas.height * 0.2
+	informationStage.height = playerBar.canvas.height * 0.8
+	informationStage.width = playerBar.canvas.width * 0.2
 	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height));
 	informationStage.addChild(informationStageObject)
 	playerBar.addChild(informationStage)
 
 	monsterStage = new createjs.Container();
 	monsterStage.x = 0
-	monsterStage.y = 0
-	monsterStage.height = playerBar.canvas.clientHeight
-	monsterStage.width = playerBar.canvas.clientWidth * 0.30
+	monsterStage.y = playerBar.canvas.height * 0.2
+	monsterStage.height = playerBar.canvas.height * 0.8
+	monsterStage.width = playerBar.canvas.width * 0.3
 	monsterStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height));
 	monsterStage.addChild(monsterStageObject)
 	playerBar.addChild(monsterStage)
 
 	shopStage = new createjs.Container();
-	shopStage.x = playerBar.canvas.width * 0.70
-	shopStage.y = 0
-	shopStage.height = playerBar.canvas.clientHeight
+	shopStage.x = playerBar.canvas.width * 0.7
+	shopStage.y = playerBar.canvas.height * 0.2
+	shopStage.height = playerBar.canvas.height * 0.8
 	shopStage.width = playerBar.canvas.clientWidth * 0.30
 	shopStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height));
 	shopStage.addChild(shopStageObject)
 	playerBar.addChild(shopStage)
-
 }
 
 function handleLeftSwap(event) {
