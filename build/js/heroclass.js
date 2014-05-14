@@ -89,6 +89,8 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stageObject.addChild(this.animationObject)
 	this.goldTime = 45000
 	this.itemList = []
+	this.stageObject.heroReference = this
+	this.stageObject.addEventListener('click', changeDisplay) //Located in ultility.js
 
 	this.update = function(event) {
 		if (this.alive == false) { //Hero is dead

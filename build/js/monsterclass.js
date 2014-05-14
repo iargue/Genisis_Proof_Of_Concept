@@ -1,4 +1,5 @@
 function monster(monster, x, y, player) {
+	this.baseStats = monster.stats
 	this.AD = monster.stats.AD * 5,
 	this.HP = monster.stats.HP * 10,
 	this.CHP = monster.stats.HP * 10,
@@ -19,11 +20,14 @@ function monster(monster, x, y, player) {
 	this.alive = true,
 	this.attackTarget = null,
 	this.stageObject = new createjs.Container(),
+	this.stageObject.monsterReference = this,
 	this.stageObject.x = x,
 	this.stageObject.y = y,
 	// this.stageShape = new createjs.Bitmap(contentManager.getResult('pokemon')),
 	// this.stageShape.sourceRect = new createjs.Rectangle(monster.icon.left,monster.icon.top, monster.icon.height, monster.icon.width)
 	// console.log(this.stageShape)
+	this.icon = new createjs.Bitmap(contentManager.getResult(monster.icon.base)),
+	this.icon.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width),
 	this.stageShape = new createjs.Shape(),
 	this.stageShape.graphics.beginFill(monster.color).drawCircle(0, 0, 16),
 	this.healthBar = new createjs.Shape(),
@@ -38,6 +42,7 @@ function monster(monster, x, y, player) {
 	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius))),
 	miniMapStage.addChild(this.miniMapObject),
 	this.stageObject.setBounds(x, y, 16, 16),
+	this.stageObject.addEventListener('click', changeDisplay)
 
 
 	this.update = function(event) {
