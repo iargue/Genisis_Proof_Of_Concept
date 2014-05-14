@@ -529,7 +529,15 @@ function refreshInfoBar(event) {
 				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
 			}
 		case 'monster':
-			//Monster stuff here
+			var monster = viewTarget[1]
+			if (monster.alive == false) {
+				informationBar.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, 0, informationStage.height * 0.25)
+				informationBar.healthBarText.text = 'Dead'
+			} else {
+				informationBar.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (monster.CHP / monster.HP) * (informationStage.width * 0.5), informationStage.height * 0.25)
+				informationBar.healthBarText.text = Math.round(monster.CHP) + '/' + Math.round(monster.HP)
+			}
+
 			return
 		case 'item':
 			//item stuff here
