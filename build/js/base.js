@@ -124,10 +124,12 @@ function updateStage(event) {
 		}
 		updateInfoBar(viewTarget[0], viewTarget[1])
 		refreshMiniMap(event)
+
 	}
 	if (leftSwap.swapViewId == 0) {
 		updateSpells(event)
 	}
+	refreshInfoBar(event)
 	playerStage.update(event); //Finally update the stage with all of our changes.
 	playerBar.update(event)
 }
@@ -210,7 +212,7 @@ function createStage() {
 	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px " + textFont, 'black');
 	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
 	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
-	var hit2 = new createjs.Shape();	
+	var hit2 = new createjs.Shape();
 	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
 	rightSwap.hitArea = hit2;
 	rightSwap.swapViewId = 1;
@@ -229,7 +231,7 @@ function createStage() {
 	gameTime.x = textPadding
 	gameTime.y = incomeTime.y = textPadding
 	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
-	
+
 	statusBar.addChild(gameTime)
 	statusBar.addChild(incomeTime)
 
@@ -415,6 +417,32 @@ function updateInfoBar(type, object) {
 	}
 }
 
+function refreshInfoBar(event) {
+	switch (viewTarget[0]) {
+		case 'hero':
+			var hero = viewTarget[1]
+			informationBar.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (hero.CHP / hero.HP) * (informationStage.width * 0.5), informationStage.height * 0.25)
+			informationBar.healthBarText.text = Math.round(hero.CHP) + '/' + Math.round(hero.HP)
+			informationBar.heroText.text = hero.level
+			informationBar.heroText.scaleX = ((informationStage.width * 0.2) / 2) / informationBar.heroText.getMeasuredWidth()
+			informationBar.heroText.scaleY = ((informationStage.height * 0.25)) / informationBar.heroText.getMeasuredHeight()
+			for (var stat in hero.baseStats) {
+				if (stat == 'HP') {
+					stat = 'CMS'
+				}
+				informationBar.statButtons[stat].textObject.text = ' ' + stat + " : " + hero[stat] + ' '
+				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth() //Scale the image down so it fits
+				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
+			}
+		case 'monster':
+			//Monster stuff here
+			return
+		case 'item':
+			//item stuff here
+			return
+	}
+}
+
 function updateMonsterBar(view) {
 	monsterStage.removeAllChildren() // Clear everything from this section
 	monsterStage.addChild(monsterStageObject) //Add back our background
@@ -428,7 +456,7 @@ function updateMonsterBar(view) {
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
-			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().beginLinearGradientFill(["#777","#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
+			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
 			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight));
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
