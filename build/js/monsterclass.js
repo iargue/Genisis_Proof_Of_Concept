@@ -42,7 +42,7 @@ function monster(monster, x, y, player) {
 	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('red').drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius))),
 	miniMapStage.addChild(this.miniMapObject),
 	this.stageObject.setBounds(x, y, 16, 16),
-	this.stageObject.addEventListener('click', changeDisplay)
+	this.stageObject.addEventListener('click', changeDisplay) // in handle.js
 
 
 	this.update = function(event) {

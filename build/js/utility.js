@@ -11,14 +11,7 @@ function msToTime(duration) {
 	return hours + ":" + minutes + ":" + seconds;
 }
 
-this.changeDisplay = function(event) {
-	console.log(event)
-	if (event.currentTarget.monsterReference) {
-		updateInfoBar('monster', event.currentTarget.monsterReference)
-	} else if (event.currentTarget.heroReference) {
-		updateInfoBar('hero', event.currentTarget.heroReference)
-	}
-}
+
 
 function timeToMs(str) {
 	var p = str.split(':'),
