@@ -66,6 +66,8 @@ function updateStage(event) {
 			width: gameStage.width / miniMapStage.width,
 			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
+
+
 		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
 		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
@@ -124,6 +126,7 @@ function updateStage(event) {
 				currentUnit.miniMapObject.graphics.clear().beginFill('red').drawCircle(0, 0, currentUnit.radius / miniMapRatio.radius)
 				currentUnit.miniMapObject.x = currentUnit.stageObject.x / miniMapRatio.width
 				currentUnit.miniMapObject.y = currentUnit.stageObject.y / miniMapRatio.height
+				currentUnit.miniMapObject.updateCache()
 			}
 		}
 
@@ -158,6 +161,13 @@ function createStage() {
 	playerBar = new createjs.Stage("gamePanel");
 	// playerBar.canvas.height = playerBar.canvas.clientHeight;
 	// playerBar.canvas.width = playerBar.canvas.clientWidth;
+
+	fpsText = new createjs.Text('0', textSize + "px " + textFont, 'black');
+	unitText = new createjs.Text('0', textSize + "px " + textFont, 'black');
+	unitText.y = fpsText.getMeasuredHeight() + 3
+	playerStage.addChild(fpsText)
+	playerStage.addChild(unitText)
+
 
 	statusBar = new createjs.Container();
 	statusBar.x = 0
@@ -352,6 +362,7 @@ function updateMonsterBar(view) {
 			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
 		}
 	}
+	monsterStage.cache(0, 0, monsterStage.width, monsterStage.height)
 }
 
 
@@ -400,13 +411,14 @@ function imageLoadingDone(e) {
 	}
 	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);
-	createjs.Ticker.setFPS(60);
+	createjs.Ticker.setFPS(120);
 	document.onkeydown = handleKeyDown
 	playerStage.mouseMoveOutside = true;
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("click", miniMapClick);
 	playerStage.addEventListener("stagemousemove", handleMouse);
 	log = true
+
 }
 
 function init() {
@@ -416,6 +428,8 @@ function init() {
 }
 
 function gameLoop(event) {
+	fpsText.text = 'FPS: ' + Math.round(createjs.Ticker.getMeasuredFPS())
+	unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
 	edgeScrolling(event); //In handle.js
 	gameTime.text = 'Game Time ' + msToTime(event.time);
 	incomeTime.text = 'Next Income ' + msToTime((activePlayer.hero.goldTime + 20000) - event.time);

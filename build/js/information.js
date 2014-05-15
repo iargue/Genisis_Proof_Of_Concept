@@ -276,6 +276,7 @@ function updateInfoBar(type, object) {
 			informationStage.addChild(informationBar)
 			return
 	}
+	informationStage.cache(0, 0, informationStage.width, informationStage.height)
 }
 
 function refreshInfoBar(event) {
@@ -310,4 +311,5 @@ function refreshInfoBar(event) {
 			//item stuff here
 			return
 	}
+	informationStage.updateCache()
 }

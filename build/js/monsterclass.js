@@ -43,6 +43,8 @@ function monster(monster, x, y, player) {
 	miniMapStage.addChild(this.miniMapObject),
 	this.stageObject.setBounds(x, y, 16, 16),
 	this.stageObject.addEventListener('click', changeDisplay) // in handle.js
+	this.stageObject.cache(-20, -30, 40, 60)
+	this.miniMapObject.cache(-Math.round(this.radius / miniMapRatio.radius), -Math.round(this.radius / miniMapRatio.radius), Math.round(this.radius / miniMapRatio.radius), Math.round(this.radius / miniMapRatio.radius))
 
 
 	this.update = function(event) {
@@ -149,6 +151,7 @@ function monster(monster, x, y, player) {
 			miniMapStage.removeChild(this.miniMapObject);
 		} else {
 			this.healthBar.graphics.clear().beginFill("red").drawRect(-18, -30, (this.CHP / this.HP) * 35, 8);
+			this.stageObject.updateCache();
 		}
 	},
 
