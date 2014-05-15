@@ -98,9 +98,9 @@ function updateStage(event) {
 		statusBar.width = playerBar.canvas.width
 		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
 
-		gameTime.x = textPadding
-		gameTime.y = incomeTime.y = textPadding
-		incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
+		gameTime.x = playerBar.canvas.width * 0.5
+		gameTime.y = incomeTime.y = 0
+		incomeTime.x = playerBar.cavnas.width * 0.4
 
 		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
 			gameStage.regY = gameStage.height - playerStage.canvas.height
@@ -179,9 +179,9 @@ function createStage() {
 
 	gameTime = new createjs.Text('Game Time 00:00:00', textSize + "px " + textFont, 'black');
 	incomeTime = new createjs.Text('Next Income 00:00:00', textSize + "px " + textFont, 'black');
-	gameTime.x = textPadding
-	gameTime.y = incomeTime.y = textPadding
-	incomeTime.x = gameTime.getMeasuredWidth() + textPadding * 3
+	gameTime.x = playerBar.canvas.width * 0.5
+	gameTime.y = incomeTime.y = 0
+	incomeTime.x = playerBar.canvas.width * 0.4
 	statusBar.addChild(gameTime)
 	statusBar.addChild(incomeTime)
 
@@ -192,25 +192,25 @@ function createStage() {
 	leftSwap.width = playerBar.canvas.width * 0.05
 	leftSwapObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("green").drawRect(0, 0, leftSwap.width, leftSwap.height))
 	leftSwap.textObject = new createjs.Text('Show Spells', largeTextSize + "px " + textFont, 'black');
-	leftSwap.textObject.x = textPadding
-	leftSwap.textObject.y = playerStage.canvas.height - (largeTextSize + (textPadding * 2));
-	var hit = new createjs.Shape();
-	hit.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, leftSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	leftSwap.hitArea = hit;
+	leftSwap.textObject.x = 0
+	leftSwap.textObject.y = 0
 	leftSwap.swapViewId = 1;
 	leftSwap.addChild(leftSwap.textObject);
-	leftSwap.addEventListener('click', handleLeftSwap);
+	leftSwap.addEventListener('click', handleLeftSwap)
 	statusBar.addChild(leftSwap)
 
 	rightSwap = new createjs.Container();
+	rightSwap.x = playerStage.canvas.width * 0.95
+	rightSwap.y = 0
+	rightSwap.height = playerBar.canvas.height * 0.2
+	rightSwap.width = playerBar.canvas.width * 0.05
+	rightSwapObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("green").drawRect(0, 0, rightSwap.width, rightSwap.height))
 	rightSwap.textObject = new createjs.Text('Show Inventory', largeTextSize + "px " + textFont, 'black');
-	rightSwap.textObject.x = playerStage.canvas.width - (rightSwap.textObject.getMeasuredWidth() + textPadding);
-	rightSwap.textObject.y = playerStage.canvas.height - (largeTextSize + textPadding * 2);
-	var hit2 = new createjs.Shape();
-	hit2.graphics.beginFill("#000").drawRect(-textPadding, -textPadding, rightSwap.textObject.getMeasuredWidth() + textPadding * 2, largeTextSize + textPadding * 2);
-	rightSwap.hitArea = hit2;
+	rightSwap.textObject.x = 0
+	rightSwap.textObject.y = 0
 	rightSwap.swapViewId = 1;
 	rightSwap.addChild(rightSwap.textObject);
+	rightSwap.addEventListener('click', handleRightSwap)
 	statusBar.addChild(rightSwap)
 
 	miniMapStage = new createjs.Container();
@@ -265,6 +265,9 @@ function handleLeftSwap(event) {
 	updateMonsterBar(event.target.swapViewId)
 }
 
+function handleRightSwap(event) {
+	console.log(event);
+}
 
 function updateShopBar(view) {
 	shopStage.removeAllChildren()
