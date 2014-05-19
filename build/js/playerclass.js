@@ -32,7 +32,4 @@ function player(team, active) {
 	this.hero = {},
 	this.activePlayer = active,
 	this.summonLevel = 0
-	if (active) {
-		activePlayer = this
-	}
 }

@@ -22,9 +22,9 @@ var stage, unitList = [],
 	lastClickedItem = null,
 	viewTarget = [null, null],
 	spellButtons = null;
-smallText = 12,
-textPadding = 2, // Vertical Padding for readability
-textFont = "Calibri"
+	smallText = 12,
+	textPadding = 2, // Vertical Padding for readability
+	textFont = "Calibri";
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -39,8 +39,8 @@ function newGame(gameOptions) {
 		opponentTeam.addPlayer(0, true, gameOptions.opponentPlayer.hero, gameOptions.opponentPlayer.spells)
 		teamList.push(activeTeam)
 	}
-	updateMonsterBar(0)
-	updateShopBar(0)
+	updateLeftBar(0)
+	updateRightBar(0)
 	updateInfoBar('hero', activePlayer.hero)
 	//Add story
 	//Add online
@@ -55,18 +55,8 @@ function updateStage(event) {
 		playerBar.canvas.height = playerBar.canvas.clientHeight
 		playerBar.canvas.width = playerBar.canvas.clientWidth
 
-		statusBar.x = 0
-		statusBar.y = 0
-		statusBar.height = playerBar.canvas.height * 0.2
-		statusBar.width = playerBar.canvas.width
-		statusBarObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height)
-
-		gameTime.x = statusBar.width * 0.5
-		gameTime.y = incomeTime.y = 0
-		incomeTime.x = statusBar.width * 0.4
-
-		miniMapStage.x = statusBar.width * 0.5
-		miniMapStage.y = statusBar.height
+		miniMapStage.x = playerBar.canvas.width * 0.5
+		miniMapStage.y = (playerBar.canvas.height * 0.2)
 		miniMapStage.height = playerBar.canvas.height * 0.8
 		miniMapStage.width = playerBar.canvas.width * 0.2
 		miniMapRatio = {
@@ -79,19 +69,19 @@ function updateStage(event) {
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
 
 		informationStage.x = playerBar.canvas.width * 0.3
-		informationStage.y = statusBar.height
+		informationStage.y = (playerBar.canvas.height * 0.2)
 		informationStage.height = playerBar.canvas.height * 0.8
 		informationStage.width = playerBar.canvas.width * 0.2
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height)
 
 		monsterStage.x = 0
-		monsterStage.y = statusBar.height
+		monsterStage.y = (playerBar.canvas.height * 0.2)
 		monsterStage.height = playerBar.canvas.height * 0.8
 		monsterStage.width = playerBar.canvas.width * 0.3
 		monsterStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height)
 
 		shopStage.x = playerBar.canvas.width * 0.70
-		shopStage.y = statusBar.height
+		shopStage.y = (playerBar.canvas.height * 0.2)
 		shopStage.height = playerBar.canvas.height * 0.8
 		shopStage.width = playerBar.canvas.width * 0.30
 		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
@@ -105,9 +95,9 @@ function updateStage(event) {
 		playerBorder.x = gameStage.regX / miniMapRatio.width
 		playerBorder.y = gameStage.regY / miniMapRatio.height
 		if (leftSwap.swapViewId == 0) {
-			updateMonsterBar(1)
+			updateLeftBar(1)
 		} else {
-			updateMonsterBar(0)
+			updateLeftBar(0)
 		}
 		updateInfoBar(viewTarget[0], viewTarget[1])
 		for (var team in teamList) { //We have to update each team
@@ -156,121 +146,131 @@ function createStage() {
 	playerBar = new createjs.Stage("gamePanel");
 	playerBar.canvas.height = playerBar.canvas.clientHeight;
 	playerBar.canvas.width = playerBar.canvas.clientWidth;
-
-	statusBar = new createjs.Container();
-	statusBar.x = 0
-	statusBar.y = 0
-	statusBar.width = playerBar.canvas.width
-	statusBar.height = playerBar.canvas.height * 0.2
-	statusBarObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, statusBar.width, statusBar.height));
-	statusBar.addChild(statusBarObject);
-	playerBar.addChild(statusBar);
+	playerBar.object = new createjs.Shape(new createjs.Graphics().beginFill("#111").drawRect(0, 0, playerBar.canvas.width, playerBar.canvas.height));
+	playerBar.addChild(playerBar.object);
 
 	gameTime = new createjs.Container();
 	gameTime.x = playerBar.canvas.width * 0.5
 	gameTime.y = 0
-	gameTime.width = statusBar.width * 0.1
-	gameTime.height = statusBar.height
-	gameTimeObject = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("white").drawRect(0, 0, gameTime.width, gameTime.height));
-	gameTime.textObject = new createjs.Text('Game Time\n00:00:00', textSize + "px " + textFont, 'black');
+	gameTime.width = playerBar.canvas.width * 0.1
+	gameTime.height = (playerBar.canvas.height * 0.2)
+	gameTimeObject = new createjs.Shape(new createjs.Graphics().drawRect(0, 0, gameTime.width, gameTime.height));
+	gameTime.textObject = new createjs.Text('00:00:00', textSize + "px " + textFont, '#FFF');
+	gameTime.textObject.scaleX = (gameTime.width / 2) / gameTime.textObject.getMeasuredWidth()
+	gameTime.textObject.scaleY = (gameTime.height / 2) /gameTime.textObject.getMeasuredHeight()
+	gameTime.textObject.x = (gameTime.width * 0.5) - (gameTime.textObject.getTransformedBounds().width / 2)
+	gameTime.textObject.y = (gameTime.textObject.getTransformedBounds().height / 2)
 	gameTime.addChild(gameTimeObject);
 	gameTime.addChild(gameTime.textObject);
-	statusBar.addChild(gameTime);
+	playerBar.addChild(gameTime);
 
 	incomeTime = new createjs.Container();
-	incomeTime.x = statusBar.width * 0.4
+	incomeTime.x = playerBar.canvas.width * 0.4
 	incomeTime.y = 0
-	incomeTime.width = statusBar.width * 0.1
-	incomeTime.height = statusBar.height
-	incomeTime.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("white").drawRect(0, 0, incomeTime.width, incomeTime.height));
-	incomeTime.textObject = new createjs.Text('Next Income In\n00:00:00', textSize + "px " + textFont, 'black');
+	incomeTime.width = playerBar.canvas.width * 0.1
+	incomeTime.height = (playerBar.canvas.height * 0.2)
+	incomeTime.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, incomeTime.width, incomeTime.height));
+	incomeTime.textObject = new createjs.Text('00:00:00', textSize + "px " + textFont, '#FFF');
+	incomeTime.textObject.scaleX = (incomeTime.width / 2) / incomeTime.textObject.getMeasuredWidth()
+	incomeTime.textObject.scaleY = (incomeTime.height / 2) /incomeTime.textObject.getMeasuredHeight()
+	incomeTime.textObject.x = (incomeTime.width * 0.5) - (incomeTime.textObject.getTransformedBounds().width / 2)
+	incomeTime.textObject.y = (incomeTime.textObject.getTransformedBounds().height / 2)
 	incomeTime.addChild(incomeTime.object);
 	incomeTime.addChild(incomeTime.textObject);
-	statusBar.addChild(incomeTime);
+	playerBar.addChild(incomeTime);
 
 	goldStage = new createjs.Container()
-	goldStage.x = statusBar.width * 0.6
+	goldStage.x = playerBar.canvas.width * 0.6
 	goldStage.y = 0
-	goldStage.width = statusBar.width * 0.1
-	goldStage.height = statusBar.height 
-	goldStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("yellow").drawRect(0, 0, goldStage.width, goldStage.height));
-	goldStage.textObject = new createjs.Text('Gold\n0', textSize + "px " + textFont, 'black')
+	goldStage.width = playerBar.canvas.width * 0.1
+	goldStage.height = (playerBar.canvas.height * 0.2) 
+	goldStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, goldStage.width, goldStage.height));
+	goldStage.textObject = new createjs.Text('0', textSize + "px " + textFont, '#FFF')
 	goldStage.addChild(goldStage.object)
 	goldStage.addChild(goldStage.textObject)
-	statusBar.addChild(goldStage)
+	playerBar.addChild(goldStage)
 
 	incomeStage = new createjs.Container()
-	incomeStage.x = statusBar.width * 0.3
+	incomeStage.x = playerBar.canvas.width * 0.3
 	incomeStage.y = 0
-	incomeStage.width = statusBar.width * 0.1
-	incomeStage.height = statusBar.height
-	incomeStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("lightblue").drawRect(0, 0, incomeStage.width, incomeStage.height))
-	incomeStage.textObject = new createjs.Text('Income\n1', textSize + "px " + textFont, 'black')
+	incomeStage.width = playerBar.canvas.width * 0.1
+	incomeStage.height = (playerBar.canvas.height * 0.2)
+	incomeStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, incomeStage.width, incomeStage.height))
+	incomeStage.textObject = new createjs.Text('1', textSize + "px " + textFont, '#FFF')
 	incomeStage.addChild(incomeStage.object)
 	incomeStage.addChild(incomeStage.textObject)
-	statusBar.addChild(incomeStage)
+	playerBar.addChild(incomeStage)
 
 	leftTeamBar = new createjs.Container()
-	leftTeamBar.x = statusBar.width * 0.05
+	leftTeamBar.x = playerBar.canvas.width * 0.1
 	leftTeamBar.y = 0
-	leftTeamBar.width = statusBar.width * 0.25
-	leftTeamBar.height = statusBar.height
+	leftTeamBar.width = playerBar.canvas.width * 0.2
+	leftTeamBar.height = (playerBar.canvas.height * 0.2)
 	leftTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, leftTeamBar.width, leftTeamBar.height))
 	leftTeamBar.textObject = new createjs.Text('555/555', textSize + "px " + textFont, '#FFF')
 	leftTeamBar.textObject.scaleX = ((leftTeamBar.width * 0.5) / 2) / (leftTeamBar.textObject.getMeasuredWidth())
 	leftTeamBar.textObject.scaleY = (leftTeamBar.height  / 2) / (leftTeamBar.textObject.getMeasuredHeight())
 	leftTeamBar.textObject.x = (leftTeamBar.width * 0.5) - (leftTeamBar.textObject.getTransformedBounds().width / 2)
-	leftTeamBar.textObject.y = leftTeamBar.textObject.getTransformedBounds().height / 2
+	leftTeamBar.textObject.y = leftTeamBar.textObject.getTransformedBounds().height / 2.2
 	leftTeamBar.addChild(leftTeamBar.object)
 	leftTeamBar.addChild(leftTeamBar.textObject)
-	statusBar.addChild(leftTeamBar)
+	playerBar.addChild(leftTeamBar)
 
 	rightTeamBar = new createjs.Container()
-	rightTeamBar.x = statusBar.width * 0.7
+	rightTeamBar.x = playerBar.canvas.width * 0.7
 	rightTeamBar.y = 0
-	rightTeamBar.width = statusBar.width * 0.25
-	rightTeamBar.height = statusBar.height
+	rightTeamBar.width = playerBar.canvas.width * 0.2
+	rightTeamBar.height = (playerBar.canvas.height * 0.2)
 	rightTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height))
 	rightTeamBar.textObject = new createjs.Text('555/555', textSize + "px " + textFont, '#FFF')
 	rightTeamBar.textObject.scaleX = ((rightTeamBar.width * 0.5) / 2) / (rightTeamBar.textObject.getMeasuredWidth())
 	rightTeamBar.textObject.scaleY = (rightTeamBar.height  / 2) / (rightTeamBar.textObject.getMeasuredHeight())
 	rightTeamBar.textObject.x = (rightTeamBar.width * 0.5) - (rightTeamBar.textObject.getTransformedBounds().width / 2)
-	rightTeamBar.textObject.y = rightTeamBar.textObject.getTransformedBounds().height / 2
+	rightTeamBar.textObject.y = rightTeamBar.textObject.getTransformedBounds().height / 2.2
 	rightTeamBar.addChild(rightTeamBar.object)
 	rightTeamBar.addChild(rightTeamBar.textObject)
-	statusBar.addChild(rightTeamBar)
+	playerBar.addChild(rightTeamBar)
 
 	leftSwap = new createjs.Container();
 	leftSwap.x = 0
 	leftSwap.y = 0
-	leftSwap.height = statusBar.height
-	leftSwap.width = playerBar.canvas.width * 0.05
-	leftSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("green").drawRect(0, 0, leftSwap.width, leftSwap.height))
+	leftSwap.height = (playerBar.canvas.height * 0.2)
+	leftSwap.width = playerBar.canvas.width * 0.1
+	leftSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height))
 	leftSwap.textObject = new createjs.Text('Spells', textSize + "px " + textFont, 'black');
-	leftSwap.textObject.scaleX = (leftSwap.width / 2) / (leftSwap.textObject.getMeasuredWidth())
+	leftSwap.textObject.scaleX = (leftSwap.width / 2.2) / (leftSwap.textObject.getMeasuredWidth())
+	leftSwap.textObject.scaleY = (leftSwap.height / 2) / (leftSwap.textObject.getMeasuredHeight())
 	leftSwap.textObject.x = (leftSwap.width * 0.5) - (leftSwap.textObject.getTransformedBounds().width / 2)
-	leftSwap.textObject.y = leftSwap.textObject.getMeasuredHeight() / 2
-	leftSwap.swapViewId = 1;
+	leftSwap.textObject.y = leftSwap.textObject.getTransformedBounds().height / 2
+	leftSwap.viewId = 0;
+	leftSwap.addEventListener('click', function(){
+		leftSwap.viewId === 0 ? leftSwap.viewId = 1 : leftSwap.viewId = 0;
+		updateLeftBar(leftSwap.viewId)
+	})
 	leftSwap.addChild(leftSwap.object);
 	leftSwap.addChild(leftSwap.textObject);
-	leftSwap.addEventListener('click', handleLeftSwap)
-	statusBar.addChild(leftSwap)
+	playerBar.addChild(leftSwap)
 
 	rightSwap = new createjs.Container();
-	rightSwap.x = statusBar.width * 0.95
+	rightSwap.x = playerBar.canvas.width * 0.9
 	rightSwap.y = 0
 	rightSwap.height = leftSwap.height
 	rightSwap.width = leftSwap.width
-	rightSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("green").drawRect(0, 0, rightSwap.width, rightSwap.height))
+	rightSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, rightSwap.height).drawRect(0, 0, rightSwap.width, rightSwap.height))
 	rightSwap.textObject = new createjs.Text('Inventory', textSize + "px " + textFont, 'black');
-	rightSwap.textObject.scaleX = (rightSwap.width / 1.4) / (rightSwap.textObject.getMeasuredWidth())
+	rightSwap.textObject.scaleX = (rightSwap.width / 1.5) / (rightSwap.textObject.getMeasuredWidth())
+	rightSwap.textObject.scaleY = (rightSwap.height / 2) / (rightSwap.textObject.getMeasuredHeight())
 	rightSwap.textObject.x = (rightSwap.width * 0.5) - (rightSwap.textObject.getTransformedBounds().width / 2)
-	rightSwap.textObject.y = rightSwap.textObject.getMeasuredHeight() / 2
+	rightSwap.textObject.y = rightSwap.textObject.getTransformedBounds().height / 2
 	rightSwap.swapViewId = 1;
 	rightSwap.addChild(rightSwap.object);
 	rightSwap.addChild(rightSwap.textObject);
-	rightSwap.addEventListener('click', handleRightSwap)
-	statusBar.addChild(rightSwap)
+	rightSwap.viewId = 0;
+	rightSwap.addEventListener('click', function(){
+		rightSwap.viewId === 0 ? rightSwap.viewId = 0 : rightSwap.viewId = 0;
+		updateRightBar(rightSwap.viewId)
+	})
+	playerBar.addChild(rightSwap)
 
 	miniMapStage = new createjs.Container();
 	miniMapStage.x = playerBar.canvas.width * 0.5
@@ -296,7 +296,7 @@ function createStage() {
 	informationStage.y = playerBar.canvas.height * 0.2
 	informationStage.height = playerBar.canvas.height * 0.8
 	informationStage.width = playerBar.canvas.width * 0.2
-	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightyellow").drawRect(0, 0, informationStage.width, informationStage.height));
+	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height));
 	informationStage.addChild(informationStageObject)
 	playerBar.addChild(informationStage)
 
@@ -305,7 +305,7 @@ function createStage() {
 	monsterStage.y = playerBar.canvas.height * 0.2
 	monsterStage.height = playerBar.canvas.height * 0.8
 	monsterStage.width = playerBar.canvas.width * 0.3
-	monsterStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height));
+	monsterStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, monsterStage.width, monsterStage.height));
 	monsterStage.addChild(monsterStageObject)
 	playerBar.addChild(monsterStage)
 
@@ -314,12 +314,12 @@ function createStage() {
 	shopStage.y = playerBar.canvas.height * 0.2
 	shopStage.height = playerBar.canvas.height * 0.8
 	shopStage.width = playerBar.canvas.clientWidth * 0.30
-	shopStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height));
+	shopStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, shopStage.width, shopStage.height));
 	shopStage.addChild(shopStageObject)
 	playerBar.addChild(shopStage)
 }
 
-function updateShopBar(view) {
+function updateRightBar(view) {
 	shopStage.removeAllChildren()
 	shopStage.addChild(shopStageObject)
 	if (view == 0) { //View 0 is the item shop. Fuck yeah
@@ -330,6 +330,7 @@ function updateShopBar(view) {
 			var itemObject = itemList[item] //Store a reference to the current item
 			itemButtons[item] = new createjs.Container() //Container for the multiple objects we will be creating
 			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base)) //Add an image to the container. Based on item icon
+			itemButtons[item].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
 			if (item > 3) { //We have added 4 units to this row, lets move it down 1.
 				itemButtons[item].y = buttonHeight //This puts it in row 2 instead of 1.
@@ -347,6 +348,7 @@ function updateShopBar(view) {
 			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
 			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
 			itemButtons[item].addEventListener('click', itemClick) //When this button is clicked, call this function (itemclick)
+			itemButtons[item].addChild(itemButtons[item].buttonBackground)
 			itemButtons[item].addChild(itemButtons[item].button) //Add to the container
 			itemButtons[item].addChild(itemButtons[item].costText)
 			shopStage.addChild(itemButtons[item]) //Add the container to the shopStage container
@@ -356,7 +358,7 @@ function updateShopBar(view) {
 
 
 
-function updateMonsterBar(view) {
+function updateLeftBar(view) {
 	monsterStage.removeAllChildren() // Clear everything from this section
 	monsterStage.addChild(monsterStageObject) //Add back our background
 	if (view == 0) { //View 0 is Monsters
@@ -369,9 +371,9 @@ function updateMonsterBar(view) {
 			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
 			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
-			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
+			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
-			monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight));
+			//monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight));
 			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
 				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
 				monsterButtons[unit].x = buttonWidth * (unit % 4) //Since we are on row 2, we have to restart our x movement
@@ -388,7 +390,6 @@ function updateMonsterBar(view) {
 			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
 			monsterButtons[unit].addChild(monsterButtons[unit].buttonBackground)
 			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
-			monsterButtons[unit].addChild(monsterButtons[unit].buttonBorder)
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
 			monsterStage.addChild(monsterButtons[unit]) //Add the container to the monsterStage container
 		}
@@ -402,6 +403,7 @@ function updateMonsterBar(view) {
 			var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current monster
 			spellButtons[spell] = new createjs.Container() //Container for the multiple objects we will be creating
 			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) //Add an image to the container. Based on monster icon
+			spellButtons[spell].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
 			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
@@ -415,6 +417,7 @@ function updateMonsterBar(view) {
 			spellButtons[spell].button.scaleY = buttonHeight / spellButtons[spell].button.image.height //Scale the image down so it fits
 			spellButtons[spell].levelButton.addEventListener('click', levelClick)
 			spellButtons[spell].addEventListener('click', spellClick) //When this button is clicked, call this function (monsterclick)
+			spellButtons[spell].addChild(spellButtons[spell].buttonBackground)
 			spellButtons[spell].addChild(spellButtons[spell].button) //Add to the container
 			spellButtons[spell].addChild(spellButtons[spell].levelText)
 			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
@@ -454,19 +457,19 @@ function loadImages() {
 }
 
 function imageLoadingDone(e) {
+	gameOptions = {
+		mode: 'solo',
+		hero: 'warrior',
+		spells: [new spellList['cupcakeTrap'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
+	}
 	createStage()
+	newGame(gameOptions)
 	playerStage.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
 	playerBar.canvas.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
-	gameOptions = {
-		mode: 'solo',
-		hero: 'warrior',
-		spells: [new spellList['cupcakeTrap'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
-	}
-	newGame(gameOptions)
 	createjs.Ticker.on("tick", gameLoop);
 	createjs.Ticker.setFPS(60);
 	document.onkeydown = handleKeyDown
@@ -485,8 +488,8 @@ function init() {
 
 function gameLoop(event) {
 	edgeScrolling(event); //In handle.js
-	gameTime.textObject.text = 'Game Time\n' + msToTime(event.time);
-	incomeTime.textObject.text = 'Next Income In\n' + msToTime((activePlayer.hero.goldTime + 20000) - event.time);
+	gameTime.textObject.text = msToTime(event.time);
+	incomeTime.textObject.text = msToTime((activePlayer.hero.goldTime + 20000) - event.time);
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
