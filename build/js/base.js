@@ -22,9 +22,9 @@ var stage, unitList = [],
 	lastClickedItem = null,
 	viewTarget = [null, null],
 	spellButtons = null;
-	smallText = 12,
-	textPadding = 2, // Vertical Padding for readability
-	textFont = "Calibri";
+smallText = 12,
+textPadding = 2, // Vertical Padding for readability
+textFont = "Calibri";
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -113,6 +113,8 @@ function updateStage(event) {
 			width: gameStage.width / miniMapStage.width,
 			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
+
+
 		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
 		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
@@ -161,6 +163,7 @@ function updateStage(event) {
 				currentUnit.miniMapObject.graphics.clear().beginFill('red').drawCircle(0, 0, currentUnit.radius / miniMapRatio.radius)
 				currentUnit.miniMapObject.x = currentUnit.stageObject.x / miniMapRatio.width
 				currentUnit.miniMapObject.y = currentUnit.stageObject.y / miniMapRatio.height
+				currentUnit.miniMapObject.updateCache()
 			}
 		}
 
@@ -210,6 +213,14 @@ function createStage() {
 	collisionTree = QUAD.init(bounds);
 	playerStage.addChild(gameStage);
 	playerBar = new createjs.Stage("gamePanel");
+
+	fpsText = new createjs.Text('0', textSize + "px " + textFont, 'black');
+	unitText = new createjs.Text('0', textSize + "px " + textFont, 'black');
+	unitText.y = fpsText.getMeasuredHeight() + 5
+	playerStage.addChild(fpsText)
+	playerStage.addChild(unitText)
+
+
 	playerBar.canvas.height = playerBar.canvas.clientHeight;
 	playerBar.canvas.width = playerBar.canvas.clientWidth;
 	playerBar.object = new createjs.Shape(new createjs.Graphics().beginFill("#111").drawRect(0, 0, playerBar.canvas.width, playerBar.canvas.height));
@@ -241,7 +252,7 @@ function createStage() {
 	goldStage.x = playerBar.canvas.width * 0.6
 	goldStage.y = 0
 	goldStage.width = playerBar.canvas.width * 0.1
-	goldStage.height = (playerBar.canvas.height * 0.2) 
+	goldStage.height = (playerBar.canvas.height * 0.2)
 	goldStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, goldStage.width, goldStage.height));
 	createTextObject(goldStage, "0", 0.5); 
 	goldStage.addChild(goldStage.object)
@@ -265,6 +276,7 @@ function createStage() {
 	leftTeamBar.width = playerBar.canvas.width * 0.2
 	leftTeamBar.height = (playerBar.canvas.height * 0.2)
 	leftTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, leftTeamBar.width, leftTeamBar.height))
+
 	createTextObject(leftTeamBar, "444/444", 0.25);
 	leftTeamBar.addChild(leftTeamBar.object)
 	leftTeamBar.addChild(leftTeamBar.textObject)
@@ -289,7 +301,7 @@ function createStage() {
 	leftSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.25, 0.75, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height))
 	createTextObject(leftSwap, "Spells", 0.5);
 	leftSwap.viewId = 0;
-	leftSwap.addEventListener('click', function(){
+	leftSwap.addEventListener('click', function() {
 		leftSwap.viewId === 0 ? leftSwap.viewId = 1 : leftSwap.viewId = 0;
 		updateLeftBar(leftSwap.viewId)
 	})
@@ -308,7 +320,7 @@ function createStage() {
 	rightSwap.addChild(rightSwap.object);
 	rightSwap.addChild(rightSwap.textObject);
 	rightSwap.viewId = 0;
-	rightSwap.addEventListener('click', function(){
+	rightSwap.addEventListener('click', function() {
 		rightSwap.viewId === 0 ? rightSwap.viewId = 0 : rightSwap.viewId = 0;
 		updateRightBar(rightSwap.viewId)
 	})
@@ -465,6 +477,7 @@ function updateLeftBar(view) {
 			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
 		}
 	}
+	monsterStage.cache(0, 0, monsterStage.width, monsterStage.height)
 }
 
 
@@ -513,13 +526,14 @@ function imageLoadingDone(e) {
 		e.preventDefault();
 	};
 	createjs.Ticker.on("tick", gameLoop);
-	createjs.Ticker.setFPS(60);
+	createjs.Ticker.setFPS(120);
 	document.onkeydown = handleKeyDown
 	playerStage.mouseMoveOutside = true;
 	playerStage.addEventListener("stagemouseup", handleClick);
 	miniMapStage.addEventListener("click", miniMapClick);
 	playerStage.addEventListener("stagemousemove", handleMouse);
 	log = true
+
 }
 
 function init() {
@@ -529,6 +543,8 @@ function init() {
 }
 
 function gameLoop(event) {
+	fpsText.text = 'FPS: ' + Math.round(createjs.Ticker.getMeasuredFPS())
+	unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
 	edgeScrolling(event); //In handle.js
 	gameTime.textObject.text = msToTime(event.time);
 	incomeTime.textObject.text = msToTime((activePlayer.hero.goldTime + 20000) - event.time);
