@@ -89,23 +89,23 @@ function updateStage(event) {
 		rightTeamBar.x = playerBar.canvas.width * 0.7
 		rightTeamBar.y = 0
 		rightTeamBar.width = playerBar.canvas.width * 0.2
-		rightTeamBar.height = (playerBar.canvas.height * 0.2)
+		rightTeamBar.height = playerBar.canvas.height * 0.2
 		rightTeamBar.object.graphics.clear().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height);
 
 		leftSwap.x = 0
 		leftSwap.y = 0
-		leftSwap.height = (playerBar.canvas.height * 0.2)
+		leftSwap.height = playerBar.canvas.height * 0.2
 		leftSwap.width = playerBar.canvas.width * 0.1
 		leftSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height);
 
 		rightTeamBar.x = playerBar.canvas.width * 0.7
 		rightTeamBar.y = 0
 		rightTeamBar.width = playerBar.canvas.width * 0.2
-		rightTeamBar.height = (playerBar.canvas.height * 0.2)
+		rightTeamBar.height = playerBar.canvas.height * 0.2
 		rightTeamBar.object.graphics.clear().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height);
 
-		miniMapStage.x = playerBar.canvas.width * 0.5
-		miniMapStage.y = (playerBar.canvas.height * 0.2)
+		miniMapStage.x = playerBar.canvas.width * 0.3
+		miniMapStage.y = playerBar.canvas.height * 0.2
 		miniMapStage.height = playerBar.canvas.height * 0.8
 		miniMapStage.width = playerBar.canvas.width * 0.2
 		miniMapRatio = {
@@ -117,14 +117,14 @@ function updateStage(event) {
 		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
 
-		informationStage.x = playerBar.canvas.width * 0.3
-		informationStage.y = (playerBar.canvas.height * 0.2)
+		informationStage.x = playerBar.canvas.width * 0.5
+		informationStage.y = playerBar.canvas.height * 0.2
 		informationStage.height = playerBar.canvas.height * 0.8
 		informationStage.width = playerBar.canvas.width * 0.2
 		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height)
 
 		monsterStage.x = 0
-		monsterStage.y = (playerBar.canvas.height * 0.2)
+		monsterStage.y = playerBar.canvas.height * 0.2
 		monsterStage.height = playerBar.canvas.height * 0.8
 		monsterStage.width = playerBar.canvas.width * 0.3
 		monsterStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height)
@@ -173,6 +173,23 @@ function updateStage(event) {
 	playerBar.update(event);
 }
 
+function createTextObject(container, text, width) {
+	// Create string always 9 or more characters long
+	var newText = text;
+	if(text.length < 9){
+		var str1 = "", 
+			str2 = "";
+		for(var i = 0; i < 9 - text.length; i++)
+			newText = " " + newText
+	}
+	console.log(newText);
+	container.textObject = new createjs.Text(newText, textSize + "px " + textFont, '#FFF');
+	container.textObject.scaleX = (container.width * width) / container.textObject.getMeasuredWidth();
+	container.textObject.scaleY = (container.height / 2) / container.textObject.getMeasuredHeight();
+	container.textObject.x = (container.width * 0.5) - (container.textObject.getTransformedBounds().width / 2);
+	container.textObject.y = container.textObject.getTransformedBounds().height / 2;
+}
+
 function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
 	playerStage.canvas.height = playerStage.canvas.clientHeight;
@@ -204,11 +221,7 @@ function createStage() {
 	gameTime.width = playerBar.canvas.width * 0.1
 	gameTime.height = (playerBar.canvas.height * 0.2)
 	gameTime.object = new createjs.Shape(new createjs.Graphics().drawRect(0, 0, gameTime.width, gameTime.height));
-	gameTime.textObject = new createjs.Text('00:00:00', textSize + "px " + textFont, '#FFF');
-	gameTime.textObject.scaleX = (gameTime.width / 2) / gameTime.textObject.getMeasuredWidth()
-	gameTime.textObject.scaleY = (gameTime.height / 2) /gameTime.textObject.getMeasuredHeight()
-	gameTime.textObject.x = (gameTime.width * 0.5) - (gameTime.textObject.getTransformedBounds().width / 2)
-	gameTime.textObject.y = (gameTime.textObject.getTransformedBounds().height / 2)
+	createTextObject(gameTime, "00:00:00", 0.5);
 	gameTime.addChild(gameTime.object);
 	gameTime.addChild(gameTime.textObject);
 	playerBar.addChild(gameTime);
@@ -219,11 +232,7 @@ function createStage() {
 	incomeTime.width = playerBar.canvas.width * 0.1
 	incomeTime.height = (playerBar.canvas.height * 0.2)
 	incomeTime.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, incomeTime.width, incomeTime.height));
-	incomeTime.textObject = new createjs.Text('00:00:00', textSize + "px " + textFont, '#FFF');
-	incomeTime.textObject.scaleX = (incomeTime.width / 2) / incomeTime.textObject.getMeasuredWidth()
-	incomeTime.textObject.scaleY = (incomeTime.height / 2) /incomeTime.textObject.getMeasuredHeight()
-	incomeTime.textObject.x = (incomeTime.width * 0.5) - (incomeTime.textObject.getTransformedBounds().width / 2)
-	incomeTime.textObject.y = (incomeTime.textObject.getTransformedBounds().height / 2)
+	createTextObject(incomeTime, "00:00:00", 0.5);
 	incomeTime.addChild(incomeTime.object);
 	incomeTime.addChild(incomeTime.textObject);
 	playerBar.addChild(incomeTime);
@@ -234,7 +243,7 @@ function createStage() {
 	goldStage.width = playerBar.canvas.width * 0.1
 	goldStage.height = (playerBar.canvas.height * 0.2) 
 	goldStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, goldStage.width, goldStage.height));
-	goldStage.textObject = new createjs.Text('0', textSize + "px " + textFont, '#FFF')
+	createTextObject(goldStage, "0", 0.5); 
 	goldStage.addChild(goldStage.object)
 	goldStage.addChild(goldStage.textObject)
 	playerBar.addChild(goldStage)
@@ -243,9 +252,9 @@ function createStage() {
 	incomeStage.x = playerBar.canvas.width * 0.3
 	incomeStage.y = 0
 	incomeStage.width = playerBar.canvas.width * 0.1
-	incomeStage.height = (playerBar.canvas.height * 0.2)
+	incomeStage.height = playerBar.canvas.height * 0.2
 	incomeStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").drawRect(0, 0, incomeStage.width, incomeStage.height))
-	incomeStage.textObject = new createjs.Text('1', textSize + "px " + textFont, '#FFF')
+	createTextObject(incomeStage, "1", 0.5); 
 	incomeStage.addChild(incomeStage.object)
 	incomeStage.addChild(incomeStage.textObject)
 	playerBar.addChild(incomeStage)
@@ -256,11 +265,7 @@ function createStage() {
 	leftTeamBar.width = playerBar.canvas.width * 0.2
 	leftTeamBar.height = (playerBar.canvas.height * 0.2)
 	leftTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, leftTeamBar.width, leftTeamBar.height))
-	leftTeamBar.textObject = new createjs.Text('555/555', textSize + "px " + textFont, '#FFF')
-	leftTeamBar.textObject.scaleX = ((leftTeamBar.width * 0.5) / 2) / (leftTeamBar.textObject.getMeasuredWidth())
-	leftTeamBar.textObject.scaleY = (leftTeamBar.height  / 2) / (leftTeamBar.textObject.getMeasuredHeight())
-	leftTeamBar.textObject.x = (leftTeamBar.width * 0.5) - (leftTeamBar.textObject.getTransformedBounds().width / 2)
-	leftTeamBar.textObject.y = leftTeamBar.textObject.getTransformedBounds().height / 2.2
+	createTextObject(leftTeamBar, "444/444", 0.25);
 	leftTeamBar.addChild(leftTeamBar.object)
 	leftTeamBar.addChild(leftTeamBar.textObject)
 	playerBar.addChild(leftTeamBar)
@@ -271,11 +276,7 @@ function createStage() {
 	rightTeamBar.width = playerBar.canvas.width * 0.2
 	rightTeamBar.height = (playerBar.canvas.height * 0.2)
 	rightTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height))
-	rightTeamBar.textObject = new createjs.Text('555/555', textSize + "px " + textFont, '#FFF')
-	rightTeamBar.textObject.scaleX = ((rightTeamBar.width * 0.5) / 2) / (rightTeamBar.textObject.getMeasuredWidth())
-	rightTeamBar.textObject.scaleY = (rightTeamBar.height  / 2) / (rightTeamBar.textObject.getMeasuredHeight())
-	rightTeamBar.textObject.x = (rightTeamBar.width * 0.5) - (rightTeamBar.textObject.getTransformedBounds().width / 2)
-	rightTeamBar.textObject.y = rightTeamBar.textObject.getTransformedBounds().height / 2.2
+	createTextObject(rightTeamBar, "444/444", 0.25);
 	rightTeamBar.addChild(rightTeamBar.object)
 	rightTeamBar.addChild(rightTeamBar.textObject)
 	playerBar.addChild(rightTeamBar)
@@ -285,12 +286,8 @@ function createStage() {
 	leftSwap.y = 0
 	leftSwap.height = (playerBar.canvas.height * 0.2)
 	leftSwap.width = playerBar.canvas.width * 0.1
-	leftSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height))
-	leftSwap.textObject = new createjs.Text('Spells', textSize + "px " + textFont, 'black');
-	leftSwap.textObject.scaleX = (leftSwap.width / 2.2) / (leftSwap.textObject.getMeasuredWidth())
-	leftSwap.textObject.scaleY = (leftSwap.height / 2) / (leftSwap.textObject.getMeasuredHeight())
-	leftSwap.textObject.x = (leftSwap.width * 0.5) - (leftSwap.textObject.getTransformedBounds().width / 2)
-	leftSwap.textObject.y = leftSwap.textObject.getTransformedBounds().height / 2
+	leftSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.25, 0.75, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height))
+	createTextObject(leftSwap, "Spells", 0.5);
 	leftSwap.viewId = 0;
 	leftSwap.addEventListener('click', function(){
 		leftSwap.viewId === 0 ? leftSwap.viewId = 1 : leftSwap.viewId = 0;
@@ -305,12 +302,8 @@ function createStage() {
 	rightSwap.y = 0
 	rightSwap.height = leftSwap.height
 	rightSwap.width = leftSwap.width
-	rightSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, rightSwap.height).drawRect(0, 0, rightSwap.width, rightSwap.height))
-	rightSwap.textObject = new createjs.Text('Inventory', textSize + "px " + textFont, 'black');
-	rightSwap.textObject.scaleX = (rightSwap.width / 1.5) / (rightSwap.textObject.getMeasuredWidth())
-	rightSwap.textObject.scaleY = (rightSwap.height / 2) / (rightSwap.textObject.getMeasuredHeight())
-	rightSwap.textObject.x = (rightSwap.width * 0.5) - (rightSwap.textObject.getTransformedBounds().width / 2)
-	rightSwap.textObject.y = rightSwap.textObject.getTransformedBounds().height / 2
+	rightSwap.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.25, 0.75, 1], 0, 0, 0, rightSwap.height).drawRect(0, 0, rightSwap.width, rightSwap.height))
+	createTextObject(rightSwap, "Inventory", 0.5);
 	rightSwap.swapViewId = 1;
 	rightSwap.addChild(rightSwap.object);
 	rightSwap.addChild(rightSwap.textObject);
@@ -322,7 +315,7 @@ function createStage() {
 	playerBar.addChild(rightSwap)
 
 	miniMapStage = new createjs.Container();
-	miniMapStage.x = playerBar.canvas.width * 0.5
+	miniMapStage.x = playerBar.canvas.width * 0.3
 	miniMapStage.y = playerBar.canvas.height * 0.2
 	miniMapStage.height = playerBar.canvas.height * 0.8
 	miniMapStage.width = playerBar.canvas.width * 0.2
@@ -341,7 +334,7 @@ function createStage() {
 	playerBar.addChild(miniMapStage);
 
 	informationStage = new createjs.Container();
-	informationStage.x = playerBar.canvas.width * 0.3
+	informationStage.x = playerBar.canvas.width * 0.5
 	informationStage.y = playerBar.canvas.height * 0.2
 	informationStage.height = playerBar.canvas.height * 0.8
 	informationStage.width = playerBar.canvas.width * 0.2

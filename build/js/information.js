@@ -29,11 +29,11 @@ function updateInfoBar(type, object) {
 			object.icon.y = object.icon.spriteSheet._regY % (iconWidth)
 			informationBar.healthBar = new createjs.Shape(new createjs.Graphics().beginFill("green").drawRect(0, 0, informationStage.width * 0.5, informationStage.height * 0.25))
 			informationBar.healthBar.x = informationStage.width * 0.5
-			informationBar.healthBarText = new createjs.Text(object.CHP + '/' + object.HP, textSize + "px " + textFont, 'white');
-			informationBar.healthBarText.scaleX = ((informationStage.width * 0.5) / 2) / (informationBar.healthBarText.getMeasuredWidth())
-			informationBar.healthBarText.scaleY = ((informationStage.height * 0.25) / 2) / (informationBar.healthBarText.getMeasuredHeight())
-			informationBar.healthBarText.x = (informationStage.width * 0.5) + (informationBar.healthBarText.getTransformedBounds().width / 2)
-			informationBar.healthBarText.y = (informationBar.healthBarText.getTransformedBounds().height / 2)
+			informationBar.healthBar.textObject = new createjs.Text(object.CHP + '/' + object.HP, textSize + "px " + textFont, 'white');
+			informationBar.healthBar.textObject.scaleX = ((informationStage.width * 0.5) / 2) / (informationBar.healthBar.textObject.getMeasuredWidth())
+			informationBar.healthBar.textObject.scaleY = ((informationStage.height * 0.25) / 2) / (informationBar.healthBar.textObject.getMeasuredHeight())
+			informationBar.healthBar.textObject.x = (informationStage.width * 0.5) + (informationBar.healthBar.textObject.getTransformedBounds().width / 2)
+			informationBar.healthBar.textObject.y = (informationBar.healthBar.textObject.getTransformedBounds().height / 2)
 			informationBar.levelText = new createjs.Text(' Level ', textSize + "px " + textFont, 'white');
 			informationBar.levelText.scaleX = (informationStage.width * 0.2) / informationBar.levelText.getMeasuredWidth()
 			informationBar.levelText.scaleY = (informationStage.height * 0.2) / informationBar.levelText.getMeasuredHeight()
@@ -86,7 +86,7 @@ function updateInfoBar(type, object) {
 			}
 			informationBar.addChild(object.icon)
 			informationBar.addChild(informationBar.healthBar)
-			informationBar.addChild(informationBar.healthBarText)
+			informationBar.addChild(informationBar.healthBar.textObject)
 			informationBar.addChild(informationBar.levelText)
 			informationBar.addChild(informationBar.heroText)
 			informationStage.addChild(informationBar)
@@ -108,11 +108,11 @@ function updateInfoBar(type, object) {
 			object.icon.y = 0
 			informationBar.healthBar = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("green").drawRect(0, 0, informationStage.width * 0.5, informationStage.height * 0.25))
 			informationBar.healthBar.x = informationStage.width * 0.5
-			informationBar.healthBarText = new createjs.Text(object.CHP + '/' + object.HP, textSize + "px " + textFont, 'white');
-			informationBar.healthBarText.scaleX = ((informationStage.width * 0.5) / 2) / (informationBar.healthBarText.getMeasuredWidth())
-			informationBar.healthBarText.scaleY = ((informationStage.height * 0.25) / 2) / (informationBar.healthBarText.getMeasuredHeight())
-			informationBar.healthBarText.x = (informationStage.width * 0.5) + (informationBar.healthBarText.getTransformedBounds().width / 2)
-			informationBar.healthBarText.y = (informationBar.healthBarText.getTransformedBounds().height / 2)
+			informationBar.healthBar.textObject = new createjs.Text(object.CHP + '/' + object.HP, textSize + "px " + textFont, 'white');
+			informationBar.healthBar.textObject.scaleX = ((informationStage.width * 0.5) / 2) / (informationBar.healthBar.textObject.getMeasuredWidth())
+			informationBar.healthBar.textObject.scaleY = ((informationStage.height * 0.25) / 2) / (informationBar.healthBar.textObject.getMeasuredHeight())
+			informationBar.healthBar.textObject.x = (informationStage.width * 0.5) + (informationBar.healthBar.textObject.getTransformedBounds().width / 2)
+			informationBar.healthBar.textObject.y = (informationBar.healthBar.textObject.getTransformedBounds().height / 2)
 			informationBar.costText = new createjs.Text(' Cost ', textSize + "px " + textFont, 'white');
 			informationBar.costText.scaleX = (informationStage.width * 0.2) / informationBar.costText.getMeasuredWidth()
 			informationBar.costText.scaleY = (informationStage.height * 0.2) / informationBar.costText.getMeasuredHeight()
@@ -175,7 +175,7 @@ function updateInfoBar(type, object) {
 			}
 			informationBar.addChild(object.icon)
 			informationBar.addChild(informationBar.healthBar)
-			informationBar.addChild(informationBar.healthBarText)
+			informationBar.addChild(informationBar.healthBar.textObject)
 			informationBar.addChild(informationBar.costText)
 			informationBar.addChild(informationBar.monsterText)
 			informationStage.addChild(informationBar)
@@ -283,7 +283,7 @@ function refreshInfoBar(event) {
 		case 'hero':
 			var hero = viewTarget[1]
 			informationBar.healthBar.graphics.clear().beginStroke("black").beginFill("green").drawRect(0, 0, (hero.CHP / hero.HP) * (informationStage.width * 0.5), informationStage.height * 0.25)
-			informationBar.healthBarText.text = Math.round(hero.CHP) + '/' + Math.round(hero.HP)
+			informationBar.healthBar.textObject.text = Math.round(hero.CHP) + '/' + Math.round(hero.HP)
 			informationBar.heroText.text = hero.level
 			informationBar.heroText.scaleX = ((informationStage.width * 0.2) / 2) / informationBar.heroText.getMeasuredWidth()
 			informationBar.heroText.scaleY = ((informationStage.height * 0.25)) / informationBar.heroText.getMeasuredHeight()
@@ -299,10 +299,10 @@ function refreshInfoBar(event) {
 			var monster = viewTarget[1]
 			if (monster.alive == false) {
 				informationBar.healthBar.graphics.clear().beginStroke("black").beginFill("green").drawRect(0, 0, 0, informationStage.height * 0.25)
-				informationBar.healthBarText.text = 'Dead'
+				informationBar.healthBar.textObject.text = 'Dead'
 			} else {
 				informationBar.healthBar.graphics.clear().beginFill("green").drawRect(0, 0, (monster.CHP / monster.HP) * (informationStage.width * 0.5), informationStage.height * 0.25)
-				informationBar.healthBarText.text = Math.round(monster.CHP) + '/' + Math.round(monster.HP)
+				informationBar.healthBar.textObject.text = Math.round(monster.CHP) + '/' + Math.round(monster.HP)
 			}
 
 			return
