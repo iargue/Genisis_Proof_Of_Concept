@@ -239,15 +239,6 @@ function itemClick(event) {
 	}
 }
 
-function handleLeftSwap(event) {
-	console.log(event);
-	updateMonsterBar(event.target.swapViewId)
-}
-
-function handleRightSwap(event) {
-	console.log(event);
-}
-
 function endGame(loser) {
 	console.log(Loser + ' Has lost this game. Sucker')
 }
