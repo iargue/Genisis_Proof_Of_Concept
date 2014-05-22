@@ -21,10 +21,10 @@ var stage, unitList = [],
 	monsterbuttons = null,
 	lastClickedItem = null,
 	viewTarget = [null, null],
-	spellButtons = null;
-smallText = 12,
-textPadding = 2, // Vertical Padding for readability
-textFont = "Calibri";
+	spellButtons = null,
+	smallText = 12,
+	textPadding = 2, // Vertical Padding for readability
+	textFont = "Calibri";
 
 function newGame(gameOptions) {
 	if (gameOptions.mode == 'solo') {
@@ -114,7 +114,6 @@ function updateStage(event) {
 			radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 		}
 
-
 		mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
 		miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
 		playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
@@ -123,19 +122,19 @@ function updateStage(event) {
 		informationStage.y = playerBar.canvas.height * 0.2
 		informationStage.height = playerBar.canvas.height * 0.8
 		informationStage.width = playerBar.canvas.width * 0.2
-		informationStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height)
+		informationStage.object.graphics.clear().drawRect(0, 0, informationStage.width, informationStage.height)
 
 		monsterStage.x = 0
 		monsterStage.y = playerBar.canvas.height * 0.2
 		monsterStage.height = playerBar.canvas.height * 0.8
 		monsterStage.width = playerBar.canvas.width * 0.3
-		monsterStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, monsterStage.width, monsterStage.height)
+		monsterStage.object.graphics.clear().drawRect(0, 0, monsterStage.width, monsterStage.height)
 
-		shopStage.x = playerBar.canvas.width * 0.70
-		shopStage.y = (playerBar.canvas.height * 0.2)
+		shopStage.x = playerBar.canvas.width * 0.7
+		shopStage.y = playerBar.canvas.height * 0.2
 		shopStage.height = playerBar.canvas.height * 0.8
-		shopStage.width = playerBar.canvas.width * 0.30
-		shopStageObject.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightblue").drawRect(0, 0, shopStage.width, shopStage.height)
+		shopStage.width = playerBar.canvas.width * 0.3
+		shopStage.object.graphics.clear().drawRect(0, 0, shopStage.width, shopStage.height)
 
 		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
 			gameStage.regY = gameStage.height - playerStage.canvas.height
@@ -171,7 +170,7 @@ function updateStage(event) {
 	if (leftSwap.swapViewId == 0) {
 		updateSpells(event)
 	}
-	refreshInfoBar(event)
+	refreshInfoBar(event);
 	playerStage.update(event); //Finally update the stage with all of our changes.
 	playerBar.update(event);
 }
@@ -350,8 +349,8 @@ function createStage() {
 	informationStage.y = playerBar.canvas.height * 0.2
 	informationStage.height = playerBar.canvas.height * 0.8
 	informationStage.width = playerBar.canvas.width * 0.2
-	informationStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height));
-	informationStage.addChild(informationStageObject)
+	informationStage.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height));
+	informationStage.addChild(informationStage.object)
 	playerBar.addChild(informationStage)
 
 	monsterStage = new createjs.Container();
@@ -359,8 +358,8 @@ function createStage() {
 	monsterStage.y = playerBar.canvas.height * 0.2
 	monsterStage.height = playerBar.canvas.height * 0.8
 	monsterStage.width = playerBar.canvas.width * 0.3
-	monsterStageObject = new createjs.Shape(new createjs.Graphics().drawRect(0, 0, monsterStage.width, monsterStage.height));
-	monsterStage.addChild(monsterStageObject)
+	monsterStage.object = new createjs.Shape(new createjs.Graphics().drawRect(0, 0, monsterStage.width, monsterStage.height));
+	monsterStage.addChild(monsterStage.object)
 	playerBar.addChild(monsterStage)
 
 	shopStage = new createjs.Container();
@@ -368,14 +367,14 @@ function createStage() {
 	shopStage.y = playerBar.canvas.height * 0.2
 	shopStage.height = playerBar.canvas.height * 0.8
 	shopStage.width = playerBar.canvas.clientWidth * 0.30
-	shopStageObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, shopStage.width, shopStage.height));
-	shopStage.addChild(shopStageObject)
+	shopStage.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, shopStage.width, shopStage.height));
+	shopStage.addChild(shopStage.object)
 	playerBar.addChild(shopStage)
 }
 
 function updateRightBar(view) {
 	shopStage.removeAllChildren()
-	shopStage.addChild(shopStageObject)
+	shopStage.addChild(shopStage.object)
 	if (view == 0) { //View 0 is the item shop. Fuck yeah
 		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
 		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
@@ -413,8 +412,8 @@ function updateRightBar(view) {
 
 
 function updateLeftBar(view) {
-	monsterStage.removeAllChildren() // Clear everything from this section
-	monsterStage.addChild(monsterStageObject) //Add back our background
+	monsterStage.removeAllChildren(); // Clear everything from this section
+	monsterStage.addChild(monsterStage.object); //Add back our background
 	if (view == 0) { //View 0 is Monsters
 		leftSwap.swapViewId = 1
 		leftSwap.textObject.text = 'Spells'
@@ -545,7 +544,7 @@ function init() {
 function gameLoop(event) {
 	fpsText.text = 'FPS: ' + Math.round(createjs.Ticker.getMeasuredFPS())
 	unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
-	edgeScrolling(event); //In handle.js
+	//edgeScrolling(event); //In handle.js
 	gameTime.textObject.text = msToTime(event.time);
 	incomeTime.textObject.text = msToTime((activePlayer.hero.goldTime + 20000) - event.time);
 	for (var team in teamList) { //We have to update each team
@@ -566,6 +565,6 @@ function gameLoop(event) {
 	particleList = particleList.filter(function(x) { //Filter dead units from the player List
 		return x.active == true;
 	})
-	updateCollisionTree(event); //in handle.js
+	//updateCollisionTree(event); //in handle.js
 	updateStage(event);
 }

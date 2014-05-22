@@ -1,7 +1,7 @@
 function updateInfoBar(type, object) {
 	viewTarget = [type, object]
 	informationStage.removeAllChildren();
-	informationStage.addChild(informationStageObject);
+	informationStage.addChild(informationStage.object);
 	informationBar = new createjs.Container();
 	iconWidth = informationStage.width * 0.3
 	iconHeight = informationStage.height * 0.5
@@ -9,9 +9,44 @@ function updateInfoBar(type, object) {
 	spellHeight = informationStage.height * 0.25
 	statWidth = informationStage.width / 4
 	statHeight = (informationStage.height * 0.5) / 2
+	informationBar.grid = []
+	// Hero Icon
+	informationBar.grid[0] = new createjs.Container();
+	informationBar.grid[0].width = informationStage.width * 0.3
+	informationBar.grid[0].height = informationStage.height * 0.5
+	// Hero Level Label
+	informationBar.grid[1] = new createjs.Container();
+	informationBar.grid[1].x = informationStage.width * 0.3
+	informationBar.grid[1].width = informationStage.width * 0.2
+	informationBar.grid[1].height = informationStage.height * 0.25
+	// Hero Health
+	informationBar.grid[2] = new createjs.Container();
+	informationBar.grid[2].x = informationStage.width * 0.5
+	informationBar.grid[2].width = informationStage.width * 0.5
+	informationBar.grid[2].height = informationStage.height * 0.25
+	// Hero Level
+	informationBar.grid[3] = new createjs.Container();
+	informationBar.grid[3].x = informationStage.width * 0.3
+	informationBar.grid[3].y = informationStage.height * 0.25
+	informationBar.grid[3].width = informationStage.width * 0.2
+	informationBar.grid[3].height = informationStage.height * 0.25
+	// Hero Skills
+	informationBar.grid[4] = new createjs.Container();
+	informationBar.grid[4].x = informationStage.width * 0.5
+	informationBar.grid[4].y = informationStage.height * 0.25
+	informationBar.grid[4].width = informationStage.width * 0.5
+	informationBar.grid[4].height = informationStage.height * 0.25
+	// Hero Stats
+	for(var i = 0; i < 8; i++){
+		informationBar.grid[i+5] = new createjs.Container();
+		informationBar.grid[i+5].x = (i % 4) * informationStage.width * 0.25
+		informationBar.grid[i+5].y = Math.floor((i+1) / 4) * informationStage.height * 0.25
+		informationBar.grid[i+5].width = informationStage.width * 0.25
+		informationBar.grid[i+5].height = informationStage.height * 0.25
+	}
 	switch (type) {
 		case 'hero':
-			informationBar.grid = []
+			informationBar.grid[0].object = new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(0, 0, informationBar.grid[0].width, informationBar.grid[0].height));
 			informationBar.grid[0] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("white").drawRect(0, 0, iconWidth, iconHeight));
 			informationBar.grid[1] = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width * 0.2, informationStage.height * 0.25));
 			informationBar.grid[1].x = informationStage.width * 0.3
@@ -48,12 +83,12 @@ function updateInfoBar(type, object) {
 			for (var spell in object.spells) {
 				spellObject = object.spells[spell]
 				informationBar.spellButtons[spell] = new createjs.Container();
-				informationBar.spellButtons[spell].icon = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) //Add an image to the container. Based on monster icon
+				informationBar.spellButtons[spell].icon = new createjs.Bitmap(contentManager.getResult(spellObject.icon))
 				informationBar.spellButtons[spell].iconBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, spellWidth, spellHeight));
 				informationBar.spellButtons[spell].x = (informationStage.width * 0.5) + (spellWidth * spell)
 				informationBar.spellButtons[spell].y = informationStage.height * 0.25
-				informationBar.spellButtons[spell].icon.scaleX = spellWidth / informationBar.spellButtons[spell].icon.image.width //Scale the image down so it fits
-				informationBar.spellButtons[spell].icon.scaleY = spellHeight / informationBar.spellButtons[spell].icon.image.height //Scale the image down so it fits
+				informationBar.spellButtons[spell].icon.scaleX = spellWidth / informationBar.spellButtons[spell].icon.image.width
+				informationBar.spellButtons[spell].icon.scaleY = spellHeight / informationBar.spellButtons[spell].icon.image.height
 				informationBar.spellButtons[spell].addChild(informationBar.spellButtons[spell].icon)
 				informationBar.spellButtons[spell].addChild(informationBar.spellButtons[spell].iconBorder)
 				informationBar.addChild(informationBar.spellButtons[spell])
@@ -74,7 +109,7 @@ function updateInfoBar(type, object) {
 				}
 				informationBar.statButtons[stat].x = statWidth * count
 				informationBar.statButtons[stat].y = statPosition
-				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth() //Scale the image down so it fits
+				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth()
 				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
 				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textObject)
 				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textBorder)
@@ -234,13 +269,6 @@ function updateInfoBar(type, object) {
 			informationBar.statButtons = [];
 			var count = 0
 			var statPosition = (informationStage.height * 0.5)
-			// console.log(Object.keys(object.stats).length)
-			// if (Object.keys(object.stats).length > 4) {
-			// 	statWidth = informationStage.width / 4
-			// 	statHeight = (informationStage.height * 0.5) / 2
-			// } else {
-			// 	statWidth = informationStage.width / Object.keys(object.stats).length
-			// }
 			for (var stat in object.stats) {
 				if (stat == 'HP') {
 					stat = 'CMS'
@@ -254,7 +282,7 @@ function updateInfoBar(type, object) {
 				}
 				informationBar.statButtons[stat].x = statWidth * count
 				informationBar.statButtons[stat].y = statPosition
-				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth() //Scale the image down so it fits
+				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth()
 				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
 				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textObject)
 				informationBar.statButtons[stat].addChild(informationBar.statButtons[stat].textBorder)
@@ -293,7 +321,7 @@ function refreshInfoBar(event) {
 					stat = 'CMS'
 				}
 				informationBar.statButtons[stat].textObject.text = ' ' + stat + " : " + hero[stat] + ' '
-				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth() //Scale the image down so it fits
+				informationBar.statButtons[stat].textObject.scaleX = statWidth / informationBar.statButtons[stat].textObject.getMeasuredWidth()
 				informationBar.statButtons[stat].textObject.scaleY = statHeight / informationBar.statButtons[stat].textObject.getMeasuredHeight()
 			}
 		case 'monster':
