@@ -12,6 +12,7 @@ function monster(monster, x, y, player) {
 	this.AS = 2000 - (monster.stats.AS * 10),
 	this.cost = monster.cost,
 	this.experience = monster.experience,
+	this.spells = [],
 	this.bounty = Math.ceil(this.cost / 20),
 	this.attackTime = new Date(),
 	this.particleSpeed = 350,

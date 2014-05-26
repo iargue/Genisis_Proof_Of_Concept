@@ -63,6 +63,77 @@ itemList = [{
 		},
 		cost: 500,
 		unique: true
+	},{
+		name: 'Worst Item NA',
+		stats: {
+			AD: 1,
+			MD: 1,
+			AS: 1,
+			AR: 1,
+			MR: 51
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 500,
+		unique: true
+	},{
+		name: 'Worst Item NA',
+		stats: {
+			AD: 1,
+			MD: 1,
+			AS: 1,
+			AR: 1,
+			MR: 51
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 500,
+		unique: true
+	},{
+		name: 'Worst Item NA',
+		stats: {
+			AD: 1,
+			MD: 1,
+			AS: 1,
+			AR: 1,
+			MR: 51
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 500,
+		unique: true
+	},{
+		name: 'Worst Item NA',
+		stats: {
+			AD: 1,
+			MD: 1,
+			AS: 1,
+			AR: 1,
+			MR: 51
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 500,
+		unique: true
 	}
-
 ]

@@ -41,6 +41,7 @@ function newGame(gameOptions) {
 	}
 	updateLeftBar(0)
 	updateRightBar(0)
+	setupInfoBar()
 	updateInfoBar('hero', activePlayer.hero)
 	//Add story
 	//Add online
@@ -84,7 +85,7 @@ function updateStage(event) {
 		leftTeamBar.y = 0
 		leftTeamBar.width = playerBar.canvas.width * 0.2
 		leftTeamBar.height = playerBar.canvas.height * 0.2
-		leftTeamBar.object.graphics.clear().beginStroke("black").beginFill("B30000").drawRect(0, 0, leftTeamBar.width, leftTeamBar.height);
+		leftTeamBar.object.graphics.clear().beginStroke("black").beginLinearGradientFill(["#200", "#400", "#400", "#200"], [0, 0.2, 0.8, 1], 0, 0, 0, leftTeamBar.height).drawRect(0, 0, leftTeamBar.width, leftTeamBar.height);
 
 		rightTeamBar.x = playerBar.canvas.width * 0.7
 		rightTeamBar.y = 0
@@ -92,11 +93,19 @@ function updateStage(event) {
 		rightTeamBar.height = playerBar.canvas.height * 0.2
 		rightTeamBar.object.graphics.clear().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height);
 
+
 		leftSwap.x = 0
 		leftSwap.y = 0
 		leftSwap.height = playerBar.canvas.height * 0.2
 		leftSwap.width = playerBar.canvas.width * 0.1
-		leftSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height);
+		leftSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height);
+		leftSwap.viewId === 0 ? createTextObject(rightTeamBar, "Spells", 0.5) : createTextObject(rightTeamBar, "Monsters", 0.5)
+
+		rightSwap.x = playerBar.canvas.width * 0.9
+		rightSwap.y = 0
+		rightSwap.height = playerBar.canvas.height * 0.2
+		rightSwap.width = playerBar.canvas.width * 0.1
+		rightSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, rightSwap.width, rightSwap.height);
 
 		rightTeamBar.x = playerBar.canvas.width * 0.7
 		rightTeamBar.y = 0
@@ -128,13 +137,11 @@ function updateStage(event) {
 		monsterStage.y = playerBar.canvas.height * 0.2
 		monsterStage.height = playerBar.canvas.height * 0.8
 		monsterStage.width = playerBar.canvas.width * 0.3
-		monsterStage.object.graphics.clear().drawRect(0, 0, monsterStage.width, monsterStage.height)
 
 		shopStage.x = playerBar.canvas.width * 0.7
 		shopStage.y = playerBar.canvas.height * 0.2
 		shopStage.height = playerBar.canvas.height * 0.8
 		shopStage.width = playerBar.canvas.width * 0.3
-		shopStage.object.graphics.clear().drawRect(0, 0, shopStage.width, shopStage.height)
 
 		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
 			gameStage.regY = gameStage.height - playerStage.canvas.height
@@ -175,16 +182,14 @@ function updateStage(event) {
 	playerBar.update(event);
 }
 
-function createTextObject(container, text, width) {
-	// Create string always 9 or more characters long
+function createTextObject(container, text, width, padding) {
 	var newText = text;
-	if(text.length < 9){
-		var str1 = "", 
-			str2 = "";
-		for(var i = 0; i < 9 - text.length; i++)
-			newText = " " + newText
+	// Create string always 9 or more characters long
+	if(!padding) padding = 9
+	if(text.length < padding){
+		for(var i = 0; i < padding - text.length; i++)
+			i % 2 === 0 ? newText = " " + newText : newText += " "
 	}
-	console.log(newText);
 	container.textObject = new createjs.Text(newText, textSize + "px " + textFont, '#FFF');
 	container.textObject.scaleX = (container.width * width) / container.textObject.getMeasuredWidth();
 	container.textObject.scaleY = (container.height / 2) / container.textObject.getMeasuredHeight();
@@ -269,25 +274,24 @@ function createStage() {
 	incomeStage.addChild(incomeStage.textObject)
 	playerBar.addChild(incomeStage)
 
-	leftTeamBar = new createjs.Container()
+	leftTeamBar = new createjs.Container();
 	leftTeamBar.x = playerBar.canvas.width * 0.1
 	leftTeamBar.y = 0
 	leftTeamBar.width = playerBar.canvas.width * 0.2
 	leftTeamBar.height = (playerBar.canvas.height * 0.2)
-	leftTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, leftTeamBar.width, leftTeamBar.height))
-
-	createTextObject(leftTeamBar, "444/444", 0.25);
+	leftTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginLinearGradientFill(["#700", "#500", "#500", "#700"], [0, 0.25, 0.75, 1], 0, 0, 0, leftTeamBar.height).drawRect(0, 0, leftTeamBar.width, leftTeamBar.height))
+	createTextObject(leftTeamBar, "444/444", 0.25, true);
 	leftTeamBar.addChild(leftTeamBar.object)
 	leftTeamBar.addChild(leftTeamBar.textObject)
 	playerBar.addChild(leftTeamBar)
 
-	rightTeamBar = new createjs.Container()
+	rightTeamBar = new createjs.Container();
 	rightTeamBar.x = playerBar.canvas.width * 0.7
 	rightTeamBar.y = 0
 	rightTeamBar.width = playerBar.canvas.width * 0.2
 	rightTeamBar.height = (playerBar.canvas.height * 0.2)
-	rightTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginFill("B30000").drawRect(0, 0, rightTeamBar.width, rightTeamBar.height))
-	createTextObject(rightTeamBar, "444/444", 0.25);
+	rightTeamBar.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginLinearGradientFill(["#700", "#500", "#500", "#700"], [0, 0.25, 0.75, 1], 0, 0, 0, rightTeamBar.height).drawRect(0, 0, rightTeamBar.width, rightTeamBar.height))
+	createTextObject(rightTeamBar, "444/444", 0.25, true);
 	rightTeamBar.addChild(rightTeamBar.object)
 	rightTeamBar.addChild(rightTeamBar.textObject)
 	playerBar.addChild(rightTeamBar)
@@ -349,8 +353,6 @@ function createStage() {
 	informationStage.y = playerBar.canvas.height * 0.2
 	informationStage.height = playerBar.canvas.height * 0.8
 	informationStage.width = playerBar.canvas.width * 0.2
-	informationStage.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, informationStage.width, informationStage.height));
-	informationStage.addChild(informationStage.object)
 	playerBar.addChild(informationStage)
 
 	monsterStage = new createjs.Container();
@@ -358,8 +360,6 @@ function createStage() {
 	monsterStage.y = playerBar.canvas.height * 0.2
 	monsterStage.height = playerBar.canvas.height * 0.8
 	monsterStage.width = playerBar.canvas.width * 0.3
-	monsterStage.object = new createjs.Shape(new createjs.Graphics().drawRect(0, 0, monsterStage.width, monsterStage.height));
-	monsterStage.addChild(monsterStage.object)
 	playerBar.addChild(monsterStage)
 
 	shopStage = new createjs.Container();
@@ -367,45 +367,46 @@ function createStage() {
 	shopStage.y = playerBar.canvas.height * 0.2
 	shopStage.height = playerBar.canvas.height * 0.8
 	shopStage.width = playerBar.canvas.clientWidth * 0.30
-	shopStage.object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, shopStage.width, shopStage.height));
-	shopStage.addChild(shopStage.object)
 	playerBar.addChild(shopStage)
 }
 
 function updateRightBar(view) {
 	shopStage.removeAllChildren()
-	shopStage.addChild(shopStage.object)
-	if (view == 0) { //View 0 is the item shop. Fuck yeah
-		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
-		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
+	// View 0 is Shop
+	if (view == 0) { 
+		buttonWidth = shopStage.width / 4
+		buttonHeight = shopStage.height / 2
 		itemButtons = []
-		for (var item in itemList) { //Lets loop through all of the currently free items
-			var itemObject = itemList[item] //Store a reference to the current item
-			itemButtons[item] = new createjs.Container() //Container for the multiple objects we will be creating
-			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base)) //Add an image to the container. Based on item icon
+		for (var item in itemList) {
+			var itemObject = itemList[item]
+			itemButtons[item] = new createjs.Container() 
+			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base))
 			itemButtons[item].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
-			if (item > 3) { //We have added 4 units to this row, lets move it down 1.
-				itemButtons[item].y = buttonHeight //This puts it in row 2 instead of 1.
-				itemButtons[item].x = buttonWidth * (item % 4) //Since we are on row 2, we have to restart our x movement
+			if (item > 3) {
+				itemButtons[item].y = buttonHeight 
+				itemButtons[item].x = buttonWidth * (item % 4) 
 			} else {
-				itemButtons[item].x = buttonWidth * item //Since we are on row 1, we just increase the x by the width of a button for each unit
+				itemButtons[item].x = buttonWidth * item 
 			}
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, textSize + "px " + textFont, 'black'); //Add in the text for how much it costs
-			itemButtons[item].costText.x = textPadding //buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
-			itemButtons[item].costText.y = textPadding // buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
-			itemButtons[item].costText.x = buttonWidth - (itemButtons[item].costText.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
-			itemButtons[item].costText.y = buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)itemButtons[item] .x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
-			itemButtons[item].button.itemId = item //Store a reference to what item this button is for. Used when clicking
-			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width //Scale the image down so it fits
-			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height //Scale the image down so it fits
-			itemButtons[item].addEventListener('click', itemClick) //When this button is clicked, call this function (itemclick)
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, textSize + "px " + textFont, 'black'); 
+			itemButtons[item].costText.x = textPadding
+			itemButtons[item].costText.y = textPadding
+			itemButtons[item].itemId = item
+			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width
+			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height
+			itemButtons[item].addEventListener('click', itemClick)
 			itemButtons[item].addChild(itemButtons[item].buttonBackground)
-			itemButtons[item].addChild(itemButtons[item].button) //Add to the container
+			itemButtons[item].addChild(itemButtons[item].button)
 			itemButtons[item].addChild(itemButtons[item].costText)
-			shopStage.addChild(itemButtons[item]) //Add the container to the shopStage container
+			shopStage.addChild(itemButtons[item])
 		}
+	}
+	// View 1 is Inventory
+	else if(view == 1){
+		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
+		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
+
 	}
 }
 
@@ -413,67 +414,68 @@ function updateRightBar(view) {
 
 function updateLeftBar(view) {
 	monsterStage.removeAllChildren(); // Clear everything from this section
-	monsterStage.addChild(monsterStage.object); //Add back our background
-	if (view == 0) { //View 0 is Monsters
+	// View 0 is Monsters
+	if (view == 0) {
 		leftSwap.swapViewId = 1
-		leftSwap.textObject.text = 'Spells'
-		buttonWidth = monsterStage.width / 4 //Calculate how much width we have for buttons
-		buttonHeight = monsterStage.height / 2 // Calculate the two levels for buttons
-		monsterButtons = [] //Create an object to store everything
-		for (var unit in monsterList[activePlayer.summonLevel]) { //Lets loop through all of the currently free monsters
-			var monster = monsterList[activePlayer.summonLevel][unit] //Store a reference to the current monster
-			monsterButtons[unit] = new createjs.Container() //Container for the multiple objects we will be creating
-			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base)) //Add an image to the container. Based on monster icon
+		leftSwap.textObject.text = "Spells"
+		buttonWidth = monsterStage.width * 0.25
+		buttonHeight = monsterStage.height * 0.5
+		monsterButtons = []
+		for (var unit in monsterList[activePlayer.summonLevel]) {
+			var monster = monsterList[activePlayer.summonLevel][unit]
+			monsterButtons[unit] = new createjs.Container()
+			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base))
 			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
-			//monsterButtons[unit].buttonBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight));
-			if (unit > 3) { //We have added 4 units to this row, lets move it down 1.
-				monsterButtons[unit].y = buttonHeight //This puts it in row 2 instead of 1.
-				monsterButtons[unit].x = buttonWidth * (unit % 4) //Since we are on row 2, we have to restart our x movement
+			if (unit > 3) {
+				monsterButtons[unit].y = buttonHeight
+				monsterButtons[unit].x = buttonWidth * (unit % 4)
 			} else {
-				monsterButtons[unit].x = buttonWidth * unit //Since we are on row 1, we just increase the x by the width of a button for each unit
+				monsterButtons[unit].x = buttonWidth * unit
 			}
-			monsterButtons[unit].button.monsterId = unit //Store a reference to what monster this button is for. Used when clicking
-			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width //Scale the image down so it fits
-			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height //Scale the image down so it fits
-			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, textSize + "px " + textFont, 'black'); //Add in the text for how much it costs
-			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px " + textFont, 'black'); //Add in the text for how much it costs
-			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding) //Put the text at the bottom based on how many digits are in the cost
-			monsterButtons[unit].goldCost.y = textPadding //buttonHeight - (18 + textPadding) //Put it 18px off (Size of text)
-			monsterButtons[unit].addEventListener('click', monsterClick) //When this button is clicked, call this function (monsterclick)
+			monsterButtons[unit].button.monsterId = unit;
+			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width;
+			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height;
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, textSize + "px " + textFont, 'black');
+			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, "18px " + textFont, 'black')
+			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding)
+			monsterButtons[unit].goldCost.y = textPadding
+			monsterButtons[unit].addEventListener('click', monsterClick)
 			monsterButtons[unit].addChild(monsterButtons[unit].buttonBackground)
-			monsterButtons[unit].addChild(monsterButtons[unit].button) //Add to the container
-			monsterButtons[unit].addChild(monsterButtons[unit].goldCost) //Add to the container
-			monsterStage.addChild(monsterButtons[unit]) //Add the container to the monsterStage container
+			monsterButtons[unit].addChild(monsterButtons[unit].button)
+			monsterButtons[unit].addChild(monsterButtons[unit].goldCost)
+			monsterStage.addChild(monsterButtons[unit])
 		}
-	} else if (view == 1) { //View 1 is Spells
+	}
+	//View 1 is Spells 
+	else if (view == 1) { 
 		leftSwap.textObject.text = 'Monsters'
 		leftSwap.swapViewId = 0
-		buttonWidth = monsterStage.width / 4 //Calculate how much width we have for buttons
-		buttonHeight = monsterStage.height // Calculate the two levels for buttons
-		spellButtons = [] //Create an object to store everything
-		for (var spell in activePlayer.hero.spells) { //Lets loop through all of the currently free monsters
-			var spellObject = activePlayer.hero.spells[spell] //Store a reference to the current monster
-			spellButtons[spell] = new createjs.Container() //Container for the multiple objects we will be creating
-			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) //Add an image to the container. Based on monster icon
+		buttonWidth = monsterStage.width * 0.25
+		buttonHeight = monsterStage.height
+		spellButtons = []
+		for (var spell in activePlayer.hero.spells) {
+			var spellObject = activePlayer.hero.spells[spell]
+			spellButtons[spell] = new createjs.Container()
+			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) 
 			spellButtons[spell].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
-			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width //Scale the image down so it fits
-			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height //Scale the image down so it fits
-			spellButtons[spell].levelText = new createjs.Text(spellObject.level, textSize + "px " + textFont, 'red'); //Add in the text for how much it costs
-			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px " + textFont, 'red'); //Add in the text for how much it costs
-			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10) //Put the text at the bottom based on how many digits are in the cost
-			spellButtons[spell].levelText.y = buttonHeight - textSize //Put it 18px off (Size of text)spellButtons[spell].x = buttonWidth * spell //Since we are on row 1, we just increase the x by the width of a button for each unit
+			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width 
+			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, textSize + "px " + textFont, 'red');
+			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px " + textFont, 'red');
+			spellButtons[spell].levelText.x = buttonWidth - (spellObject.level.toString().length * 10)
+			spellButtons[spell].levelText.y = buttonHeight - textSize
 			spellButtons[spell].x = buttonWidth * spell
-			spellButtons[spell].button.spellId = spell //Store a reference to what monster this button is for. Used when clicking
-			spellButtons[spell].button.scaleX = buttonWidth / spellButtons[spell].button.image.width //Scale the image down so it fits
-			spellButtons[spell].button.scaleY = buttonHeight / spellButtons[spell].button.image.height //Scale the image down so it fits
+			spellButtons[spell].button.spellId = spell
+			spellButtons[spell].button.scaleX = buttonWidth / spellButtons[spell].button.image.width
+			spellButtons[spell].button.scaleY = buttonHeight / spellButtons[spell].button.image.height
 			spellButtons[spell].levelButton.addEventListener('click', levelClick)
-			spellButtons[spell].addEventListener('click', spellClick) //When this button is clicked, call this function (monsterclick)
+			spellButtons[spell].addEventListener('click', spellClick)
 			spellButtons[spell].addChild(spellButtons[spell].buttonBackground)
-			spellButtons[spell].addChild(spellButtons[spell].button) //Add to the container
+			spellButtons[spell].addChild(spellButtons[spell].button)
 			spellButtons[spell].addChild(spellButtons[spell].levelText)
-			monsterStage.addChild(spellButtons[spell]) //Add the container to the monsterStage container
+			monsterStage.addChild(spellButtons[spell])
 		}
 	}
 	monsterStage.cache(0, 0, monsterStage.width, monsterStage.height)

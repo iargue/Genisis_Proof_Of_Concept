@@ -219,10 +219,10 @@ function hero(hero, heroSpells, x, y, player) {
 			this.effects.push(effect)
 			this.CMS -= (effect.effectAmount / 100) * this.MS
 		}
-		if (effect.effectType == "stun" && this.stunned == false) {
+		if (effect.effectType == "stun" && this.stunned === false) {
 			this.effects.push(effect)
 		}
-		if (effect.effectType == "root" && this.rooted = false) {
+		if (effect.effectType == "root" && this.rooted === false) {
 			this.effects.push(effect)
 		}
 	},

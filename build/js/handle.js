@@ -230,7 +230,8 @@ function levelClick(event) { //Called when a Monster button is clicked.
 }
 
 function itemClick(event) {
-	if (lastClickedItem == event.target.itemId) {
+	console.log(event);
+	if (lastClickedItem && lastClickedItem == event.target.itemId) {
 		activePlayer.hero.buyItem(event.target.itemId);
 		lastClickedItem = null;
 	} else {
