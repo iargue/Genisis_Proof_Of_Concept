@@ -567,6 +567,6 @@ function gameLoop(event) {
 	particleList = particleList.filter(function(x) { //Filter dead units from the player List
 		return x.active == true;
 	})
-	//updateCollisionTree(event); //in handle.js
+	updateCollisionTree(event); //in handle.js
 	updateStage(event);
 }
