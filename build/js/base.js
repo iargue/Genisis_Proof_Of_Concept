@@ -174,46 +174,10 @@ function updateStage(event) {
 		}
 
 	}
-	if (leftSwap.swapViewId == 0) {
-		updateSpells(event)
-	}
-	refreshInfoBar(event);
 	playerStage.update(event); //Finally update the stage with all of our changes.
-	playerBar.update(event);
 }
 
-function createTextObject(container, type, text, width, padding, color) {
-	var newText = text;
-	// Create string always 9 or more characters long
-	if(!padding && padding !== 0) padding = 9
-	if(text.length < padding){
-		for(var i = 0; i < padding - text.length; i++)
-			i % 2 === 0 ? newText = " " + newText : newText += " "
-	}
-	switch(type){
-		case "label":
-			container.labelObject = new createjs.Text(newText, textSize + "px " + textFont, color)
-			container.labelObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
-			container.labelObject.scaleY = (container.height * 0.45) / container.labelObject.getMeasuredHeight()
-			container.labelObject.x = (container.width * 0.5) - (container.labelObject.getTransformedBounds().width * 0.5);
-			container.labelObject.y = container.labelObject.getTransformedBounds().height * 0.025
-			return
-		case "content":
-			container.contentObject = new createjs.Text(newText, textSize + "px " + textFont, "#FFF")
-			container.contentObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
-			container.contentObject.scaleY = (container.height * 0.45) / container.contentObject.getMeasuredHeight()
-			container.contentObject.x = (container.width * 0.5) - (container.contentObject.getTransformedBounds().width * 0.5);
-			container.contentObject.y = container.height - (container.contentObject.getTransformedBounds().height * 1.025)
-			return
-		default:
-			container.textObject = new createjs.Text(newText, textSize + "px " + textFont, '#FFF');
-			container.textObject.scaleX = (container.width * width) / container.textObject.getMeasuredWidth();
-			container.textObject.scaleY = (container.height * 0.5) / container.textObject.getMeasuredHeight();
-			container.textObject.x = (container.width * 0.5) - (container.textObject.getTransformedBounds().width * 0.5);
-			container.textObject.y = container.textObject.getTransformedBounds().height * 0.5;
-			return
-	}
-}
+
 
 function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
@@ -276,7 +240,7 @@ function createStage() {
 	goldStage.width = playerBar.canvas.width * 0.1
 	goldStage.height = (playerBar.canvas.height * 0.2)
 	// goldStage.object = new createjs.Shape(new createjs.Graphics().beginStroke("black").beginLinearGradientFill(["#444", "#222", "#222", "#444"], [0, 0.25, 0.75, 1], 0, 0, 0, goldStage.height).drawRect(0, 0, goldStage.width, goldStage.height));
-	createTextObject(goldStage, "label", "Current Gold", 0.75, 20, "#EFC94C"); 
+	createTextObject(goldStage, "label", "Current Gold", 0.75, 20, "#EFC94C");
 	createTextObject(goldStage, "content", "0", 0.75)
 	// goldStage.addChild(goldStage.object)
 	goldStage.addChild(goldStage.labelObject)
@@ -332,6 +296,7 @@ function createStage() {
 	})
 	leftSwap.addChild(leftSwap.object);
 	leftSwap.addChild(leftSwap.textObject);
+	cacheItem(leftSwap);
 	playerBar.addChild(leftSwap)
 
 	rightSwap = new createjs.Container();
@@ -349,6 +314,7 @@ function createStage() {
 		rightSwap.viewId === 0 ? rightSwap.viewId = 0 : rightSwap.viewId = 0;
 		updateRightBar(rightSwap.viewId)
 	})
+	cacheItem(rightSwap);
 	playerBar.addChild(rightSwap)
 
 	miniMapStage = new createjs.Container();
@@ -362,11 +328,20 @@ function createStage() {
 		radius: (gameStage.height + gameStage.width) / (miniMapStage.height + miniMapStage.width)
 	}
 	mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
+	mapBorder.width = miniMapStage.width
+	mapBorder.height = miniMapStage.height
 	miniPlayerSplit = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2));
+	miniPlayerSplit.width = miniMapStage.width
+	miniPlayerSplit.height = miniMapStage.height / 2
+	cacheItem(mapBorder)
+	cacheItem(miniPlayerSplit)
 	miniMapStage.addChild(mapBorder);
 	miniMapStage.addChild(miniPlayerSplit);
 	var point = playerStage.localToGlobal(gameStage.regX, gameStage.regY);
 	playerBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height));
+	playerBorder.width = playerStage.canvas.clientWidth / miniMapRatio.width
+	playerBorder.height = playerStage.canvas.clientHeight / miniMapRatio.height
+	cacheItem(playerBorder)
 	miniMapStage.addChild(playerBorder);
 	playerBar.addChild(miniMapStage);
 
@@ -395,23 +370,25 @@ function createStage() {
 function updateRightBar(view) {
 	shopStage.removeAllChildren()
 	// View 0 is Shop
-	if (view == 0) { 
+	if (view == 0) {
 		buttonWidth = shopStage.width / 4
 		buttonHeight = shopStage.height / 2
 		itemButtons = []
 		for (var item in itemList) {
 			var itemObject = itemList[item]
-			itemButtons[item] = new createjs.Container() 
+			itemButtons[item] = new createjs.Container()
+			itemButtons[item].width = buttonWidth
+			itemButtons[item].height = buttonHeight
 			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base))
 			itemButtons[item].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
 			if (item > 3) {
-				itemButtons[item].y = buttonHeight 
-				itemButtons[item].x = buttonWidth * (item % 4) 
+				itemButtons[item].y = buttonHeight
+				itemButtons[item].x = buttonWidth * (item % 4)
 			} else {
-				itemButtons[item].x = buttonWidth * item 
+				itemButtons[item].x = buttonWidth * item
 			}
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, textSize + "px " + textFont, 'black'); 
+			itemButtons[item].costText = new createjs.Text(itemObject.cost, textSize + "px " + textFont, 'black');
 			itemButtons[item].costText.x = textPadding
 			itemButtons[item].costText.y = textPadding
 			itemButtons[item].itemId = item
@@ -421,11 +398,12 @@ function updateRightBar(view) {
 			itemButtons[item].addChild(itemButtons[item].buttonBackground)
 			itemButtons[item].addChild(itemButtons[item].button)
 			itemButtons[item].addChild(itemButtons[item].costText)
+			cacheItem(itemButtons[item])
 			shopStage.addChild(itemButtons[item])
 		}
 	}
 	// View 1 is Inventory
-	else if(view == 1){
+	else if (view == 1) {
 		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
 		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
 
@@ -440,12 +418,15 @@ function updateLeftBar(view) {
 	if (view == 0) {
 		leftSwap.swapViewId = 1
 		leftSwap.textObject.text = "Spells"
+		cacheItem(leftSwap)
 		buttonWidth = monsterStage.width * 0.25
 		buttonHeight = monsterStage.height * 0.5
 		monsterButtons = []
 		for (var unit in monsterList[activePlayer.summonLevel]) {
 			var monster = monsterList[activePlayer.summonLevel][unit]
 			monsterButtons[unit] = new createjs.Container()
+			monsterButtons[unit].height = buttonHeight
+			monsterButtons[unit].width = buttonWidth
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base))
 			monsterButtons[unit].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			monsterButtons[unit].button.sourceRect = new createjs.Rectangle(monster.icon.left, monster.icon.top, monster.icon.height, monster.icon.width)
@@ -466,12 +447,14 @@ function updateLeftBar(view) {
 			monsterButtons[unit].addChild(monsterButtons[unit].buttonBackground)
 			monsterButtons[unit].addChild(monsterButtons[unit].button)
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost)
+			cacheItem(monsterButtons[unit])
 			monsterStage.addChild(monsterButtons[unit])
 		}
 	}
 	//View 1 is Spells 
-	else if (view == 1) { 
+	else if (view == 1) {
 		leftSwap.textObject.text = 'Monsters'
+		cacheItem(leftSwap)
 		leftSwap.swapViewId = 0
 		buttonWidth = monsterStage.width * 0.25
 		buttonHeight = monsterStage.height
@@ -479,10 +462,12 @@ function updateLeftBar(view) {
 		for (var spell in activePlayer.hero.spells) {
 			var spellObject = activePlayer.hero.spells[spell]
 			spellButtons[spell] = new createjs.Container()
-			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon)) 
+			spellButtons[spell].width = buttonWidth
+			spellButtons[spell].height = buttonHeight
+			spellButtons[spell].button = new createjs.Bitmap(contentManager.getResult(spellObject.icon))
 			spellButtons[spell].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
 			spellButtons[spell].levelButton = new createjs.Bitmap(contentManager.getResult('plus'))
-			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width 
+			spellButtons[spell].levelButton.scaleX = (buttonWidth * 0.3) / spellButtons[spell].levelButton.image.width
 			spellButtons[spell].levelButton.scaleY = (buttonHeight * 0.3) / spellButtons[spell].levelButton.image.height
 			spellButtons[spell].levelText = new createjs.Text(spellObject.level, textSize + "px " + textFont, 'red');
 			spellButtons[spell].levelText = new createjs.Text(spellObject.level, "18px " + textFont, 'red');
@@ -497,10 +482,10 @@ function updateLeftBar(view) {
 			spellButtons[spell].addChild(spellButtons[spell].buttonBackground)
 			spellButtons[spell].addChild(spellButtons[spell].button)
 			spellButtons[spell].addChild(spellButtons[spell].levelText)
+			cacheItem(spellButtons[spell])
 			monsterStage.addChild(spellButtons[spell])
 		}
 	}
-	monsterStage.cache(0, 0, monsterStage.width, monsterStage.height)
 }
 
 
@@ -565,12 +550,25 @@ function init() {
 	contentManager.on("complete", imageLoadingDone, this);
 }
 
+function updatePlayerBar(event) {
+
+	gameTime.textObject.text = msToTime(event.time);
+	incomeTime.textObject.text = msToTime((activePlayer.hero.goldTime + 20000) - event.time);
+	// createTextObject(goldStage, "content", activePlayer.hero.gold, 0.75)
+	// createTextObject(incomeStage, "content", activePlayer.hero.income, 0.75)
+	goldStage.contentObject.text = activePlayer.hero.gold
+	incomeStage.contentObject.text = activePlayer.hero.income
+	if (leftSwap.swapViewId == 0) {
+		updateSpells(event)
+	}
+	refreshInfoBar(event);
+	playerBar.update(event);
+}
+
 function gameLoop(event) {
 	fpsText.text = 'FPS: ' + Math.round(createjs.Ticker.getMeasuredFPS())
 	unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
 	//edgeScrolling(event); //In handle.js
-	gameTime.textObject.text = msToTime(event.time);
-	incomeTime.textObject.text = msToTime((activePlayer.hero.goldTime + 20000) - event.time);
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
@@ -589,6 +587,7 @@ function gameLoop(event) {
 	particleList = particleList.filter(function(x) { //Filter dead units from the player List
 		return x.active == true;
 	})
-	updateCollisionTree(event); //in handle.js
+	updateCollisionTree(event) //in handle.js
 	updateStage(event);
+	updatePlayerBar(event);
 }

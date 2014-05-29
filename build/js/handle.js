@@ -42,7 +42,7 @@ function handleKeyDown(e) {
 				if (gameStage.regX + playerStage.canvas.width < gameStage.width) {
 					gameStage.regX += 10
 				} else {
-					gameStage.regX = playerStage - playerStage.canvas.width
+					gameStage.regX = gameStage.width - playerStage.canvas.width
 				}
 				break;
 			case 38: //Up arrow key

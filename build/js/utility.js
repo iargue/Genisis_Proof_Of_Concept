@@ -248,3 +248,59 @@ function isInTriangle(px, py, ax, ay, bx, by, cx, cy) {
 
 	return ((u >= 0) && (v >= 0) && (u + v < 1));
 }
+
+function cacheItem(item) { //Will Cache any item with width or height that is defined
+	if (typeof item.width === "undefined" || item.height === "undefined") {
+		console.log("Unable to cache " + item)
+		return false
+	}
+	if (item.cacheCanvas) {
+		if (item.cacheCanvas.width !== item.width || item.cacheCanvas.height !== item.height) {
+			item.uncache()
+			item.cache(0, 0, item.width, item.height)
+		} else {
+			item.updateCache()
+		}
+	} else {
+		item.cache(0, 0, item.width, item.height)
+	}
+}
+
+function createTextObject(container, type, text, width, padding, color) {
+	var newText = text;
+	// Create string always 9 or more characters long
+	if (!padding && padding !== 0) padding = 9
+	if (text.length < padding) {
+		for (var i = 0; i < padding - text.length; i++)
+			i % 2 === 0 ? newText = " " + newText : newText += " "
+	}
+	switch (type) {
+		case "label":
+			container.labelObject = new createjs.Text(newText, textSize + "px " + textFont, color)
+			container.labelObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
+			container.labelObject.scaleY = (container.height * 0.45) / container.labelObject.getMeasuredHeight()
+			container.labelObject.x = (container.width * 0.5) - (container.labelObject.getTransformedBounds().width * 0.5);
+			container.labelObject.y = container.labelObject.getTransformedBounds().height * 0.025
+			return
+		case "content":
+			container.contentObject = new createjs.Text(newText, textSize + "px " + textFont, "#FFF")
+			container.contentObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
+			container.contentObject.scaleY = (container.height * 0.45) / container.contentObject.getMeasuredHeight()
+			container.contentObject.x = (container.width * 0.5) - (container.contentObject.getTransformedBounds().width * 0.5);
+			container.contentObject.y = container.height - (container.contentObject.getTransformedBounds().height * 1.025)
+			return
+		default:
+			container.textObject = new createjs.Text(newText, textSize + "px " + textFont, '#FFF');
+			container.textObject.scaleX = (container.width * width) / container.textObject.getMeasuredWidth();
+			container.textObject.scaleY = (container.height * 0.5) / container.textObject.getMeasuredHeight();
+			container.textObject.x = (container.width * 0.5) - (container.textObject.getTransformedBounds().width * 0.5);
+			container.textObject.y = container.textObject.getTransformedBounds().height * 0.5;
+			return
+	}
+}
+
+function timeIt(callBack, arguments, nmae) {
+	console.time(name)
+	callBack.call(arguments)
+	console.timeEnd(name)
+}
