@@ -367,39 +367,59 @@ function createStage() {
 	playerBar.addChild(shopStage)
 }
 
-function updateRightBar(view) {
+function filterShopbar(){
+
+}
+
+function updateRightBar(view , itemId) {
 	shopStage.removeAllChildren()
 	// View 0 is Shop
 	if (view == 0) {
 		buttonWidth = shopStage.width / 4
 		buttonHeight = shopStage.height / 2
 		itemButtons = []
-		for (var item in itemList) {
-			var itemObject = itemList[item]
-			itemButtons[item] = new createjs.Container()
-			itemButtons[item].width = buttonWidth
-			itemButtons[item].height = buttonHeight
-			itemButtons[item].button = new createjs.Bitmap(contentManager.getResult(itemObject.icon.base))
-			itemButtons[item].buttonBackground = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
-			itemButtons[item].button.sourceRect = new createjs.Rectangle(itemObject.icon.left, itemObject.icon.top, itemObject.icon.height, itemObject.icon.width)
-			if (item > 3) {
-				itemButtons[item].y = buttonHeight
-				itemButtons[item].x = buttonWidth * (item % 4)
-			} else {
-				itemButtons[item].x = buttonWidth * item
+		if(itemId){
+			var list = itemList.filter(function(x){x[itemId] !== undefined});
+			for(var item in list){
+				itemButtons[item] = new createjs.Container()
+				itemButtons[item].width = buttonWidth
+				itemButtons[item].height = buttonHeight
+				itemButtons[item].button = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
+				if (stat > 3) {
+					itemButtons[item].y = buttonHeight
+					itemButtons[item].x = buttonWidth * (stat % 4)
+				} else {
+					itemButtons[item].x = buttonWidth * stat
+				}
+				itemButtons[item].itemId = stat
+				itemButtons[item].addEventListener('click', itemClick)
+				createTextObject(itemButtons[stat], "text", item.cost)
+				itemButtons[item].addChild(itemButtons[stat].button)
+				itemButtons[item].addChild(itemButtons[stat].textObject)
+				cacheItem(itemButtons[item])
+				shopStage.addChild(itemButtons[item])
 			}
-			itemButtons[item].costText = new createjs.Text(itemObject.cost, textSize + "px " + textFont, 'black');
-			itemButtons[item].costText.x = textPadding
-			itemButtons[item].costText.y = textPadding
-			itemButtons[item].itemId = item
-			itemButtons[item].button.scaleX = buttonWidth / itemObject.icon.width
-			itemButtons[item].button.scaleY = buttonHeight / itemObject.icon.height
-			itemButtons[item].addEventListener('click', itemClick)
-			itemButtons[item].addChild(itemButtons[item].buttonBackground)
-			itemButtons[item].addChild(itemButtons[item].button)
-			itemButtons[item].addChild(itemButtons[item].costText)
-			cacheItem(itemButtons[item])
-			shopStage.addChild(itemButtons[item])
+		} else {
+			for(var stat in itemStats){
+				itemButtons[stat] = new createjs.Container()
+				itemButtons[stat].width = buttonWidth
+				itemButtons[stat].height = buttonHeight
+				itemButtons[stat].button = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
+				if (stat > 3) {
+					itemButtons[stat].y = buttonHeight
+					itemButtons[stat].x = buttonWidth * (stat % 4)
+				} else {
+					itemButtons[stat].x = buttonWidth * stat
+				}
+				itemButtons[stat].itemCatagory = true
+				itemButtons[stat].itemId = stat
+				itemButtons[stat].addEventListener('click', itemClick)
+				createTextObject(itemButtons[stat], "text", stat + "")
+				itemButtons[stat].addChild(itemButtons[stat].button)
+				itemButtons[stat].addChild(itemButtons[stat].textObject)
+				cacheItem(itemButtons[stat])
+				shopStage.addChild(itemButtons[stat])
+			}
 		}
 	}
 	// View 1 is Inventory
@@ -409,8 +429,6 @@ function updateRightBar(view) {
 
 	}
 }
-
-
 
 function updateLeftBar(view) {
 	monsterStage.removeAllChildren(); // Clear everything from this section

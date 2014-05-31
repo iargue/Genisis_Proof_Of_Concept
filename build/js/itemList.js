@@ -1,3 +1,14 @@
+itemStats = [
+	'AD',
+	'MD',
+	'AR',
+	'MR',
+	'HP',
+	'MS',
+	'AS',
+	'RN'
+],
+
 itemList = [{
 		name: 'Big Sword of Doom',
 		stats: {

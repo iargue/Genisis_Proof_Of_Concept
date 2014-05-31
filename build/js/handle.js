@@ -231,12 +231,16 @@ function levelClick(event) { //Called when a Monster button is clicked.
 
 function itemClick(event) {
 	console.log(event);
-	if (lastClickedItem && lastClickedItem == event.target.itemId) {
-		activePlayer.hero.buyItem(event.target.itemId);
-		lastClickedItem = null;
-	} else {
-		updateInfoBar('item', itemList[event.target.itemId])
-		lastClickedItem = event.target.itemId;
+	if(event.target.itemCatagory){
+
+	}else{
+		if (lastClickedItem && lastClickedItem == event.target.itemId) {
+			activePlayer.hero.buyItem(event.target.itemId);
+			lastClickedItem = null;
+		} else {
+			updateInfoBar('item', itemList[event.target.itemId])
+			lastClickedItem = event.target.itemId;
+		}
 	}
 }
 
