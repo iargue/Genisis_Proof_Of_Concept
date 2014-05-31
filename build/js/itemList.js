@@ -10,7 +10,141 @@ itemStats = [
 ],
 
 itemList = [{
-		name: 'Big Sword of Doom',
+		//Item Id 0
+		name: 'Dagger',
+		stats: {
+			AD: 15
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 15,
+		unique: false
+	}, {
+		//Item Id 1
+		name: 'Magic Page',
+		stats: {
+			MD: 10
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 12,
+		unique: false
+	}, {
+		//Item Id 2
+		name: 'Duel Daggers',
+		stats: {
+			AD: 30,
+			AS: 20
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		//Requires A Dagger first
+		required: [0],
+		cost: 60,
+		unique: true
+	},{
+		//Item Id 3
+		name: 'Two daggers with Posion',
+		stats: {
+			AD: 100,
+			AS: 50
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		//Requires Dual Daggers to upgrade
+		required: [2],
+		cost: 120,
+		unique: true
+	},{
+		//Item Id 4
+		name: 'Magic Book',
+		stats: {
+			MD: 100,
+			MR: 10
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		//Requires 4 Magic Pages to make a Magic Book (Obviously)
+		required: [1,1,1,1],
+		cost: 60,
+		unique: true
+	},{
+		//Item Id 5
+		name: 'Triangle Shield',
+		stats: {
+			AR: 5,
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		cost: 25,
+		unique: true
+	},{
+		//Item Id 6
+		name: 'Triangle Shield with extra wood',
+		stats: {
+			AR: 15
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		//Requires a Triangle shield before you can add wood to it.
+		requires: [5],
+		cost: 25,
+		unique: true
+	},{
+		//Item Id 7
+		name: 'Kite shield',
+		stats: {
+			AR: 40,
+		},
+		icon: {
+			base: 'shop',
+			top: 42,
+			left: 320,
+			height: 42,
+			width: 42,
+		},
+		//Requires a Triangle shield AND a triangle shield with extra wood.
+		requires: [5,6],
+		cost: 75,
+		unique: true
+	},{
+		//Item Id 8
+		name: 'Longsword',
 		stats: {
 			AD: 25
 		},
@@ -21,13 +155,17 @@ itemList = [{
 			height: 42,
 			width: 42,
 		},
-		cost: 100,
-		unique: false
-	}, {
-		name: 'Shield of AR and MR',
+		//Requires a Dagger
+		requires: [0],
+		cost: 45,
+		unique: true
+	},{
+		//Item Id 9
+		name: 'DeathStick',
 		stats: {
-			AR: 10,
-			MR: 10
+			AD: 45,
+			AS: 25,
+			MS: 5
 		},
 		icon: {
 			base: 'shop',
@@ -36,16 +174,15 @@ itemList = [{
 			height: 42,
 			width: 42,
 		},
-		cost: 2,
-		unique: false
-	}, {
-		name: 'Badass Nunchucks',
+		//Requires a Longsword and Dual Daggers
+		requires: [0, 2],
+		cost: 99,
+		unique: true
+	},{
+		//Item Id 10
+		name: 'Magic Wand',
 		stats: {
-			AD: 25,
 			MD: 25,
-			AS: 120,
-			AR: 5,
-			MR: 5
 		},
 		icon: {
 			base: 'shop',
@@ -54,16 +191,13 @@ itemList = [{
 			height: 42,
 			width: 42,
 		},
-		cost: 2,
+		cost: 60,
 		unique: true
 	},{
-		name: 'Worst Item NA',
+		//Item Id 11
+		name: 'Extended Magic Wand',
 		stats: {
-			AD: 1,
-			MD: 1,
-			AS: 1,
-			AR: 1,
-			MR: 51
+			MD: 75,
 		},
 		icon: {
 			base: 'shop',
@@ -72,16 +206,15 @@ itemList = [{
 			height: 42,
 			width: 42,
 		},
-		cost: 500,
+		//Requires that you have a magic wand before you extend it.
+		requires: [10],
+		cost: 100,
 		unique: true
 	},{
-		name: 'Worst Item NA',
+		//Item Id 10
+		name: 'Overcompensating Magic Wand',
 		stats: {
-			AD: 1,
-			MD: 1,
-			AS: 1,
-			AR: 1,
-			MR: 51
+			MD: 120,
 		},
 		icon: {
 			base: 'shop',
@@ -90,61 +223,9 @@ itemList = [{
 			height: 42,
 			width: 42,
 		},
-		cost: 500,
-		unique: true
-	},{
-		name: 'Worst Item NA',
-		stats: {
-			AD: 1,
-			MD: 1,
-			AS: 1,
-			AR: 1,
-			MR: 51
-		},
-		icon: {
-			base: 'shop',
-			top: 42,
-			left: 320,
-			height: 42,
-			width: 42,
-		},
-		cost: 500,
-		unique: true
-	},{
-		name: 'Worst Item NA',
-		stats: {
-			AD: 1,
-			MD: 1,
-			AS: 1,
-			AR: 1,
-			MR: 51
-		},
-		icon: {
-			base: 'shop',
-			top: 42,
-			left: 320,
-			height: 42,
-			width: 42,
-		},
-		cost: 500,
-		unique: true
-	},{
-		name: 'Worst Item NA',
-		stats: {
-			AD: 1,
-			MD: 1,
-			AS: 1,
-			AR: 1,
-			MR: 51
-		},
-		icon: {
-			base: 'shop',
-			top: 42,
-			left: 320,
-			height: 42,
-			width: 42,
-		},
-		cost: 500,
+		//Requires an Extended Magic Wand.
+		requires: [11],
+		cost: 75,
 		unique: true
 	}
 ]
