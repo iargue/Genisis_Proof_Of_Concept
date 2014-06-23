@@ -49,9 +49,7 @@ function monster(monster, x, y, player) {
 
 
 	this.update = function(event) {
-		if (this.alive == false) {
-			return;
-		}
+		if (this.alive == false) return;
 		this.updateEffects(event);
 		this.move(event);
 		this.handleCombat(event);
@@ -83,7 +81,6 @@ function monster(monster, x, y, player) {
 
 	},
 
-
 	this.applyEffect = function(x) {
 		effect = new Clone(x)
 		effect.appliedTime = new Date()
@@ -101,7 +98,6 @@ function monster(monster, x, y, player) {
 			this.rooted = true;
 		}
 	},
-
 
 	this.updateEffects = function(event) {
 		for (var i = 0; i < this.effects.length; i++) {
@@ -129,7 +125,6 @@ function monster(monster, x, y, player) {
 		}
 	},
 
-
 	this.passedGate = function() {
 		this.alive = false;
 		this.player.team.removePoints(1);
@@ -156,14 +151,10 @@ function monster(monster, x, y, player) {
 		}
 	},
 
-
-
 	this.checkCollision = function(x, y, radius) {
-		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageObject.x, 2) + Math.pow(y - this.stageObject.y, 2))) {
+		if (this.radius + radius < Math.sqrt(Math.pow(x - this.stageObject.x, 2) + Math.pow(y - this.stageObject.y, 2)))
 			return false;
-		} else {
-			return true;
-		}
+		return true;
 	},
 
 	this.handleCombat = function() {

@@ -1,3 +1,6 @@
+// 0 - hero
+// 1 - monster 
+// 2 - item 
 function setupInfoBar(){
 	informationStage.bar = new createjs.Container();
 	informationStage.bar.grid = []
@@ -45,15 +48,6 @@ function updateInfoBar(type, object) {
 	for(var i = 0; i < informationStage.bar.grid.length; i++){
 		informationStage.bar.grid[i].removeAllChildren();
 	}
-	//informationStage.addChild(informationStage.object);
-	// TO Delete
-	iconWidth = informationStage.width * 0.3
-	iconHeight = informationStage.height * 0.5
-	spellWidth = (informationStage.width * 0.5) / 4
-	spellHeight = informationStage.height * 0.25
-	statWidth = informationStage.width / 4
-	statHeight = (informationStage.height * 0.5) / 2
-	//
 	switch (type) {
 		case 'hero':
 			// Hero Icon
@@ -68,21 +62,17 @@ function updateInfoBar(type, object) {
 			informationStage.bar.grid[0].addChild(object.icon);
 			// Hero Experience
 			informationStage.bar.grid[1].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").beginLinearGradientFill(["#007", "#005", "#005", "#007"], [0, 0.25, 0.75, 1], 0, 0, 0, informationStage.bar.grid[1].height).drawRect(0, 0, informationStage.bar.grid[1].width, informationStage.bar.grid[1].height));
-			createTextObject(informationStage.bar.grid[1], "text", object.experience + "/" + object.experienceToLevel, 0.75, 12);
 			informationStage.bar.grid[1].addChild(informationStage.bar.grid[1].object)
-			informationStage.bar.grid[1].addChild(informationStage.bar.grid[1].textObject)
+			createTextObject(informationStage.bar.grid[1], "text", object.experience + "/" + object.experienceToLevel, 0.75, 12);
 			// Hero Health
 			informationStage.bar.grid[2].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").beginLinearGradientFill(["#070", "#050", "#050", "#070"], [0, 0.25, 0.75, 1], 0, 0, 0, informationStage.bar.grid[2].height).drawRect(0, 0, informationStage.bar.grid[2].width, informationStage.bar.grid[2].height));
-			createTextObject(informationStage.bar.grid[2], "text", object.CHP + "/" + object.HP, 0.75);
 			informationStage.bar.grid[2].addChild(informationStage.bar.grid[2].object);
-			informationStage.bar.grid[2].addChild(informationStage.bar.grid[2].textObject);
+			createTextObject(informationStage.bar.grid[2], "text", object.CHP + "/" + object.HP, 0.75);
 			// Hero Level
 			informationStage.bar.grid[3].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").drawRect(0, 0, informationStage.bar.grid[3].width, informationStage.bar.grid[3].height));
-			createTextObject(informationStage.bar.grid[3], "label", "Level", 0.6, 0, "#EFC94C")
-			createTextObject(informationStage.bar.grid[3], "content", "" + object.level, 0.5)
 			informationStage.bar.grid[3].addChild(informationStage.bar.grid[3].object);
-			informationStage.bar.grid[3].addChild(informationStage.bar.grid[3].labelObject)
-			informationStage.bar.grid[3].addChild(informationStage.bar.grid[3].contentObject)
+			createTextObject(informationStage.bar.grid[3], "label", "Level", 0.6, 0, "#EFC94C");
+			createTextObject(informationStage.bar.grid[3], "content", "" + object.level, 0.5);
 			// Hero Spells
 			for(var i = 0; i < object.spells.length; i++){
 				informationStage.bar.grid[i+4].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").drawRect(0, 0, informationStage.bar.grid[i+4].width, informationStage.bar.grid[i+4].height));
@@ -97,7 +87,6 @@ function updateInfoBar(type, object) {
 			var i = 0;
 			for(var stat in object.baseStats){
 				createTextObject(informationStage.bar.grid[i+8], "text", stat + " : " + object[stat], 0.75);
-				informationStage.bar.grid[i+8].addChild(informationStage.bar.grid[i+8].textObject);
 				i++;
 			}
 			// Add containers to InformationStage
@@ -118,17 +107,14 @@ function updateInfoBar(type, object) {
 			// Monster Cost Label
 			createTextObject(informationStage.bar.grid[1], "label", "Cost", 0.6, 0, "#EFC94C");
 			createTextObject(informationStage.bar.grid[1], "content", object.cost, 0.5, 0);
-			informationStage.bar.grid[1].addChild(informationStage.bar.grid[1].labelObject);
-			informationStage.bar.grid[1].addChild(informationStage.bar.grid[1].contentObject);
 			// Monster Health
 			informationStage.bar.grid[2].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").beginFill("#070").drawRect(0, 0, informationStage.bar.grid[2].width, informationStage.bar.grid[2].height));
-			createTextObject(informationStage.bar.grid[2], "text", object.CHP + "/" + object.HP, 0.5, 0);
 			informationStage.bar.grid[2].addChild(informationStage.bar.grid[2].object);
-			informationStage.bar.grid[2].addChild(informationStage.bar.grid[2].textObject);
+			createTextObject(informationStage.bar.grid[2], "text", object.CHP + "/" + object.HP, 0.5, 0);
 			// Monster Cost 
-			createTextObject(informationStage.bar.grid[3], "text", "" + object.cost, 0.75);
-			informationStage.bar.grid[3].addChild(informationStage.bar.grid[3].textObject)
-			// Monster Stats
+			createTextObject(informationStage.bar.grid[3], "label", "Income Bonus", 0.75, 0, "#EFC94C");
+			createTextObject(informationStage.bar.grid[3], "content", "" + object.bounty, 0.75)
+			// Monster Skills
 			for(var i = 0; i < object.spells.length; i++){
 				informationStage.bar.grid[i+4].borderObject = new createjs.Shape(new createjs.Graphics().beginStroke("#000").drawRect(0, 0, informationStage.bar.grid[i+4].width, informationStage.bar.grid[i+4].height));
 				spellObject = object.spells[i];
@@ -142,7 +128,6 @@ function updateInfoBar(type, object) {
 			var i = 0;
 			for(var stat in object.baseStats){
 				createTextObject(informationStage.bar.grid[i+8], "text", stat + " : " + object[stat], 0.75);
-				informationStage.bar.grid[i+8].addChild(informationStage.bar.grid[i+8].textObject);
 				i++;
 			}
 			for(var item in informationStage.bar.grid){

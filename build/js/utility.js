@@ -11,7 +11,13 @@ function msToTime(duration) {
 	return hours + ":" + minutes + ":" + seconds;
 }
 
-
+function padString(string, padding){
+	var newText = string;
+	if (string.length < padding)
+		for (var i = 0; i < padding - string.length; i++)
+			i % 2 === 0 ? newText = " " + newText : newText += " ";
+	return newText;
+}
 
 function timeToMs(str) {
 	var p = str.split(':'),
@@ -63,11 +69,9 @@ function displayText(text, color) {
 }
 
 function levelSpell(hero, spellNumber) {
-	if ((hero.level / 3) < hero.spells[spellNumber].level) {
-		return
-	}
+	if ((hero.level / 3) < hero.spells[spellNumber].level) return;
 
-	hero.spells[spellNumber].level += 1 //Increase level of spell
+	hero.spells[spellNumber].level += 1;
 	hero.spells[spellNumber].range = hero.spells[spellNumber].rangePerLevel[hero.spells[spellNumber].level]
 	hero.spells[spellNumber].damage = hero.spells[spellNumber].damagePerLevel[hero.spells[spellNumber].level] //Current damage based on level of spell
 	// hero.spells[spellNumber].coolDown = hero.spells[spellNumber].coolDownPerLevel[hero.spells[spellNumber].level] //Current cooldown based on level of spell
@@ -111,7 +115,6 @@ function spawnHero(hero, side) {
 			}
 		}
 	}
-	console.log('nope');
 }
 
 function spawnUnit(monsterNumber) {
@@ -250,11 +253,11 @@ function isInTriangle(px, py, ax, ay, bx, by, cx, cy) {
 }
 
 function cacheItem(item) { //Will Cache any item with width or height that is defined
+	//console.log(item);
 	if (typeof item.width === "undefined" || item.height === "undefined") {
 		console.log("Unable to cache " + item)
-		return false
 	}
-	if (item.cacheCanvas) {
+	else if (item.cacheCanvas) {
 		if (item.cacheCanvas.width !== item.width || item.cacheCanvas.height !== item.height) {
 			item.uncache()
 			item.cache(0, 0, item.width, item.height)
@@ -276,26 +279,29 @@ function createTextObject(container, type, text, width, padding, color) {
 	}
 	switch (type) {
 		case "label":
-			container.labelObject = new createjs.Text(newText, textSize + "px " + textFont, color)
-			container.labelObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
-			container.labelObject.scaleY = (container.height * 0.45) / container.labelObject.getMeasuredHeight()
+			container.labelObject = new createjs.Text(newText, textSize + "px " + textFont, color);
+			container.labelObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth();
+			container.labelObject.scaleY = (container.height * 0.45) / container.labelObject.getMeasuredHeight();
 			container.labelObject.x = (container.width * 0.5) - (container.labelObject.getTransformedBounds().width * 0.5);
-			container.labelObject.y = container.labelObject.getTransformedBounds().height * 0.025
-			return
+			container.labelObject.y = container.labelObject.getTransformedBounds().height * 0.025;
+			container.addChild(container.labelObject);
+			break
 		case "content":
 			container.contentObject = new createjs.Text(newText, textSize + "px " + textFont, "#FFF")
-			container.contentObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth()
-			container.contentObject.scaleY = (container.height * 0.45) / container.contentObject.getMeasuredHeight()
+			container.contentObject.scaleX = (container.width * width) / container.labelObject.getMeasuredWidth();
+			container.contentObject.scaleY = (container.height * 0.45) / container.contentObject.getMeasuredHeight();
 			container.contentObject.x = (container.width * 0.5) - (container.contentObject.getTransformedBounds().width * 0.5);
-			container.contentObject.y = container.height - (container.contentObject.getTransformedBounds().height * 1.025)
-			return
+			container.contentObject.y = container.height - (container.contentObject.getTransformedBounds().height * 1.025);
+			container.addChild(container.contentObject);
+			break
 		default:
 			container.textObject = new createjs.Text(newText, textSize + "px " + textFont, '#FFF');
 			container.textObject.scaleX = (container.width * width) / container.textObject.getMeasuredWidth();
 			container.textObject.scaleY = (container.height * 0.5) / container.textObject.getMeasuredHeight();
 			container.textObject.x = (container.width * 0.5) - (container.textObject.getTransformedBounds().width * 0.5);
 			container.textObject.y = container.textObject.getTransformedBounds().height * 0.5;
-			return
+			container.addChild(container.textObject);
+			break
 	}
 }
 
