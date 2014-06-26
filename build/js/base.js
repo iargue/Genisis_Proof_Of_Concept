@@ -565,7 +565,7 @@ function updatePlayerBar(event) {
 function gameLoop(event) {
 	fpsText.text = 'FPS: ' + Math.round(createjs.Ticker.getMeasuredFPS())
 	unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
-	//edgeScrolling(event); //In handle.js
+	edgeScrolling(event); //In handle.js
 	for (var team in teamList) { //We have to update each team
 		for (var player in teamList[team].playerList) { //Check each player on that team
 			teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
