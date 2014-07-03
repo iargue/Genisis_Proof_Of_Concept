@@ -118,9 +118,9 @@ function spawnHero(hero, side) {
 }
 
 function spawnUnit(monsterNumber) {
-	blackList = [];
-	nodeOkay = false;
-	x = 10
+	var blackList = [],
+		nodeOkay = false,
+		x = 10;
 	if (opponentTeam == activeTeam) {
 		y = getRandom10(20, 960);
 	} else {
@@ -141,8 +141,7 @@ function spawnUnit(monsterNumber) {
 	} else {
 		displayText("Not enough gold to summon", "red")
 	}
-
-
+	return unit
 }
 
 function moveTo(unit, targetX, targetY, steps) {
