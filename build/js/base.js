@@ -461,7 +461,7 @@ function updateLeftBar(view) {
 		monsterButtons = []
 		for (var unit in monsterList[activePlayer.summonLevel]) {
 			var monster = monsterList[activePlayer.summonLevel][unit]
-			monsterButtons[unit] = new createjs.Container()
+			monsterButtons[unit] = new createjs.Container();
 			monsterButtons[unit].height = buttonHeight
 			monsterButtons[unit].width = buttonWidth
 			monsterButtons[unit].button = new createjs.Bitmap(contentManager.getResult(monster.icon.base))

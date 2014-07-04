@@ -304,6 +304,12 @@ function createTextObject(container, type, text, width, padding, color) {
 	}
 }
 
+// @container - createjs container
+// @side - 'left', 'right'
+function createSelectorBox(container, side) {
+
+}
+
 function timeIt(callBack, arguments, nmae) {
 	console.time(name)
 	callBack.call(arguments)

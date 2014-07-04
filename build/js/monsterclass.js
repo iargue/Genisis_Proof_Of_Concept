@@ -145,6 +145,7 @@ function monster(monster, x, y, player) {
 			attacker.experience += this.experience;
 			gameStage.removeChild(this.stageObject);
 			miniMapStage.removeChild(this.miniMapObject);
+			if(viewTarget[1] === this){updateInfoBar('hero', activePlayer.hero)}
 		} else {
 			this.healthBar.graphics.clear().beginFill("red").drawRect(-18, -30, (this.CHP / this.HP) * 35, 8);
 			this.stageObject.updateCache();

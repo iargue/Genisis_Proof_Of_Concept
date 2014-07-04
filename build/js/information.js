@@ -78,7 +78,7 @@ function updateInfoBar(type, object, buySell) {
 			// Hero Health
 			informationStage.bar.grid[2].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").beginLinearGradientFill(["#070", "#050", "#050", "#070"], [0, 0.25, 0.75, 1], 0, 0, 0, informationStage.bar.grid[2].height).drawRect(0, 0, informationStage.bar.grid[2].width, informationStage.bar.grid[2].height));
 			informationStage.bar.grid[2].addChild(informationStage.bar.grid[2].object);
-			createTextObject(informationStage.bar.grid[2], "text", object.CHP + "/" + object.HP, 0.75);
+			createTextObject(informationStage.bar.grid[2], "text", Math.round(object.CHP) + "/" + object.HP, 0.75);
 			// Hero Level
 			informationStage.bar.grid[3].object = new createjs.Shape(new createjs.Graphics().beginStroke("#000").drawRect(0, 0, informationStage.bar.grid[3].width, informationStage.bar.grid[3].height));
 			informationStage.bar.grid[3].addChild(informationStage.bar.grid[3].object);
