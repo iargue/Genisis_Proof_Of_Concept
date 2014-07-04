@@ -13,13 +13,14 @@ var stage, unitList = [],
 	incomeTime,
 	gameOptions,
 	playerBorder,
+	buttonWidth,
+	buttonHeight,
 	scrollDown = false,
 	scrollUp = false,
 	scrollLeft = false,
 	scrollRight = false,
 	castActive = false,
 	monsterbuttons = null,
-	lastClickedItem = null,
 	viewTarget = [null, null],
 	spellButtons = null,
 	smallText = 12,
@@ -187,6 +188,7 @@ function createStage() {
 	collisionTree = QUAD.init(bounds);
 	playerStage.addChild(gameStage);
 	playerBar = new createjs.Stage("gamePanel");
+	playerBar.enableMouseOver(10);
 
 	fpsText = new createjs.Text('0', textSize + "px " + textFont, 'black');
 	unitText = new createjs.Text('0', textSize + "px " + textFont, 'black');
@@ -346,65 +348,104 @@ function createStage() {
 	playerBar.addChild(shopStage)
 }
 
-function filterShopbar(){
-
-}
-
 function updateRightBar(view , itemId) {
 	shopStage.removeAllChildren()
 	// View 0 is Shop
 	if (view == 0) {
+		rightSwap.textObject.text = "Inventory"
+		cacheItem(rightSwap)
 		buttonWidth = shopStage.width / 4
 		buttonHeight = shopStage.height / 2
 		itemButtons = []
-		if(itemId){
-			var list = itemList.filter(function(x){x[itemId] !== undefined});
-			for(var item in list){
-				itemButtons[item] = new createjs.Container()
-				itemButtons[item].width = buttonWidth
-				itemButtons[item].height = buttonHeight
-				itemButtons[item].button = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
-				if (stat > 3) {
-					itemButtons[item].y = buttonHeight
-					itemButtons[item].x = buttonWidth * (stat % 4)
+		if(itemId !== undefined){
+			var i, list = itemList.filter(function(x){return (x.stats[itemStats[itemId]] !== undefined)});
+			for(i=0; i < list.length; i++){
+				itemButtons[i] = new createjs.Container()
+				itemButtons[i].width = buttonWidth
+				itemButtons[i].height = buttonHeight
+				if (i > 3) {
+					itemButtons[i].y = buttonHeight
+					itemButtons[i].x = buttonWidth * (i % 4)
 				} else {
-					itemButtons[item].x = buttonWidth * stat
+					itemButtons[i].x = buttonWidth * i
 				}
-				itemButtons[item].itemId = stat
-				itemButtons[item].addEventListener('click', itemClick)
-				createTextObject(itemButtons[stat], "text", item.cost)
-				itemButtons[item].addChild(itemButtons[stat].button)
-				itemButtons[item].addChild(itemButtons[stat].textObject)
-				cacheItem(itemButtons[item])
-				shopStage.addChild(itemButtons[item])
+				itemButtons[i].object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
+				itemButtons[i].item = list[i];
+
+				itemButtons[i].addEventListener('click', function(event){updateInfoBar('item', event.currentTarget.item, true)})
+				itemButtons[i].addChild(itemButtons[i].object)
+				createTextObject(itemButtons[i], "text", list[i].name)
+				cacheItem(itemButtons[i])
+				shopStage.addChild(itemButtons[i])
 			}
-		} else {
-			for(var stat in itemStats){
-				itemButtons[stat] = new createjs.Container()
-				itemButtons[stat].width = buttonWidth
-				itemButtons[stat].height = buttonHeight
-				itemButtons[stat].button = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#777", "#DDD", "#DDD", "#777"], [0, 0.2, 0.8, 1], 0, 0, 0, buttonHeight).drawRect(0, 0, buttonWidth, buttonHeight));
-				if (stat > 3) {
-					itemButtons[stat].y = buttonHeight
-					itemButtons[stat].x = buttonWidth * (stat % 4)
-				} else {
-					itemButtons[stat].x = buttonWidth * stat
+			itemButtons[i] = new createjs.Container()
+			itemButtons[i].width = buttonWidth
+			itemButtons[i].height = buttonHeight
+			if (i > 3) {
+				itemButtons[i].y = buttonHeight
+				itemButtons[i].x = buttonWidth * (i % 4)
+			} else {
+				itemButtons[i].x = buttonWidth * i
+			}
+			itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginStroke().beginFill("purple").drawRect(0, 0, buttonWidth, buttonHeight));
+			itemButtons[i].addEventListener('click', function(){ updateRightBar(view);})
+			itemButtons[i].addChild(itemButtons[i].object)
+			createTextObject(itemButtons[i], "text", "BACK")
+			cacheItem(itemButtons[i])
+			shopStage.addChild(itemButtons[i])
+		}
+		else{
+			for(var i=0; i < itemStats.length; i++){
+				itemButtons[i] = new createjs.Container()
+				itemButtons[i].width = buttonWidth
+				itemButtons[i].height = buttonHeight
+				if(i === 0){
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("F00").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
-				itemButtons[stat].itemCatagory = true
-				itemButtons[stat].itemId = stat
-				itemButtons[stat].addEventListener('click', itemClick)
-				createTextObject(itemButtons[stat], "text", stat + "")
-				itemButtons[stat].addChild(itemButtons[stat].button)
-				itemButtons[stat].addChild(itemButtons[stat].textObject)
-				cacheItem(itemButtons[stat])
-				shopStage.addChild(itemButtons[stat])
+				else if(i === 1){
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("0F0").drawRect(0, 0, buttonWidth, buttonHeight));
+				}
+				else if(i === 2){
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("00F").drawRect(0, 0, buttonWidth, buttonHeight));
+				}
+				else if(i === 3){
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("F0F0F0").drawRect(0, 0, buttonWidth, buttonHeight));
+				}
+				else if(i === 4){
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("0F0F0F").drawRect(0, 0, buttonWidth, buttonHeight));
+				}
+				else{
+					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("000").drawRect(0, 0, buttonWidth, buttonHeight));
+				}
+				itemButtons[i].object.value = i;
+				if (i > 3) {
+					itemButtons[i].y = buttonHeight
+					itemButtons[i].x = buttonWidth * (i % 4)
+				} else itemButtons[i].x = buttonWidth * i;
+				itemButtons[i].object.addEventListener('click', function(event) {
+					updateRightBar(view, event.target.value);
+				})
+				itemButtons[i].addChild(itemButtons[i].object);
+				createTextObject(itemButtons[i], "text", itemStats[i]);
+				cacheItem(itemButtons[i])
+				shopStage.addChild(itemButtons[i])
 			}
 		}
 	}
 	// View 1 is Inventory
 	else if (view == 1) {
+		rightSwap.textObject.text = "Shop"
+		cacheItem(rightSwap)
 		buttonWidth = shopStage.width / 4 //Calculate how much width we have for buttons
 		buttonHeight = shopStage.height / 2 // Calculate the two levels for buttons
+		inventoryButtons = [];
+		if(activeHero.itemList.length === 0){
+			createTextObject(shopStage, "text", "Purchase Items in the Shop");
+			return
+		}
+		for(var item in activeHero.itemList){
+
+		}
 
 	}
 }
@@ -432,7 +473,8 @@ function updateLeftBar(view) {
 			} else {
 				monsterButtons[unit].x = buttonWidth * unit
 			}
-			monsterButtons[unit].button.monsterId = unit;
+			monsterButtons[unit].monsterId = unit;
+			monsterButtons[unit].monster = monsterList[activePlayer.summonLevel][unit];
 			monsterButtons[unit].button.scaleX = buttonWidth / monster.icon.width;
 			monsterButtons[unit].button.scaleY = buttonHeight / monster.icon.height;
 			monsterButtons[unit].goldCost = new createjs.Text(monster.cost, textSize + "px " + textFont, 'black');
@@ -440,7 +482,10 @@ function updateLeftBar(view) {
 			monsterButtons[unit].goldCost.x = buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding)
 			monsterButtons[unit].goldCost.y = textPadding
 			monsterButtons[unit].goldCostBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("#FFF").drawRect(0, 0, buttonWidth - (monsterButtons[unit].goldCost.getMeasuredWidth() + textPadding), 50));
-			monsterButtons[unit].addEventListener('click', monsterClick)
+			monsterButtons[unit].addEventListener('click', function(event){
+				var unit = spawnUnit(event.currentTarget.monsterId)
+				updateInfoBar('monster', unit)
+			})
 			monsterButtons[unit].addChild(monsterButtons[unit].buttonBackground)
 			monsterButtons[unit].addChild(monsterButtons[unit].button)
 			monsterButtons[unit].addChild(monsterButtons[unit].goldCost)

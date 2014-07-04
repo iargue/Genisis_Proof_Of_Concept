@@ -216,9 +216,9 @@ function changeDisplay(event) {
 	}
 }
 
-function monsterClick(event) { //Called when a Monster button is clicked.
+/*function monsterClick(event) { //Called when a Monster button is clicked.
 	spawnUnit(event.target.monsterId) //Spawn the unit related to that button. This value is stored when the button is first created in updateMonsterBar
-}
+}*/
 
 function spellClick(event) { //Called when a Monster button is clicked.
 	castActive = event.target.spellId
@@ -230,18 +230,7 @@ function levelClick(event) { //Called when a Monster button is clicked.
 }
 
 function itemClick(event) {
-	console.log(event);
-	if(event.target.itemCatagory){
-
-	}else{
-		if (lastClickedItem && lastClickedItem == event.target.itemId) {
-			activePlayer.hero.buyItem(event.target.itemId);
-			lastClickedItem = null;
-		} else {
-			updateInfoBar('item', itemList[event.target.itemId])
-			lastClickedItem = event.target.itemId;
-		}
-	}
+	updateInfoBar('item', event.target.item)
 }
 
 function endGame(loser) {
