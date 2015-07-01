@@ -58,6 +58,21 @@ function updateStage(event) {
 		playerBar.canvas.width = playerBar.canvas.clientWidth
 		playerBar.object.graphics.clear().beginFill("#111").drawRect(0, 0, playerBar.canvas.width, playerBar.canvas.height);
 
+		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
+			gameStage.regY = gameStage.height - playerStage.canvas.height
+		}
+
+		if (gameStage.regY + playerStage.canvas.height < 0) {
+			gameStage.regY = 0 +  playerStage.canvas.height
+		}
+
+		if (gameStage.regX + playerStage.canvas.width > gameStage.width) {
+			gameStage.regX = gameStage.width - playerStage.canvas.width
+		}
+
+		if (gameStage.regX + playerStage.canvas.width < 0) {
+			gameStage.regX = 0 + playerStage.canvas.width
+		}
 		gameTime.x = playerBar.canvas.width * 0.5
 		gameTime.y = 0
 		gameTime.width = playerBar.canvas.width * 0.1
