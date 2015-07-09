@@ -73,6 +73,7 @@ function updateStage(event) {
 		if (gameStage.regX + playerStage.canvas.width < 0) {
 			gameStage.regX = 0 + playerStage.canvas.width
 		}
+
 		gameTime.x = playerBar.canvas.width * 0.5
 		gameTime.y = 0
 		gameTime.width = playerBar.canvas.width * 0.1
@@ -136,24 +137,19 @@ function updateStage(event) {
 		informationStage.y = playerBar.canvas.height * 0.2
 		informationStage.height = playerBar.canvas.height * 0.8
 		informationStage.width = playerBar.canvas.width * 0.2
-		informationStage.object.graphics.clear().drawRect(0, 0, informationStage.width, informationStage.height)
-
+		// informationStage.object.graphics.clear().drawRect(0, 0, informationStage.width, informationStage.height)
+		
 		monsterStage.x = 0
 		monsterStage.y = playerBar.canvas.height * 0.2
 		monsterStage.height = playerBar.canvas.height * 0.8
 		monsterStage.width = playerBar.canvas.width * 0.3
-
+		console.log(monsterStage)
+		
 		shopStage.x = playerBar.canvas.width * 0.7
 		shopStage.y = playerBar.canvas.height * 0.2
 		shopStage.height = playerBar.canvas.height * 0.8
 		shopStage.width = playerBar.canvas.width * 0.3
 
-		if (gameStage.regY + playerStage.canvas.height > gameStage.height) {
-			gameStage.regY = gameStage.height - playerStage.canvas.height
-		}
-		if (gameStage.regX + playerStage.canvas.width > gameStage.width) {
-			gameStage.regX = gameStage.width - playerStage.canvas.width
-		}
 		playerBorder.x = gameStage.regX / miniMapRatio.width
 		playerBorder.y = gameStage.regY / miniMapRatio.height
 		if (leftSwap.swapViewId == 0) {
@@ -178,6 +174,19 @@ function updateStage(event) {
 				currentUnit.miniMapObject.updateCache()
 			}
 		}
+
+		cacheItem(shopStage)
+		cacheItem(monsterStage)
+		cacheItem(informationStage)
+		cacheItem(miniMapStage)
+		cacheItem(rightSwap)
+		cacheItem(leftSwap)
+		cacheItem(rightTeamBar)
+		cacheItem(leftTeamBar)
+		cacheItem(incomeStage)
+		cacheItem(incomeTime)
+		cacheItem(goldStage)
+		cacheItem(gameTime)
 
 	}
 	playerStage.update(event); //Finally update the stage with all of our changes.
