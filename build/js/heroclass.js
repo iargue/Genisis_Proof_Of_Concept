@@ -124,7 +124,7 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
-		this.miniMapWayPoint.graphics.clear().setStrokeStyle(10 / miniMapRatio.radius).moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).beginStroke('black').lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
+		this.miniMapWayPoint.graphics.clear().setStrokeStyle(10 / miniMapRatio.radius).moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).beginStroke('#000000').lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
 	},
 
 	this.updatePassive = function(event) {

@@ -174,20 +174,6 @@ function updateStage(event) {
 				currentUnit.miniMapObject.updateCache()
 			}
 		}
-
-		cacheItem(shopStage)
-		cacheItem(monsterStage)
-		cacheItem(informationStage)
-		cacheItem(miniMapStage)
-		cacheItem(rightSwap)
-		cacheItem(leftSwap)
-		cacheItem(rightTeamBar)
-		cacheItem(leftTeamBar)
-		cacheItem(incomeStage)
-		cacheItem(incomeTime)
-		cacheItem(goldStage)
-		cacheItem(gameTime)
-
 	}
 	playerStage.update(event); //Finally update the stage with all of our changes.
 }
@@ -480,6 +466,7 @@ function updateLeftBar(view) {
 	if (view == 0) {
 		leftSwap.textObject.text = "Spells"
 		cacheItem(leftSwap)
+		leftSwap.swapViewId = 0
 		buttonWidth = monsterStage.width * 0.25
 		buttonHeight = monsterStage.height * 0.5
 		monsterButtons = []
@@ -521,7 +508,7 @@ function updateLeftBar(view) {
 	else if (view == 1) {
 		leftSwap.textObject.text = 'Monsters'
 		cacheItem(leftSwap)
-		leftSwap.swapViewId = 0
+		leftSwap.swapViewId = 1
 		buttonWidth = monsterStage.width * 0.25
 		buttonHeight = monsterStage.height
 		spellButtons = []
@@ -624,7 +611,8 @@ function updatePlayerBar(event) {
 	// createTextObject(incomeStage, "content", activePlayer.hero.income, 0.75)
 	goldStage.contentObject.text = activePlayer.hero.gold
 	incomeStage.contentObject.text = activePlayer.hero.income
-	if (leftSwap.swapViewId == 0) {
+
+	if (leftSwap.swapViewId == 1) {
 		updateSpells(event)
 	}
 	refreshInfoBar(event);

@@ -167,6 +167,7 @@ function updateSpells(event) {
 			spellButtons[spell].removeChild(spellButtons[spell].levelButton)
 		}
 		spellButtons[spell].button.alpha = percentage
+		cacheItem(spellButtons[spell])
 	}
 }
 
