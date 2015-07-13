@@ -60,20 +60,36 @@ function monster(monster, x, y, player) {
     this.move = function(event) {
         if (this.stunned) return;
         if (this.rooted) return;
+        this.collision = true
+        var unit = this
+        var bounds = {
+            height: 50,
+            width: 50,
+            x: unit.stageObject.x - 25,
+            y: unit.stageObject.y - 25,
+        }
+        collisionTree.retrieve(bounds, function(collidee) {
+            if (collidee.checkCollision(unit.stageObject.x, unit.stageObject.y, unit.radius)) {
+                if (collidee != unit) {
+                    this.collision = false
+                }
+            }
+        })
+
         this.steps = (((event.delta) / 100 * this.CMS) / 10);
         if (this.attackTarget != null) {
             if (distance(this, this.attackTarget) > this.RN) {
                 this.moving = true;
-                moveTo(this, this.attackTarget.stageObject.x, this.attackTarget.stageObject.y, this.steps, true);
+                moveTo(this, this.attackTarget.stageObject.x, this.attackTarget.stageObject.y, this.steps, this.collision);
             } else {
                 this.moving = false;
             }
         } else if (this.stageObject.x < this.player.team.teamPortal.x - 100) {
             this.moving = true;
-            moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps, true);
+            moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps, this.collision);
         } else {
             this.moving = true;
-            moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps, true);
+            moveTo(this, this.player.team.teamPortal.x, this.player.team.teamPortal.y, this.steps, this.collision);
             if (this.stageObject.x = this.player.team.teamPortal.x) {
                 this.passedGate();
             }
