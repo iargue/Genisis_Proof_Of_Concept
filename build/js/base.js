@@ -99,19 +99,20 @@ function updateStage(event) {
 		leftTeamBar.width = playerBar.canvas.width * 0.2
 		leftTeamBar.height = playerBar.canvas.height * 0.2
 		leftTeamBar.object.graphics.clear().beginStroke("black").beginLinearGradientFill(["#200", "#400", "#400", "#200"], [0, 0.2, 0.8, 1], 0, 0, 0, leftTeamBar.height).drawRect(0, 0, leftTeamBar.width, leftTeamBar.height);
+		cacheItem(leftTeamBar.object)
 
 		rightTeamBar.x = playerBar.canvas.width * 0.7
 		rightTeamBar.y = 0
 		rightTeamBar.width = playerBar.canvas.width * 0.2
 		rightTeamBar.height = playerBar.canvas.height * 0.2
 		rightTeamBar.object.graphics.clear().beginStroke("black").beginLinearGradientFill(["#200", "#400", "#400", "#200"], [0, 0.2, 0.8, 1], 0, 0, 0, rightTeamBar.height).drawRect(0, 0, rightTeamBar.width, rightTeamBar.height);
+		cacheItem(rightTeamBar.object)
 
 		leftSwap.x = 0
 		leftSwap.y = 0
 		leftSwap.height = playerBar.canvas.height * 0.2
 		leftSwap.width = playerBar.canvas.width * 0.1
 		leftSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height);
-		leftSwap.viewId === 0 ? createTextObject(rightTeamBar, "text", "Spells", 0.5) : createTextObject(rightTeamBar, "Monsters", 0.5)
 
 		rightSwap.x = playerBar.canvas.width * 0.9
 		rightSwap.y = 0
@@ -576,7 +577,7 @@ function imageLoadingDone(e) {
 	gameOptions = {
 		mode: 'solo',
 		hero: 'warrior',
-		spells: [new spellList['cupcakeTrap'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
+		spells: [new spellList['chainLightening'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
 	}
 	createStage()
 	newGame(gameOptions)
