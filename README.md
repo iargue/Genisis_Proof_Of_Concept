@@ -20,3 +20,7 @@ Launch the game using
 
 
 http://localhost:8888/index.html
+
+Learn to close issues using:
+
+https://help.github.com/articles/closing-issues-via-commit-messages/
