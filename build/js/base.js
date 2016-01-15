@@ -183,6 +183,7 @@ function createStage() {
 	playerStage = new createjs.Stage("gameCanvas");
 	playerStage.canvas.height = playerStage.canvas.clientHeight;
 	playerStage.canvas.width = playerStage.canvas.clientWidth;
+
 	gameStage = new createjs.Container();
 	gameStage.width = 2000;
 	gameStage.height = 2000;
@@ -405,24 +406,24 @@ function updateRightBar(view , itemId) {
 			cacheItem(itemButtons[i])
 			shopStage.addChild(itemButtons[i])
 		}
-		else{
-			for(var i=0; i < itemStats.length; i++){
+		else {
+			for(var i=0; i < itemStats.length; i++) {
 				itemButtons[i] = new createjs.Container()
 				itemButtons[i].width = buttonWidth
 				itemButtons[i].height = buttonHeight
 				if(i === 0){
 					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("F00").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
-				else if(i === 1){
+				else if(i === 1) {
 					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("0F0").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
-				else if(i === 2){
+				else if(i === 2) {
 					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("00F").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
-				else if(i === 3){
+				else if(i === 3) {
 					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("F0F0F0").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
-				else if(i === 4){
+				else if(i === 4) {
 					itemButtons[i].object = new createjs.Shape(new createjs.Graphics().beginFill("0F0F0F").drawRect(0, 0, buttonWidth, buttonHeight));
 				}
 				else{
