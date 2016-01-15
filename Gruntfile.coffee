@@ -12,10 +12,10 @@ module.exports = (grunt) ->
 			options:
 				livereload: true
 			css:
-				files: ['develop/css/*.styl']
-				tasks: ['stylus']
-				options:
-					event: ['all']
+				files: ['develop/css/*.scss']
+				tasks: ['sass']
+				# options:
+				# 	event: ['all']
 			js:
 				files: ['develop/coffee/*.coffee']
 				tasks: ['coffee']
@@ -29,6 +29,11 @@ module.exports = (grunt) ->
 
 		devserver:
   			server: {}	
+
+  		sass:
+  			dist:
+  				files:
+  					'build/style/main.css': ['develop/css/main.scss']
 
 		stylus:
 			compile:
@@ -53,6 +58,7 @@ module.exports = (grunt) ->
 
 	
 	# Load plugins that provide tasks.
+	grunt.loadNpmTasks 'grunt-sass'
 	grunt.loadNpmTasks 'grunt-contrib-watch'
 	grunt.loadNpmTasks 'grunt-contrib-stylus'
 	grunt.loadNpmTasks 'grunt-contrib-coffee'

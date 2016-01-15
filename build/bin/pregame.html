@@ -1,0 +1,111 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+<script type="text/javascript" src="../js/heroList.js"></script>
+<script type="text/javascript" src="../js/spellList.js"></script>
+<script type="text/javascript" src="../js/ultimateList.js"></script>
+<script type="text/javascript">
+	// Angular Handling 
+	var preGameApp = angular.module('preGameApp', []);
+
+	preGameApp.controller('appCtrl', function($scope) {
+		$scope.heroList = heroList;
+		$scope.spellList = spellList;
+		$scope.ultimateList = ultimateList;
+
+		$scope.gameArray = [
+			{name: "Hero", selected: true},
+			{name: "Spell 1"},
+			{name: "Spell 2"},
+			{name: "Spell 3"},
+			{name: "Ultimate"}
+		];
+		$scope.stage = $scope.gameArray[0];
+
+		$scope.filter = '';
+		$scope.sorts = [
+			{name: 'A-Z'},
+			{name: 'Z-A'},
+			{name: 'Type'}
+		];
+		$scope.sort = $scope.sorts[0];
+
+		$scope.changePage = function(index) {
+			$scope.gameArray.map(function(x) {
+				x.selected = false;
+				return x;
+			});
+			$scope.gameArray[index].selected = true;
+			$scope.stage = $scope.gameArray[index];
+			$scope.filter = '';
+		};
+
+		$scope.view = {
+			mode: false,
+			select: true
+		};
+	});
+</script>
+<body ng-app="preGameApp" ng-controller="appCtrl" id="preGame">
+	<section ng-show="view.mode">
+		<div id="solo">
+			
+		</div>
+		<div id="multi">
+			
+		</div>
+	</section>
+
+	<section ng-show="view.select">
+		<div id="icons">
+			<button
+			ng-show="gameArray[0].selected"
+			ng-click="stage.select = val"
+			ng-repeat="(key, val) in heroList">
+				{{key}}
+			</button>
+			<button
+			ng-show="gameArray[1].selected || gameArray[2].selected || gameArray[3].selected"
+			ng-click="stage.select = val"
+			ng-repeat="(key, val) in spellList">
+				{{key}}
+			</button>
+			<button
+			ng-show="gameArray[4].selected"
+			ng-click="stage.select = val"
+			ng-repeat="(key, val) in ultimateList">
+				{{key}}
+			</button>
+		</div>
+		<div>
+			<input id="filter" type="search" placeholder="Search the list">
+			<select 
+			ng-model="sort"
+			ng-options="option.name for option in sorts">
+			</select>
+		</div>
+		<div>
+			<table id="stats">
+				<caption>Stats</caption>
+				<tbody>
+					<tr ng-repeat="(key, val) in stage.select.stats">
+						<td>{{key}}</td>
+						<td>{{val}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<span id="preview">
+				
+			</span>
+		</div>
+		<div id="action">
+			<button
+			class="progress"
+			ng-repeat="choice in gameArray"
+			ng-click="changePage($index)">
+				{{choice.name}}
+			</button>
+			<button type="button">
+				OK
+			</button>
+		</div>
+	</section>
+</body>
