@@ -1,10 +1,19 @@
 {
   "name": "GPoC",
   "version": "0.1.2",
-  "devDependencies": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iargue/Genisis_Proof_Of_Concept"
+  },
+  "dependencies": {
+    "nodejs": "0.0.0",
+    "socket.io": "^1.4.4",
+    "sqlite3": "^3.1.1",
     "live-server": "latest"
   },
   "scripts": {
-    "start": "live-server --port=8888 --host=localhost"
+    "start": "start /d server start.bat",
+    "stop": "start /d server stop.bat",
+    "watch": "live-server --port=8888 --host=localhost"
   }
 }
