@@ -547,28 +547,28 @@ function updateLeftBar(view) {
 function loadImages() {
 	contentManager.loadManifest([{
 		id: "warrior",
-		src: "http://localhost:8888/build/assets/game/warrior.png"
+		src: "http://localhost:8888/assets/game/warrior.png"
 	}, {
 		id: "background",
-		src: "http://localhost:8888/build/assets/game/background.png"
+		src: "http://localhost:8888/assets/game/background.png"
 	}, {
 		id: "monster1",
-		src: "http://localhost:8888/build/assets/game/monster1.png"
+		src: "http://localhost:8888/assets/game/monster1.png"
 	}, {
 		id: "monsters",
-		src: "http://localhost:8888/build/assets/game/monsters.png"
+		src: "http://localhost:8888/assets/game/monsters.png"
 	}, {
 		id: "fireball",
-		src: "http://localhost:8888/build/assets/game/fireball.png"
+		src: "http://localhost:8888/assets/game/fireball.png"
 	}, {
 		id: "iceball",
-		src: "http://localhost:8888/build/assets/game/iceball.png"
+		src: "http://localhost:8888/assets/game/iceball.png"
 	}, {
 		id: "plus",
-		src: "http://localhost:8888/build/assets/game/plus.png"
+		src: "http://localhost:8888/assets/game/plus.png"
 	}, {
 		id: "shop",
-		src: "http://localhost:8888/build/assets/game/shop.png"
+		src: "http://localhost:8888/assets/game/shop.png"
 	}]);
 
 }
