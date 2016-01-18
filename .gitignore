@@ -19,6 +19,9 @@
 *.tar
 *.zip
 
+#Don't include Process Id Files
+*.pid
+
 # Logs and databases #
 ######################
 *.log
@@ -40,3 +43,4 @@ Thumbs.db
 node_modules
 bower_components
 _public
+*.pid
