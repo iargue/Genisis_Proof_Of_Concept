@@ -28,12 +28,12 @@ var stage, unitList = [],
 	textFont = "Calibri";
 
 function newGame(gameOptions) {
-	if (gameOptions.mode == 'solo') {
+	if (gameOptions.mode === 'solo') {
 		activeTeam = new team(0)
 		activeTeam.addPlayer(0, true, gameOptions.hero, gameOptions.spells)
 		opponentTeam = activeTeam
 		teamList.push(activeTeam)
-	} else if (gameOptions.mode == 'online') {
+	} else if (gameOptions.mode === 'online') {
 		activeTeam = new team(0)
 		activeTeam.addPlayer(0, true, gameOptions.currentPlayer.hero, gameOptions.currentPlayer.spells)
 		opponentTeam = new team(1)
