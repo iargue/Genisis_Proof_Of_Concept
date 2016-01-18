@@ -25,6 +25,7 @@ var stage, unitList = [],
 	spellButtons = null,
 	smallText = 12,
 	textPadding = 2, // Vertical Padding for readability
+	server = eval (process.argv[2] === "true"),
 	textFont = "Calibri";
 
 function newGame(gameOptions) {
@@ -646,3 +647,13 @@ function gameLoop(event) {
 	updateStage(event);
 	updatePlayerBar(event);
 }
+
+console.log(server)
+console.log(typeof(server))
+
+if (server === true) {
+	var io = require('socket.io')
+	var test = require('../vendor/node-easel.js')
+	var createjs = require('../vendor/createjs.min.js')
+	socket = io.listen(8000);
+}	
