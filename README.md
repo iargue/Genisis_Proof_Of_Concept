@@ -8,10 +8,10 @@ This is just a proof of concept for a game that will eventually be created. Noth
 
 npm install
 
-npm run start
+npm start
 
 ------------------------
 
 Launch the game using
 
-http://localhost:8888/build/bin/game.html
+http://localhost:8888/bin/game.html
