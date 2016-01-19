@@ -11,77 +11,124 @@
 		$scope.spellList = spellList;
 		$scope.ultimateList = ultimateList;
 
-		$scope.gameArray = [
-			{name: "Hero", selected: true},
-			{name: "Spell 1"},
-			{name: "Spell 2"},
-			{name: "Spell 3"},
-			{name: "Ultimate"}
-		];
-		$scope.stage = $scope.gameArray[0];
-
-		$scope.filter = '';
-		$scope.sorts = [
-			{name: 'A-Z'},
-			{name: 'Z-A'},
-			{name: 'Type'}
-		];
-		$scope.sort = $scope.sorts[0];
-
-		$scope.changePage = function(index) {
-			$scope.gameArray.map(function(x) {
-				x.selected = false;
-				return x;
-			});
-			$scope.gameArray[index].selected = true;
-			$scope.stage = $scope.gameArray[index];
-			$scope.filter = '';
+		$scope.selectSpell = function(spellNum, spell) {
+			console.log("anything");
+			if(spellNum === 1) {
+				console.log(spell);
+			}
 		};
 
-		$scope.view = {
-			mode: false,
-			select: true
+		$scope.model = {
+			mode: "solo",
+			select: {
+				hero: $scope.heroList[0],
+				sp1: $scope.spellList[0],
+				sp2: $scope.spellList[1],
+				sp3: $scope.spellList[2],
+				ult: $scope.ultimateList[0]
+			}
 		};
+
+		$scope.viewShift = function(forward) {
+			for(var i = 0; i < $scope.view.length; i++) {
+				if($scope.view[i]) {
+					if(forward) {
+						if(i + 1 < $scope.view.length) {
+							$scope.view[i] = false;
+							$scope.view[i + 1] = true;
+						}
+					} else {
+						$scope.view[i] = false;
+						$scope.view[i - 1] = true;
+					}
+					return;
+				}
+			}
+		};
+		$scope.viewChange = function(index) {
+			for(var i = 0; i < $scope.view.length; i++) {
+				if($scope.view[i]) {
+					if(i === index + 1) return;
+					else $scope.view[i] = false;
+				}
+			}
+			$scope.view[index + 1] = true;
+		};
+		$scope.view = [
+			true,	// mode
+			false,	// hero
+			false,	// sp1
+			false,	// sp2
+			false,	// sp3
+			false	// ult
+		]
 	});
 </script>
-<body ng-app="preGameApp" ng-controller="appCtrl" id="preGame">
-	<section ng-show="view.mode">
-		<div id="solo">
-			
-		</div>
-		<div id="multi">
-			
-		</div>
+<body
+ng-app="preGameApp" 
+ng-controller="appCtrl">
+
+	<section id="mode" ng-show="view[0]">
+		<button ng-click='model.mode="solo";viewShift(true);'>
+			<h2>Solo</h2>
+			<p>
+				Battle your own army.
+			</p>
+		</button>
+		<button ng-click='model.mode="ranked";viewShift(true);'>
+			<h2>Ranked</h2>
+			<p>
+				Compete for superiority.
+			</p> 
+		</button>
+		<a href="./game.html">
+			<button >
+				<h2>For us devs</h2>
+				<p>Start a game already.</p>
+			</button>
+		</a>
+		<a href="../index.html">
+			<button >
+				<h2>Back button</h2>
+				<p>Always have one.</p>
+			</button>
+		</a>
 	</section>
 
-	<section ng-show="view.select">
+	<section id="select" ng-hide="view[0]">
 		<div id="icons">
 			<button
-			ng-show="gameArray[0].selected"
-			ng-click="stage.select = val"
+			ng-show="view[1]"
+			ng-click="model.select.hero = val"
 			ng-repeat="(key, val) in heroList">
 				{{key}}
 			</button>
 			<button
-			ng-show="gameArray[1].selected || gameArray[2].selected || gameArray[3].selected"
-			ng-click="stage.select = val"
+			ng-show="view[2]"
+			ng-repeat="(key, val) in spellList"
+			ng-click="selectSpell(1, val)">
+				{{key}}
+			</button>
+			<button
+			ng-show="view[3]"
+			ng-click="model.select.sp2 = val"
 			ng-repeat="(key, val) in spellList">
 				{{key}}
 			</button>
 			<button
-			ng-show="gameArray[4].selected"
-			ng-click="stage.select = val"
+			ng-show="view[4]"
+			ng-click="model.select.sp3 = val"
+			ng-repeat="(key, val) in spellList">
+				{{key}}
+			</button>
+			<button
+			ng-show="view[5]"
+			ng-click="stage.select.ult = val"
 			ng-repeat="(key, val) in ultimateList">
 				{{key}}
 			</button>
 		</div>
-		<div>
-			<input id="filter" type="search" placeholder="Search the list">
-			<select 
-			ng-model="sort"
-			ng-options="option.name for option in sorts">
-			</select>
-		</div>
+
 		<div>
 			<table id="stats">
 				<caption>Stats</caption>
@@ -96,16 +143,76 @@
 				
 			</span>
 		</div>
-		<div id="action">
-			<button
-			class="progress"
-			ng-repeat="choice in gameArray"
-			ng-click="changePage($index)">
-				{{choice.name}}
+
+		<div id="progress">
+			<button ng-click="viewShift(false)">
+				Back
 			</button>
-			<button type="button">
-				OK
+			<button
+			ng-repeat="(key, val) in model.select"
+			ng-click="viewChange($index)">
+				<div>{{key}}</div>
+				<div>{{val}}</div>
+			</button>
+			<button ng-click="viewShift(true)">
+				Next
 			</button>
 		</div>
 	</section>
 </body>
+
+<!-- 
+<section id="GD-Game-Setup" class="hide page-wrap">
+  <span class="step-menu">
+    <ol>
+      <li>Mode </li>
+      <div class="arrow">
+        <div class="arrow-right"></div>
+      </div>
+      <li>Hero</li>
+      <div class="arrow">
+        <div class="arrow-right"></div>
+      </div>
+      <li>Skill </li>
+      <div class="arrow">
+        <div class="arrow-right"></div>
+      </div>
+      <li>Ultimate</li>
+    </ol>
+  </span>
+  <section class="mode">
+    <div>
+      <h1>Mode </h1>
+      <p>Choose 1 mode, this choice will decide the kind of game you will play.</p>
+    </div>
+    <div class="selector-container">
+      <button data-ng-repeat="mode in modeList" class="mode selector-button"></button>
+    </div>
+  </section>
+  <section class="heros">
+    <div>
+      <h1>Heros </h1>
+      <p>Choose 1 epic hero, your selection will be who you will customize and battle with.</p>
+    </div>
+    <button data-ng-repeat="hero in heroList" class="hero selector-button"></button>
+  </section>
+  <section class="skills">
+    <div>
+      <h1>Skills</h1>
+      <p>Choose 4 skills, your hero is training to become a master at using your selected skills. </p>
+    </div>
+    <div class="selector-container">
+      <button data-ng-repeat="skill in skillList" class="skill selector-button"></button>
+    </div>
+  </section>
+  <section class="ultimates">
+    <div>
+      <h1>Ultimate Skill </h1>
+      <p>Choose 1 ultimate skill, this might be the strongest skill your hero has!</p>
+    </div>
+    <div class="selector-container">
+      <button data-ng-repeat="ultimate in ultimateList" class="ultimate selector-button"></button>
+    </div>
+  </section>
+</section>
+-->

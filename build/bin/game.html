@@ -23,60 +23,7 @@
     <script type="text/javascript" src="../js/itemList.js"></script>
   </head>
   <body onload="init();">
-    <section id="GD-Game" data-ng-controller="appCtrl">
-      <canvas id="gameCanvas"></canvas>
-      <canvas id="gamePanel"></canvas>
-    </section>
-    <section id="GD-Game-Setup" class="hide page-wrap"><span class="step-menu">
-        <ol>
-          <li>Mode </li>
-          <div class="arrow">
-            <div class="arrow-right"></div>
-          </div>
-          <li>Hero</li>
-          <div class="arrow">
-            <div class="arrow-right"></div>
-          </div>
-          <li>Skill </li>
-          <div class="arrow">
-            <div class="arrow-right"></div>
-          </div>
-          <li>Ultimate</li>
-        </ol></span>
-      <section class="mode">
-        <div>
-          <h1>Mode </h1>
-          <p>Choose 1 mode, this choice will decide the kind of game you will play.</p>
-        </div>
-        <div class="selector-container">
-          <button data-ng-repeat="mode in modeList" class="mode selector-button"></button>
-        </div>
-      </section>
-      <section class="heros">
-        <div>
-          <h1>Heros </h1>
-          <p>Choose 1 epic hero, your selection will be who you will customize and battle with.</p>
-        </div>
-        <button data-ng-repeat="hero in heroList" class="hero selector-button"></button>
-      </section>
-      <section class="skills">
-        <div>
-          <h1>Skills</h1>
-          <p>Choose 4 skills, your hero is training to become a master at using your selected skills. </p>
-        </div>
-        <div class="selector-container">
-          <button data-ng-repeat="skill in skillList" class="skill selector-button"></button>
-        </div>
-      </section>
-      <section class="ultimates">
-        <div>
-          <h1>Ultimate Skill </h1>
-          <p>Choose 1 ultimate skill, this might be the strongest skill your hero has!</p>
-        </div>
-        <div class="selector-container">
-          <button data-ng-repeat="ultimate in ultimateList" class="ultimate selector-button"></button>
-        </div>
-      </section>
-    </section>
+    <canvas id="gameCanvas"></canvas>
+    <canvas id="gamePanel"></canvas>
   </body>
 </html>
