@@ -1,7 +1,6 @@
 function handleMouse(e) {
-	console.log(e)
-	if (e.pageY >= renderer._height - 30) {
-		if (e.pageY + 1 != renderer._height) {
+	if (e.pageY >= playerBar.y - 30) {
+		if (e.pageY + 1 != playerBar.y) {
 			scrollDown = true
 			scrollUp = false
 		} else {
@@ -15,7 +14,7 @@ function handleMouse(e) {
 		scrollUp = false
 		scrollDown = false
 	}
-	if (e.pageX >= renderer._width - 30) {
+	if (e.pageX >= renderer.width - 30) {
 		scrollRight = true
 		scrollLeft = false
 	} else if (e.pageX < 30) {
@@ -33,17 +32,17 @@ function handleKeyDown(e) {
 	} else {
 		switch (e.keyCode) {
 			case 40:
-				if (gameStage.pivot.y + renderer._height < gameStage._height) {
+				if (gameStage.pivot.y + renderer.height < gameStage._height) {
 					gameStage.pivot.y += 10
 				} else {
-					gameStage.pivot.y = gameStage._height - renderer._height
+					gameStage.pivot.y = gameStage._height - renderer.height
 				}
 				break;
 			case 39: // Right arrow key
-				if (gameStage.pivot.X + renderer._width < gameStage._width) {
-					gameStage.pivot.X += 10
+				if (gameStage.pivot.x + renderer.width < gameStage._width) {
+					gameStage.pivot.x += 10
 				} else {
-					gameStage.pivot.X = gameStage._width - renderer._width
+					gameStage.pivot.x = gameStage._width - renderer.width
 				}
 				break;
 			case 38: //Up arrow key
@@ -54,10 +53,10 @@ function handleKeyDown(e) {
 				}
 				break;
 			case 37: // Left arrow key
-				if (gameStage.pivot.X > 0) {
-					gameStage.pivot.X -= 10
+				if (gameStage.pivot.x > 0) {
+					gameStage.pivot.x -= 10
 				} else {
-					gameStage.pivot.X = 0
+					gameStage.pivot.x = 0
 				}
 				break;
 			case 49:
@@ -94,7 +93,7 @@ function handleKeyDown(e) {
 				activePlayer.hero.castSpell(e.keyCode);
 		}
 
-		playerBorder.x = gameStage.pivot.X / miniMapRatio.width
+		playerBorder.x = gameStage.pivot.x / miniMapRatio.width
 		playerBorder.y = gameStage.pivot.y / miniMapRatio.height
 	}
 }
@@ -102,24 +101,24 @@ function handleKeyDown(e) {
 function miniMapClick(event) {
 	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
 		point = {
-			x: (event.localX * miniMapRatio.width) - (renderer._width / 2),
-			y: (event.localY * miniMapRatio.height) - (renderer._height / 2),
+			x: (event.localX * miniMapRatio.width) - (renderer.width / 2),
+			y: (event.localY * miniMapRatio.height) - (renderer.height / 2),
 		}
 		if (point.x < 0) {
 			point.x = 0
-		} else if (point.x > (gameStage._width - renderer._width)) {
-			point.x = (gameStage._width - renderer._width)
+		} else if (point.x > (gameStage._width - renderer.width)) {
+			point.x = (gameStage._width - renderer.width)
 		}
 		if (point.y < 0) {
 			point.y = 0
-		} else if (point.y > (gameStage._height - renderer._height)) {
-			point.y = (gameStage._height - renderer._height)
+		} else if (point.y > (gameStage._height - renderer.height)) {
+			point.y = (gameStage._height - renderer.height)
 		}
 
-		gameStage.pivot.X = point.x;
+		gameStage.pivot.x = point.x;
 		gameStage.pivot.y = point.y;
 
-		playerBorder.x = gameStage.pivot.X / miniMapRatio.width;
+		playerBorder.x = gameStage.pivot.x / miniMapRatio.width;
 		playerBorder.y = gameStage.pivot.y / miniMapRatio.height;
 	}
 	scrollDown = false
@@ -175,29 +174,29 @@ function updateSpells(event) {
 
 function edgeScrolling(event) {
 	if (scrollDown) {
-		if (gameStage.pivot.y + renderer._height < gameStage._height) {
-			gameStage.pivot.y += 5
+		if (gameStage.pivot.y + playerBar.y < gameStage._height) {
+			gameStage.pivot.y += gameStage._height * 0.01
 		}
 	}
 	if (scrollRight) {
-		if (gameStage.pivot.X + renderer._width < gameStage._width) {
-			gameStage.pivot.X += 5
+		if (gameStage.pivot.x + renderer.width< gameStage._width) {
+			gameStage.pivot.x += gameStage._width * 0.01
 		}
 
 	}
 	if (scrollUp) {
 		if (gameStage.pivot.y > 0) {
-			gameStage.pivot.y -= 5
+			gameStage.pivot.y -= gameStage._height * 0.01
 		}
 
 	}
 	if (scrollLeft) {
-		if (gameStage.pivot.X > 0) {
-			gameStage.pivot.X -= 5
+		if (gameStage.pivot.x > 0) {
+			gameStage.pivot.x -= gameStage._width * 0.01
 		}
 	}
 	//MARKED
-	// playerBorder.x = gameStage.pivot.X / miniMapRatio.width
+	// playerBorder.x = gameStage.pivot.x / miniMapRatio.width
 	// playerBorder.y = gameStage.pivot.y / miniMapRatio.height
 }
 
