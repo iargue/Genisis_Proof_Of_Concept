@@ -1,23 +1,24 @@
 function handleMouse(e) {
-	if (e.stageY >= playerStage.canvas.height - 30) {
-		if (e.stageY + 1 != playerStage.canvas.height) {
+	console.log(e)
+	if (e.pageY >= renderer._height - 30) {
+		if (e.pageY + 1 != renderer._height) {
 			scrollDown = true
 			scrollUp = false
 		} else {
 			scrollUp = false
 			scrollDown = false
 		}
-	} else if (e.stageY < 30) {
+	} else if (e.pageY < 30) {
 		scrollUp = true
 		scrollDown = false
 	} else {
 		scrollUp = false
 		scrollDown = false
 	}
-	if (e.stageX >= playerStage.canvas.width - 30) {
+	if (e.pageX >= renderer._width - 30) {
 		scrollRight = true
 		scrollLeft = false
-	} else if (e.stageX < 30) {
+	} else if (e.pageX < 30) {
 		scrollLeft = true
 		scrollRight = false
 	} else {
@@ -32,31 +33,31 @@ function handleKeyDown(e) {
 	} else {
 		switch (e.keyCode) {
 			case 40:
-				if (gameStage.regY + playerStage.canvas.height < gameStage.height) {
-					gameStage.regY += 10
+				if (gameStage.pivot.y + renderer._height < gameStage._height) {
+					gameStage.pivot.y += 10
 				} else {
-					gameStage.regY = gameStage.height - playerStage.canvas.height
+					gameStage.pivot.y = gameStage._height - renderer._height
 				}
 				break;
 			case 39: // Right arrow key
-				if (gameStage.regX + playerStage.canvas.width < gameStage.width) {
-					gameStage.regX += 10
+				if (gameStage.pivot.X + renderer._width < gameStage._width) {
+					gameStage.pivot.X += 10
 				} else {
-					gameStage.regX = gameStage.width - playerStage.canvas.width
+					gameStage.pivot.X = gameStage._width - renderer._width
 				}
 				break;
 			case 38: //Up arrow key
-				if (gameStage.regY > 0) {
-					gameStage.regY -= 10
+				if (gameStage.pivot.y > 0) {
+					gameStage.pivot.y -= 10
 				} else {
-					gameStage.regY = 0
+					gameStage.pivot.y = 0
 				}
 				break;
 			case 37: // Left arrow key
-				if (gameStage.regX > 0) {
-					gameStage.regX -= 10
+				if (gameStage.pivot.X > 0) {
+					gameStage.pivot.X -= 10
 				} else {
-					gameStage.regX = 0
+					gameStage.pivot.X = 0
 				}
 				break;
 			case 49:
@@ -93,33 +94,33 @@ function handleKeyDown(e) {
 				activePlayer.hero.castSpell(e.keyCode);
 		}
 
-		playerBorder.x = gameStage.regX / miniMapRatio.width
-		playerBorder.y = gameStage.regY / miniMapRatio.height
+		playerBorder.x = gameStage.pivot.X / miniMapRatio.width
+		playerBorder.y = gameStage.pivot.y / miniMapRatio.height
 	}
 }
 
 function miniMapClick(event) {
 	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
 		point = {
-			x: (event.localX * miniMapRatio.width) - (playerStage.canvas.width / 2),
-			y: (event.localY * miniMapRatio.height) - (playerStage.canvas.height / 2),
+			x: (event.localX * miniMapRatio.width) - (renderer._width / 2),
+			y: (event.localY * miniMapRatio.height) - (renderer._height / 2),
 		}
 		if (point.x < 0) {
 			point.x = 0
-		} else if (point.x > (gameStage.width - playerStage.canvas.width)) {
-			point.x = (gameStage.width - playerStage.canvas.width)
+		} else if (point.x > (gameStage._width - renderer._width)) {
+			point.x = (gameStage._width - renderer._width)
 		}
 		if (point.y < 0) {
 			point.y = 0
-		} else if (point.y > (gameStage.height - playerStage.canvas.height)) {
-			point.y = (gameStage.height - playerStage.canvas.height)
+		} else if (point.y > (gameStage._height - renderer._height)) {
+			point.y = (gameStage._height - renderer._height)
 		}
 
-		gameStage.regX = point.x;
-		gameStage.regY = point.y;
+		gameStage.pivot.X = point.x;
+		gameStage.pivot.y = point.y;
 
-		playerBorder.x = gameStage.regX / miniMapRatio.width;
-		playerBorder.y = gameStage.regY / miniMapRatio.height;
+		playerBorder.x = gameStage.pivot.X / miniMapRatio.width;
+		playerBorder.y = gameStage.pivot.y / miniMapRatio.height;
 	}
 	scrollDown = false
 	scrollUp = false
@@ -174,30 +175,30 @@ function updateSpells(event) {
 
 function edgeScrolling(event) {
 	if (scrollDown) {
-		if (gameStage.regY + playerStage.canvas.height < gameStage.height) {
-			gameStage.regY += 5
+		if (gameStage.pivot.y + renderer._height < gameStage._height) {
+			gameStage.pivot.y += 5
 		}
 	}
 	if (scrollRight) {
-		if (gameStage.regX + playerStage.canvas.width < gameStage.width) {
-			gameStage.regX += 5
+		if (gameStage.pivot.X + renderer._width < gameStage._width) {
+			gameStage.pivot.X += 5
 		}
 
 	}
 	if (scrollUp) {
-		if (gameStage.regY > 0) {
-			gameStage.regY -= 5
+		if (gameStage.pivot.y > 0) {
+			gameStage.pivot.y -= 5
 		}
 
 	}
 	if (scrollLeft) {
-		if (gameStage.regX > 0) {
-			gameStage.regX -= 5
+		if (gameStage.pivot.X > 0) {
+			gameStage.pivot.X -= 5
 		}
 	}
 	//MARKED
-	playerBorder.x = gameStage.regX / miniMapRatio.width
-	playerBorder.y = gameStage.regY / miniMapRatio.height
+	// playerBorder.x = gameStage.pivot.X / miniMapRatio.width
+	// playerBorder.y = gameStage.pivot.y / miniMapRatio.height
 }
 
 function updateCollisionTree(event) {
