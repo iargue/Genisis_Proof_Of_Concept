@@ -25,7 +25,7 @@ var stage, unitList = [],
 	spellButtons = null,
 	smallText = 12,
 	textPadding = 2, // Vertical Padding for readability
-	server = eval (process.argv[2] === "true"),
+	// server = eval (process.argv[2] === "true"),
 	textFont = "Calibri";
 
 function newGame(gameOptions) {
