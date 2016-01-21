@@ -3,7 +3,6 @@ function handleMouse(e) {
 	offsetX = window.innerWidth * 0.05
 	offsetY = window.innerHeight * 0.05
 	//This if statement checks if the mouse is to the bottom or top of the screen and starts scrolling. If its not at the top or bottom, we stop scrolling
-	console.log(e)
 	if (e.pageY >= (window.innerHeight - (window.innerHeight * 0.2)) - offsetY) {
 			scrollDown = true
 			scrollUp = false
