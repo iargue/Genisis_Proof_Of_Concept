@@ -1,0 +1,185 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+}
+
+div {
+    position: absolute;
+    display: inline-block;
+}
+
+.hide {
+    display: none
+}
+
+#playerBar {
+    width: 100%;
+    height: 20%;
+    top: 80%;
+}
+
+#infoBar {
+    width: 100%;
+    height: 20%;
+}
+#infoBar > div {
+    height: 100%;
+    text-align: center;
+}
+
+.leftSwap {
+    width: 10%;
+    background-color: #111111;
+}
+
+#leftTeamBar {
+    width: 20%;
+    left: 10%;
+    background-color: #222222;
+}
+
+#incomeStage {
+    width: 10%;
+    left: 30%;
+    background-color: #333333;
+}
+
+#incomeTime {
+    width: 10%;
+    left: 40%;
+    background-color: #444444;
+}
+
+#gameTime {
+    width: 10%;
+    left: 50%;
+    background-color: #555555;
+}
+
+#goldStage {
+    width: 10%;
+    left: 60%;
+    background-color: #666666;
+}
+
+#rightTeamBar {
+    width: 20%;
+    left: 70%;
+    background-color: #777777;
+}
+
+.rightSwap {
+    width: 10%;
+    left: 90%;
+    background-color: #888888;
+}
+
+#controlBar {
+    width: 100%;
+    height: 80%;
+    top: 20%;
+}
+#controlBar > div {
+    height: 100%;
+}
+
+.leftPad {
+    width: 30%;
+    background-color: #999999;
+}
+
+.rightPad {
+    width: 30%;
+    left: 70%;
+    background-color: #999999;
+}
+
+
+#GD-Game #game-panel {
+    display: flex;
+    align-content: stretch;
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    bottom: 0%;
+}
+#GD-Game #game-panel .switch {
+    background-color: #444;
+    flex: 2;
+    display: flex;
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    flex-direction: column;
+}
+#GD-Game #game-panel .switch >button {
+    flex: 1;
+    margin: 0
+}
+#GD-Game #game-panel .switch >button:active {
+    -moz-box-shadow: inset 0 0 10px #000;
+    -webkit-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000
+}
+#GD-Game #game-panel .switch .chosen {
+    background-color: ButtonHighlight
+}
+#GD-Game #game-panel #info {
+    flex: 2;
+    display: flex;
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    flex-direction: column;
+}
+#GD-Game #game-panel #info >button {
+    text-align: center;
+    flex: 1;
+    margin: 0;
+    border: 0;
+    outline: 0
+}
+#GD-Game #game-panel #info >button:nth-child(-n+3) {
+    border-bottom: 1px solid #000
+}
+#GD-Game #game-panel #selected {
+    flex: 10;
+    overflow: auto;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+}
+#GD-Game #game-panel #selected >div {
+    flex: 1 0 25%;
+    text-align: center;
+    border: 1px solid #000;
+    height: 12px
+}
+#GD-Game #game-panel #selected image {
+    flex: 2
+}
+#GD-Game #game-panel #miniMap {
+    flex: 10
+}
+#GD-Game #game-panel .selector-container {
+    background-color: #222;
+    flex: 11;
+    display: flex;
+    overflow: auto;
+}
+#GD-Game #game-panel .selector-container .selector-button {
+    flex: 0 0 25%;
+    margin: 0;
+}
+#GD-Game #game-panel .selector-container .selector-button >img {
+    width: 100%
+}
+#GD-Game #game-panel .enemies {
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap
+}
+#GD-Game #game-panel .items {
+    -webkit-flex-flow: row-reverse wrap;
+    flex-flow: row-reverse wrap
+}

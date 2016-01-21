@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Game of Defense</title>
-    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/game.css">
     <script type="text/javascript" src="../vendor/pixi.js"></script>
     <script type="text/javascript" src="../vendor/QuadTree.js"></script>
     <script type="text/javascript" src="../vendor/blowfish.js"></script>
@@ -24,6 +24,53 @@
   </head>
   <body onload="init();">
     <canvas id="gameCanvas"></canvas>
-    <canvas id="gamePanel"></canvas>
+    <div id="playerBar">
+        <div id="infoBar">
+            <div class="leftSwap" onclick="leftSwapClick()">
+                Spells
+            </div>
+            <div class="leftSwap hide" onclick="leftSwapClick()">
+                Monsters
+            </div>
+            <div id="leftTeamBar">
+                400 / 400
+            </div>
+            <div id="incomeStage">
+                0
+            </div>
+            <div id="incomeTime">
+                00:00:00
+            </div>
+            <div id="gameTime">
+                00:00:00
+            </div>
+            <div id="goldStage">
+                0
+            </div>
+            <div id="rightTeamBar">
+                400 / 400
+            </div>
+            <div id="shop" class="rightSwap" onclick="rightSwapClick()">
+                Inventory
+            </div>
+            <div  class="rightSwap hide" onclick="rightSwapClick()">
+                Shop
+            </div>
+        </div>
+        <div id="controlBar">
+            <div id="monsters" class="leftPad">
+                
+            </div>
+            <div id="spells" class="leftPad hide">
+                
+            </div>
+            <div id="shop" class="rightPad">
+                
+            </div>
+            <div id="inventory" class="rightPad hide">
+                
+            </div>
+        </div>
+    </div>
   </body>
 </html>

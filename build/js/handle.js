@@ -247,3 +247,35 @@ function itemClick(event) {
 function endGame(loser) {
 	console.log(Loser + ' Has lost this game. Sucker')
 }
+
+var leftSwaps = document.getElementsByClassName('leftSwap');
+var leftPads = document.getElementsByClassName('leftPad');
+function leftSwapClick() {
+	if(leftSwaps[0].classList.contains('hide')) {
+		leftSwaps[1].className += ' hide';
+		leftSwaps[0].className = 'leftSwap';
+		leftPads[1].className += ' hide';
+		leftPads[0].className = 'leftPad';
+	} else {
+		leftSwaps[0].className += ' hide';
+		leftSwaps[1].className = 'leftSwap';
+		leftPads[0].className += ' hide';
+		leftPads[1].className = 'leftPad';
+	}
+}
+
+var rightSwaps = document.getElementsByClassName('rightSwap');
+var rightPads = document.getElementsByClassName('rightPad');
+function rightSwapClick() {
+	if(rightSwaps[0].classList.contains('hide')) {
+		rightSwaps[1].className += ' hide';
+		rightSwaps[0].className = 'rightSwap';
+		rightPads[1].className += ' hide';
+		rightPads[0].className = 'rightPad';
+	} else {
+		rightSwaps[0].className += ' hide';
+		rightSwaps[1].className = 'rightSwap';
+		rightPads[0].className += ' hide';
+		rightPads[1].className = 'rightPad';
+	}
+}

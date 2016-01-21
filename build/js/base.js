@@ -1,4 +1,6 @@
-var stage, unitList = [],
+var stage, 
+    gameStage,
+    unitList = [],
     playerList = [],
     keys = [],
     collisionTree,
@@ -31,6 +33,13 @@ var stage, unitList = [],
     ticker = null,
     textFont = "Calibri";
 
+var font = {
+    sizeS: '12px',
+    sizeM: '18px',
+    sizeL: '24px',
+    family: 'Arial'
+}
+
 function newGame(gameOptions) {
     if (gameOptions.mode === 'solo') {
         activeTeam = new team(0)
@@ -53,157 +62,129 @@ function newGame(gameOptions) {
         //Add tutorial
 }
 
-function updateStage(event) {
-    if (playerStage.canvas.height != playerStage.canvas.clientHeight || playerStage.canvas.width != playerStage.canvas.clientWidth) {
-        playerStage.canvas.height = playerStage.canvas.clientHeight
-        playerStage.canvas.width = playerStage.canvas.clientWidth
-        playerBar.canvas.height = playerBar.canvas.clientHeight
-        playerBar.canvas.width = playerBar.canvas.clientWidth
-        playerBar.object.graphics.clear().beginFill("#111").drawRect(0, 0, playerBar.canvas.width, playerBar.canvas.height);
-        if (gameStage.regY + playerStage.canvas.height > gameHeight) {
-            gameStage.regY = gameHeight - playerStage.canvas.height
-        }
-        if (gameStage.regY + playerStage.canvas.height < 0) {
-            gameStage.regY = 0 + playerStage.canvas.height
-        }
-        if (gameStage.regX + playerStage.canvas.width > gameWidth) {
-            gameStage.regX = gameWidth- playerStage.canvas.width
-        }
-        if (gameStage.regX + playerStage.canvas.width < 0) {
-            gameStage.regX = 0 + playerStage.canvas.width
-        }
-        gameTime.x = playerBar.canvas.width * 0.5
-        gameTime.y = 0
-        gameTime.width = playerBar.canvas.width * 0.1
-        gameTime.height = playerBar.canvas.height * 0.2
-        incomeTime.x = playerBar.canvas.width * 0.4
-        incomeTime.y = 0
-        incomeTime.width = playerBar.canvas.width * 0.1
-        incomeTime.height = playerBar.canvas.height * 0.2
-        goldStage.x = playerBar.canvas.width * 0.6
-        goldStage.y = 0
-        goldStage.width = playerBar.canvas.width * 0.1
-        goldStage.height = playerBar.canvas.height * 0.2
-        incomeStage.x = playerBar.canvas.width * 0.3
-        incomeStage.y = 0
-        incomeStage.width = playerBar.canvas.width * 0.1
-        incomeStage.height = playerBar.canvas.height * 0.2
-        leftTeamBar.x = playerBar.canvas.width * 0.1
-        leftTeamBar.y = 0
-        leftTeamBar.width = playerBar.canvas.width * 0.2
-        leftTeamBar.height = playerBar.canvas.height * 0.2
-        leftTeamBar.object.graphics.clear().beginStroke("black").beginLinearGradientFill(["#200", "#400", "#400", "#200"], [0, 0.2, 0.8, 1], 0, 0, 0, leftTeamBar.height).drawRect(0, 0, leftTeamBar.width, leftTeamBar.height);
-        cacheItem(leftTeamBar.object)
-        rightTeamBar.x = playerBar.canvas.width * 0.7
-        rightTeamBar.y = 0
-        rightTeamBar.width = playerBar.canvas.width * 0.2
-        rightTeamBar.height = playerBar.canvas.height * 0.2
-        rightTeamBar.object.graphics.clear().beginStroke("black").beginLinearGradientFill(["#200", "#400", "#400", "#200"], [0, 0.2, 0.8, 1], 0, 0, 0, rightTeamBar.height).drawRect(0, 0, rightTeamBar.width, rightTeamBar.height);
-        cacheItem(rightTeamBar.object)
-        leftSwap.x = 0
-        leftSwap.y = 0
-        leftSwap.height = playerBar.canvas.height * 0.2
-        leftSwap.width = playerBar.canvas.width * 0.1
-        leftSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.2, 0.8, 1], 0, 0, 0, leftSwap.height).drawRect(0, 0, leftSwap.width, leftSwap.height);
-        rightSwap.x = playerBar.canvas.width * 0.9
-        rightSwap.y = 0
-        rightSwap.height = playerBar.canvas.height * 0.2
-        rightSwap.width = playerBar.canvas.width * 0.1
-        rightSwap.object.graphics.clear().setStrokeStyle(1).beginStroke("black").beginLinearGradientFill(["#222", "#444", "#444", "#222"], [0, 0.2, 0.8, 1], 0, 0, 0, rightSwap.height).drawRect(0, 0, rightSwap.width, rightSwap.height);
-        miniMapStage.x = playerBar.canvas.width * 0.3
-        miniMapStage.y = playerBar.canvas.height * 0.2
-        miniMapStage.height = playerBar.canvas.height * 0.8
-        miniMapStage.width = playerBar.canvas.width * 0.2
-        miniMapRatio = {
-            height: gameHeight / miniMapStage.height,
-            width: gameWidth/ miniMapStage.width,
-            radius: (gameHeight + gameWidth) / (miniMapStage.height + miniMapStage.width)
-        }
-        mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
-        miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
-        playerBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").drawRect(0, 0, playerStage.canvas.clientWidth / miniMapRatio.width, playerStage.canvas.clientHeight / miniMapRatio.height);
-        informationStage.x = playerBar.canvas.width * 0.5
-        informationStage.y = playerBar.canvas.height * 0.2
-        informationStage.height = playerBar.canvas.height * 0.8
-        informationStage.width = playerBar.canvas.width * 0.2
-            // informationStage.object.graphics.clear().drawRect(0, 0, informationStage.width, informationStage.height)
-        monsterStage.x = 0
-        monsterStage.y = playerBar.canvas.height * 0.2
-        monsterStage.height = playerBar.canvas.height * 0.8
-        monsterStage.width = playerBar.canvas.width * 0.3
-        console.log(monsterStage)
-        shopStage.x = playerBar.canvas.width * 0.7
-        shopStage.y = playerBar.canvas.height * 0.2
-        shopStage.height = playerBar.canvas.height * 0.8
-        shopStage.width = playerBar.canvas.width * 0.3
-        playerBorder.x = gameStage.regX / miniMapRatio.width
-        playerBorder.y = gameStage.regY / miniMapRatio.height
-        if (leftSwap.swapViewId == 0) {
-            updateLeftBar(1)
-        } else {
-            updateLeftBar(0)
-        }
-        updateRightBar(0)
-        updateInfoBar(viewTarget[0], viewTarget[1])
-        for (var team in teamList) { //We have to update each team
-            for (var player in teamList[team].playerList) { //Check each player on that team
-                var hero = teamList[team].playerList[player].hero
-                hero.miniMapObject.graphics.clear().beginFill('green').drawCircle(0, 0, hero.radius / miniMapRatio.radius)
-                hero.miniMapObject.x = hero.stageObject.x / miniMapRatio.width
-                hero.miniMapObject.y = hero.stageObject.y / miniMapRatio.height
-            }
-            for (var unit in teamList[team].unitList) {
-                var currentUnit = teamList[team].unitList[unit]
-                currentUnit.miniMapObject.graphics.clear().beginFill('red').drawCircle(0, 0, currentUnit.radius / miniMapRatio.radius)
-                currentUnit.miniMapObject.x = currentUnit.stageObject.x / miniMapRatio.width
-                currentUnit.miniMapObject.y = currentUnit.stageObject.y / miniMapRatio.height
-                currentUnit.miniMapObject.updateCache()
-            }
-        }
-    }
-    playerStage.update(event); //Finally update the stage with all of our changes.
-}
-
 function createStage() {
     stage = new PIXI.Container();
 
     gameStage = new PIXI.Container();
+
     var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(5, 5, gameWidth - 10, gameHeight - 10).endFill();
     gameStage.addChild(border);
 
     var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
     gameStage.addChild(playerSplit);
 
-
     collisionTree = QUAD.init({x: 0, y: 0, w: gameWidth, h: gameHeight});
 
     fpsText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
-    fpsText.x = 10
-    fpsText.y = 6
-    stage.addChild(fpsText)
+    fpsText.x = 10;
+    fpsText.y = 6;
+    stage.addChild(fpsText);
 
-    unitText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
-    unitText.x = 10
-    unitText.y = fpsText.height + 16
-	stage.addChild(unitText)
+    var unitText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
+    unitText.x = 10;
+    unitText.y = fpsText.height + 16;
+	stage.addChild(unitText);
 
-    playerBar = new PIXI.Container();
+    var playerBar = new PIXI.Container();
+    playerBar.y = renderer.height - (renderer.height * 0.2);
     playerBar.width = renderer.width;
     playerBar.height = renderer.height * 0.2;
-    playerBar.y = renderer.height - (renderer.height * 0.2)
     playerBar.object = new PIXI.Graphics().beginFill("0x111").drawRect(0, 0, playerBar._width, playerBar._height);
     playerBar.addChild(playerBar.object);
 
-    stage.addChild(gameStage)
-    stage.addChild(playerBar)
-    // gameTime = new createjs.Container();
-    // gameTime.x = playerBar.canvas.width * 0.5
-    // gameTime.y = 0
-    // gameTime.width = playerBar.canvas.width * 0.1
-    // gameTime.height = playerBar.canvas.height * 0.2
-    // createTextObject(gameTime, "text", "00:00:00", 0.5);
+    // * Replaced with HTML * //
+
+    // var leftSwap = new PIXI.Container();
+    // leftSwap.object = new PIXI.Graphics().beginFill("0x111111").drawRect(0, 0, 
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // leftSwap.addChild(leftSwap.object);
+    // playerBar.addChild(leftSwap);
+
+    // var leftTeamBar = new PIXI.Container();
+    // leftTeamBar.position = new PIXI.Point(playerBar._width * 0.1, 0);
+    // leftTeamBar.object = new PIXI.Graphics().beginFill("0x222222").drawRect(0, 0,
+    //     playerBar._width * 0.2,
+    //     playerBar._height * 0.2
+    // );
+    // leftTeamBar.addChild(leftTeamBar.object);
+    // playerBar.addChild(leftTeamBar);
+
+    // var incomeStage = new PIXI.Container();
+    // incomeStage.position = new PIXI.Point(playerBar._width * 0.3, 0);
+    // incomeStage.object = new PIXI.Graphics().beginFill("0x333333").drawRect(0, 0,
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // incomeStage.addChild(incomeStage.object);
+    // playerBar.addChild(incomeStage);
+
+    // var incomeTime = new PIXI.Container();
+    // incomeTime.position = new PIXI.Point(playerBar._width * 0.4, 0);
+    // incomeTime.object = new PIXI.Graphics().beginFill("0x444444").drawRect(0, 0,
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // incomeTime.addChild(incomeTime.object);
+    // incomeTime.textObject = new PIXI.Text('00:00:00', {
+    //     font: font.sizeM + ' ' + font.family,
+    //     fill: '#000000',
+    //     align: 'center'
+    // });
+    // incomeTime.addChild(incomeTime.textObject);
+    // playerBar.addChild(incomeTime);
+
+    // var gameTime = new PIXI.Container();
+    // gameTime.position = new PIXI.Point(playerBar._width * 0.5, 0);
+    // gameTime.object = new PIXI.Graphics().beginFill("0x555555").drawRect(0, 0,
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // gameTime.addChild(gameTime.object);
+    // gameTime.textObject = new PIXI.Text('00:00:00', {
+    //     font: font.sizeM + ' ' + font.family,
+    //     fill: '#000000',
+    //     align: 'center'
+    // });
     // gameTime.addChild(gameTime.textObject);
     // playerBar.addChild(gameTime);
+
+    // var goldStage = new PIXI.Container();
+    // goldStage.position = new PIXI.Point(playerBar._width * 0.6, 0);
+    // goldStage.object = new PIXI.Graphics().beginFill("0x666666").drawRect(0, 0,
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // goldStage.addChild(goldStage.object);
+    // playerBar.addChild(goldStage);
+
+    // var rightTeamBar = new PIXI.Container();
+    // rightTeamBar.position = new PIXI.Point(playerBar._width * 0.7, 0);
+    // rightTeamBar.object = new PIXI.Graphics().beginFill("0x777777").drawRect(0, 0,
+    //     playerBar._width * 0.2,
+    //     playerBar._height * 0.2
+    // );
+    // rightTeamBar.addChild(rightTeamBar.object);
+    // playerBar.addChild(rightTeamBar);
+
+    // var rightSwap = new PIXI.Container();
+    // rightSwap.position = new PIXI.Point(playerBar._width * 0.9, 0);
+    // rightSwap.object = new PIXI.Graphics().beginFill("0x888888").drawRect(0, 0,
+    //     playerBar._width * 0.1,
+    //     playerBar._height * 0.2
+    // );
+    // rightSwap.addChild(rightSwap.object);
+    // playerBar.addChild(rightSwap);
+
+    // * End Replaced with HTML * //
+
+
+
+    stage.addChild(gameStage);
+    stage.addChild(playerBar);
+    // createTextObject(gameTime, "text", "00:00:00", 0.5);
+    // gameTime.addChild(gameTime.textObject);
     // incomeTime = new createjs.Container();
     // incomeTime.x = playerBar.canvas.width * 0.4
     // incomeTime.y = 0
@@ -585,20 +566,17 @@ window.onresize = function(event) {
 };
 
 function init() {
-	var rendererOptions = {
-		antialiasing: false,
-		transparent: false,
-		resolution: window.devicePixelRatio,
-		autoResize: true,
-	}
-    renderer = new PIXI.autoDetectRenderer(window.screen.width, window.screen.height, rendererOptions);
+    var gameCanvas = document.getElementById("gameCanvas");
+    renderer = new PIXI.autoDetectRenderer(window.screen.width, window.screen.height, {
+        view: gameCanvas
+    });
     renderer.plugins.interaction.autoPreventDefault = true;
     renderer.view.style.position = "absolute";
 	renderer.view.style.top = "0px";
 	renderer.view.style.left = "0px";
 	// renderer.view.style.border = "3px solid black";
 	renderer.backgroundColor = 0x006600;
-    document.body.appendChild(renderer.view);
+    // document.body.appendChild(renderer.view);
     contentManager = new PIXI.loaders.Loader();
     loadImages()
     contentManager.once('complete', imageLoadingDone, this);
