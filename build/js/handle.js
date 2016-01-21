@@ -32,17 +32,17 @@ function handleKeyDown(e) {
 	} else {
 		switch (e.keyCode) {
 			case 40:
-				if (gameStage.pivot.y + renderer.height < gameStage._height) {
+				if (gameStage.pivot.y + renderer.height < gameHeight) {
 					gameStage.pivot.y += 10
 				} else {
-					gameStage.pivot.y = gameStage._height - renderer.height
+					gameStage.pivot.y = gameHeight - renderer.height
 				}
 				break;
 			case 39: // Right arrow key
-				if (gameStage.pivot.x + renderer.width < gameStage._width) {
+				if (gameStage.pivot.x + renderer.width < gameWidth) {
 					gameStage.pivot.x += 10
 				} else {
-					gameStage.pivot.x = gameStage._width - renderer.width
+					gameStage.pivot.x = gameWidth - renderer.width
 				}
 				break;
 			case 38: //Up arrow key
@@ -106,13 +106,13 @@ function miniMapClick(event) {
 		}
 		if (point.x < 0) {
 			point.x = 0
-		} else if (point.x > (gameStage._width - renderer.width)) {
-			point.x = (gameStage._width - renderer.width)
+		} else if (point.x > (gameWidth - renderer.width)) {
+			point.x = (gameWidth - renderer.width)
 		}
 		if (point.y < 0) {
 			point.y = 0
-		} else if (point.y > (gameStage._height - renderer.height)) {
-			point.y = (gameStage._height - renderer.height)
+		} else if (point.y > (gameHeight - renderer.height)) {
+			point.y = (gameHeight - renderer.height)
 		}
 
 		gameStage.pivot.x = point.x;
@@ -174,25 +174,25 @@ function updateSpells(event) {
 
 function edgeScrolling(event) {
 	if (scrollDown) {
-		if (gameStage.pivot.y + playerBar.y < gameStage._height) {
-			gameStage.pivot.y += gameStage._height * 0.01
+		if (gameStage.pivot.y + playerBar.y < gameHeight) {
+			gameStage.pivot.y += gameHeight * 0.01
 		}
 	}
 	if (scrollRight) {
-		if (gameStage.pivot.x + renderer.width< gameStage._width) {
-			gameStage.pivot.x += gameStage._width * 0.01
+		if (gameStage.pivot.x + renderer.width< gameWidth) {
+			gameStage.pivot.x += gameWidth * 0.01
 		}
 
 	}
 	if (scrollUp) {
 		if (gameStage.pivot.y > 0) {
-			gameStage.pivot.y -= gameStage._height * 0.01
+			gameStage.pivot.y -= gameHeight * 0.01
 		}
 
 	}
 	if (scrollLeft) {
 		if (gameStage.pivot.x > 0) {
-			gameStage.pivot.x -= gameStage._width * 0.01
+			gameStage.pivot.x -= gameWidth * 0.01
 		}
 	}
 	//MARKED

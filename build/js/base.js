@@ -60,14 +60,14 @@ function updateStage(event) {
         playerBar.canvas.height = playerBar.canvas.clientHeight
         playerBar.canvas.width = playerBar.canvas.clientWidth
         playerBar.object.graphics.clear().beginFill("#111").drawRect(0, 0, playerBar.canvas.width, playerBar.canvas.height);
-        if (gameStage.regY + playerStage.canvas.height > gameStage._height) {
-            gameStage.regY = gameStage._height - playerStage.canvas.height
+        if (gameStage.regY + playerStage.canvas.height > gameHeight) {
+            gameStage.regY = gameHeight - playerStage.canvas.height
         }
         if (gameStage.regY + playerStage.canvas.height < 0) {
             gameStage.regY = 0 + playerStage.canvas.height
         }
-        if (gameStage.regX + playerStage.canvas.width > gameStage._width) {
-            gameStage.regX = gameStage._width - playerStage.canvas.width
+        if (gameStage.regX + playerStage.canvas.width > gameWidth) {
+            gameStage.regX = gameWidth- playerStage.canvas.width
         }
         if (gameStage.regX + playerStage.canvas.width < 0) {
             gameStage.regX = 0 + playerStage.canvas.width
@@ -115,9 +115,9 @@ function updateStage(event) {
         miniMapStage.height = playerBar.canvas.height * 0.8
         miniMapStage.width = playerBar.canvas.width * 0.2
         miniMapRatio = {
-            height: gameStage._height / miniMapStage.height,
-            width: gameStage._width / miniMapStage.width,
-            radius: (gameStage._height + gameStage._width) / (miniMapStage.height + miniMapStage.width)
+            height: gameHeight / miniMapStage.height,
+            width: gameWidth/ miniMapStage.width,
+            radius: (gameHeight + gameWidth) / (miniMapStage.height + miniMapStage.width)
         }
         mapBorder.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height);
         miniPlayerSplit.graphics.clear().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, miniMapStage.height / 2, miniMapStage.width, 2);
@@ -167,18 +167,18 @@ function updateStage(event) {
 function createStage() {
     stage = new PIXI.Container();
     gameStage = new PIXI.Container();
-    gameStage._width = gameWidth;
-    gameStage._height = gameHeight;
-    var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(0, 0, gameStage._width, gameStage._height).endFill()
-    var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameStage._height / 2 - 3, gameStage._width , 6).endFill();
+    gameWidth= gameWidth;
+    gameHeight = gameHeight;
+    var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(0, 0, gameWidth, gameHeight).endFill()
+    var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
     gameStage.addChild(border);
     gameStage.addChild(playerSplit);
 	console.log(gameStage)
     bounds = {
         x: 0,
         y: 0,
-        w: gameStage._width,
-        h: gameStage._height,
+        w: gameWidth,
+        h: gameHeight,
     }
     collisionTree = QUAD.init(bounds);
     fpsText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
@@ -289,9 +289,9 @@ function createStage() {
     // miniMapStage.width = playerBar.canvas.width * 0.2
     // miniMapStage.height = playerBar.canvas.height * 0.8
     // miniMapRatio = {
-    //     width: gameStage._width / miniMapStage.width,
-    //     height: gameStage._height / miniMapStage.height,
-    //     radius: (gameStage._height + gameStage._width) / (miniMapStage.height + miniMapStage.width)
+    //     width: gameWidth/ miniMapStage.width,
+    //     height: gameHeight / miniMapStage.height,
+    //     radius: (gameHeight + gameWidth) / (miniMapStage.height + miniMapStage.width)
     // }
     // mapBorder = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("lightgrey").drawRect(0, 0, miniMapStage.width, miniMapStage.height));
     // mapBorder.width = miniMapStage.width
@@ -563,17 +563,17 @@ function resize() {
 	// renderer.resize(window.innerWidth, window.innerHeight)
     renderer.view.style.width = window.innerWidth + "px"
     renderer.view.style.height = window.innerHeight + "px"
-    // if (gameStage.pivot.y + renderer.height > gameStage._height) {
-    //     gameStage.pivot.y = gameStage._height - renderer.height
+    // if (gameStage.pivot.y + renderer.height > gameHeight) {
+    //     gameStage.pivot.y = gameHeight - renderer.height
     // }
     // if (gameStage.pivot.y + renderer.height < 0) {
     //     gameStage.pivot.y = 0
     // }
-    // if (gameStage.pivot.x + renderer.width > gameStage._width) {
-    //     gameStage.pivot.x = gameStage._height - renderer.width
+    // if (gameStage.pivot.x + renderer.width > gameWidth) {
+    //     gameStage.pivot.x = gameHeight - renderer.width
     // }
-    // if (gameStage.pivot.x + renderer.width > gameStage._width) {
-    //     gameStage.pivot.x = gameStage._width - renderer.width
+    // if (gameStage.pivot.x + renderer.width > gameWidth) {
+    //     gameStage.pivot.x = gameWidth- renderer.width
     // }
 
 }
