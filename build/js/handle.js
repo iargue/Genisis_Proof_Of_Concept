@@ -174,24 +174,32 @@ function updateSpells(event) {
 
 function edgeScrolling(event) {
 	if (scrollDown) {
-		if (gameStage.pivot.y + (renderer.height - (renderer.height * 0.2)) < gameHeight) {
+		if (gameStage.pivot.y + (renderer.height - (renderer.height * 0.2)) > gameHeight) {
+			gameStage.pivot.y = gameHeight - (renderer.height - (renderer.height * 0.2))
+		} else if (gameStage.pivot.y + (renderer.height - (renderer.height * 0.2)) < gameHeight) {
 			gameStage.pivot.y += gameHeight * 0.01
 		}
 	}
 	if (scrollRight) {
-		if (gameStage.pivot.x + renderer.width < gameWidth) {
+		if(gameStage.pivot.x + renderer.width > gameWidth) {
+			// If we have scrolled out of range put us back
+			gameStage.pivot.x = gameWidth - renderer.width;
+		} else if (gameStage.pivot.x + renderer.width < gameWidth) {
 			gameStage.pivot.x += gameWidth * 0.01
 		}
-
 	}
 	if (scrollUp) {
-		if (gameStage.pivot.y > 0) {
+		if (gameStage.pivot.y < 0) {
+			gameStage.pivot.y = 0
+		} else if (gameStage.pivot.y > 0) {
 			gameStage.pivot.y -= gameHeight * 0.01
 		}
 
 	}
 	if (scrollLeft) {
-		if (gameStage.pivot.x > 0) {
+		if (gameStage.pivot.x < 0) {
+			gameStage.pivot.x = 0
+		} else if (gameStage.pivot.x > 0) {
 			gameStage.pivot.x -= gameWidth * 0.01
 		}
 	}

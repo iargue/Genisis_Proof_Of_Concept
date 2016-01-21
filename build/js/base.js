@@ -26,8 +26,8 @@ var stage, unitList = [],
     spellButtons = null,
     smallText = 12,
     textPadding = 2, // Vertical Padding for readability
-    gameHeight = 4000,
-    gameWidth = 8000,
+    gameHeight = 1000,
+    gameWidth = 2000,
     ticker = null,
     textFont = "Calibri";
 
@@ -167,10 +167,10 @@ function updateStage(event) {
 function createStage() {
     stage = new PIXI.Container();
     gameStage = new PIXI.Container();
-    var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(0, 0, gameWidth, gameHeight).endFill()
-    var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
+    var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(5, 5, gameWidth - 10, gameHeight - 10).endFill()
+    // var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
     gameStage.addChild(border);
-    gameStage.addChild(playerSplit);
+    // gameStage.addChild(playerSplit);
 	console.log(gameStage)
     bounds = {
         x: 0,
