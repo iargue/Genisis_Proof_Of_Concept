@@ -167,8 +167,6 @@ function updateStage(event) {
 function createStage() {
     stage = new PIXI.Container();
     gameStage = new PIXI.Container();
-    gameWidth= gameWidth;
-    gameHeight = gameHeight;
     var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(0, 0, gameWidth, gameHeight).endFill()
     var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
     gameStage.addChild(border);
@@ -190,10 +188,8 @@ function createStage() {
     stage.addChild(fpsText)
     stage.addChild(unitText)
     playerBar = new PIXI.Container();
-    playerBar.height = renderer.height * 0.2
-    playerBar.width = renderer.width
-    playerBar.y = renderer.height - playerBar._height 
-    playerBar.object = new PIXI.Graphics().beginFill("0x111").drawRect(0, 0, playerBar._width, playerBar._height);
+    playerBar.y = renderer.height - (renderer.height * 0.2)
+    playerBar.object = new PIXI.Graphics().beginFill("0x111").drawRect(0, 0, renderer.width, renderer.height * 0.2);
     playerBar.addChild(playerBar.object);
     // gameTime = new createjs.Container();
     // gameTime.x = playerBar.canvas.width * 0.5
@@ -560,9 +556,9 @@ function imageLoadingDone(e) {
 //This function will resize the render frame to match the screen
 //This function will re-position the camera isn't of the game bounds.
 function resize() {
-	// renderer.resize(window.innerWidth, window.innerHeight)
     renderer.view.style.width = window.innerWidth + "px"
     renderer.view.style.height = window.innerHeight + "px"
+    renderer.resize(window.innerWidth, window.innerHeight)
     // if (gameStage.pivot.y + renderer.height > gameHeight) {
     //     gameStage.pivot.y = gameHeight - renderer.height
     // }
