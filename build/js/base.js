@@ -26,8 +26,8 @@ var stage, unitList = [],
     spellButtons = null,
     smallText = 12,
     textPadding = 2, // Vertical Padding for readability
-    gameHeight = 1000,
-    gameWidth = 2000,
+    gameHeight = 4000,
+    gameWidth = 8000,
     ticker = null,
     textFont = "Calibri";
 
@@ -554,6 +554,8 @@ function imageLoadingDone(e) {
     renderer.view.preventDefault = true
     // playerStage.onmousemove = handleMouse;
     // log = true
+    // renderer.resize(window.innerWidth,window.innerHeight)
+    resize()
 }
 
 
@@ -562,7 +564,7 @@ function imageLoadingDone(e) {
 function resize() {
     renderer.view.style.width = window.innerWidth + "px"
     renderer.view.style.height = window.innerHeight + "px"
-    renderer.resize(window.innerWidth, window.innerHeight)
+    // renderer.resize(window.innerWidth, window.innerHeight)
     // if (gameStage.pivot.y + renderer.height > gameHeight) {
     //     gameStage.pivot.y = gameHeight - renderer.height
     // }
@@ -589,7 +591,7 @@ function init() {
 		resolution: window.devicePixelRatio,
 		autoResize: true,
 	}
-    renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, rendererOptions);
+    renderer = new PIXI.autoDetectRenderer(window.screen.width, window.screen.height, rendererOptions);
     renderer.plugins.interaction.autoPreventDefault = true;
     renderer.view.style.position = "absolute";
 	renderer.view.style.top = "0px";

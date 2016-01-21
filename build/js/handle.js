@@ -1,23 +1,25 @@
 function handleMouse(e) {
-	if (e.pageY >= playerBar.y - 30) {
-		if (e.pageY + 1 != playerBar.y) {
+	offsetX = window.innerWidth * 0.05
+	offsetY = window.innerHeight * 0.05
+	if (e.pageY >= (window.innerHeight - (window.innerHeight * 0.2)) - offsetY) {
+		if (e.pageY + 1 < (window.innerHeight - (window.innerHeight * 0.2))) {
 			scrollDown = true
 			scrollUp = false
 		} else {
 			scrollUp = false
 			scrollDown = false
 		}
-	} else if (e.pageY < 30) {
+	} else if (e.pageY < offsetY) {
 		scrollUp = true
 		scrollDown = false
 	} else {
 		scrollUp = false
 		scrollDown = false
 	}
-	if (e.pageX >= renderer.width - 30) {
+	if (e.pageX >= window.innerWidth - offsetX) {
 		scrollRight = true
 		scrollLeft = false
-	} else if (e.pageX < 30) {
+	} else if (e.pageX < offsetX) {
 		scrollLeft = true
 		scrollRight = false
 	} else {
