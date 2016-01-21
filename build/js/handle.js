@@ -1,14 +1,12 @@
 function handleMouse(e) {
+	//These offets determine the width that we start scrolling at. Larger offset = farther away from screen to scroll
 	offsetX = window.innerWidth * 0.05
 	offsetY = window.innerHeight * 0.05
+	//This if statement checks if the mouse is to the bottom or top of the screen and starts scrolling. If its not at the top or bottom, we stop scrolling
+	console.log(e)
 	if (e.pageY >= (window.innerHeight - (window.innerHeight * 0.2)) - offsetY) {
-		if (e.pageY + 1 < (window.innerHeight - (window.innerHeight * 0.2))) {
 			scrollDown = true
 			scrollUp = false
-		} else {
-			scrollUp = false
-			scrollDown = false
-		}
 	} else if (e.pageY < offsetY) {
 		scrollUp = true
 		scrollDown = false
@@ -16,6 +14,7 @@ function handleMouse(e) {
 		scrollUp = false
 		scrollDown = false
 	}
+	//This statement checks if the mouse is at the left or right of the screen and scrolls as needed. If we are not left or right, we stop scrolling.
 	if (e.pageX >= window.innerWidth - offsetX) {
 		scrollRight = true
 		scrollLeft = false
@@ -25,6 +24,13 @@ function handleMouse(e) {
 	} else {
 		scrollLeft = false
 		scrollRight = false
+	}
+	//Mouse has left the canvas, so lets stop scrolling
+	if (e.type === "mouseout") {
+		scrollLeft = false
+		scrollRight = false
+		scrollUp = false
+		scrollDown = false
 	}
 }
 

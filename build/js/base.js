@@ -529,13 +529,14 @@ function imageLoadingDone(e) {
     // playerStage.mouseMoveOutside = true;
     //playerStage.addEventListener("stagemouseup", handleClick);
     // miniMapStage.addEventListener("click", miniMapClick);
-    // interactionManager = new PIXI.interaction.InteractionManager(renderer)
-    // interactionManager.OnMouseMove = handleMouse
+
+    //Capture mousemovement events for canvas
     renderer.view.onmousemove = handleMouse
+    //Capture move leaving events for canvas
+    renderer.view.onmouseout = handleMouse
+    //Prevent right clicks... not working yet???
     renderer.view.preventDefault = true
-    // playerStage.onmousemove = handleMouse;
-    // log = true
-    // renderer.resize(window.innerWidth,window.innerHeight)
+
     resize()
 }
 
@@ -574,14 +575,11 @@ function init() {
     renderer.view.style.position = "absolute";
 	renderer.view.style.top = "0px";
 	renderer.view.style.left = "0px";
-	// renderer.view.style.border = "3px solid black";
 	renderer.backgroundColor = 0x006600;
-    // document.body.appendChild(renderer.view);
     contentManager = new PIXI.loaders.Loader();
     loadImages()
     contentManager.once('complete', imageLoadingDone, this);
     contentManager.load();
-
 }
 
 function updatePlayerBar(event) {
