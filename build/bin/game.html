@@ -24,53 +24,64 @@
   </head>
   <body onload="init();">
     <canvas id="gameCanvas"></canvas>
-    <div id="playerBar">
-        <div id="infoBar">
-            <div class="leftSwap" onclick="leftSwapClick()">
-                Spells
-            </div>
-            <div class="leftSwap hide" onclick="leftSwapClick()">
-                Monsters
-            </div>
-            <div id="leftTeamBar">
-                400 / 400
-            </div>
-            <div id="incomeStage">
-                0
-            </div>
-            <div id="incomeTime">
-                00:00:00
-            </div>
-            <div id="gameTime">
-                00:00:00
-            </div>
-            <div id="goldStage">
-                0
-            </div>
-            <div id="rightTeamBar">
-                400 / 400
-            </div>
-            <div id="shop" class="rightSwap" onclick="rightSwapClick()">
-                Inventory
-            </div>
-            <div  class="rightSwap hide" onclick="rightSwapClick()">
-                Shop
-            </div>
+    <div id="infoBar">
+        <div class="leftSwap" onclick="leftSwapClick()">
+            Spells
         </div>
-        <div id="controlBar">
-            <div id="monsters" class="leftPad">
-                
-            </div>
-            <div id="spells" class="leftPad hide">
-                
-            </div>
-            <div id="shop" class="rightPad">
-                
-            </div>
-            <div id="inventory" class="rightPad hide">
-                
-            </div>
+        <div class="leftSwap hide" onclick="leftSwapClick()">
+            Monsters
         </div>
+        <div id="leftTeamBar">
+            400 / 400
+        </div>
+        <div id="incomeStage">
+            0
+        </div>
+        <div id="incomeTime">
+            00:00:00
+        </div>
+        <div id="gameTime">
+            00:00:00
+        </div>
+        <div id="goldStage">
+            0
+        </div>
+        <div id="rightTeamBar">
+            400 / 400
+        </div>
+        <div id="shop" class="rightSwap" onclick="rightSwapClick()">
+            Inventory
+        </div>
+        <div  class="rightSwap hide" onclick="rightSwapClick()">
+            Shop
+        </div>
+    </div>
+    <div id="monsters" class="leftPad">
+        
+    </div>
+    <div id="spells" class="leftPad hide">
+        <div id="spellQ">
+            <div class="ul">Q</div>
+            <div class="ur">Level Up</div>
+        </div>
+        <div id="spellW">
+            <div class="ul">W</div>
+            <div class="ur">Level Up</div>
+        </div>
+        <div id="spellE">
+            <div class="ul">E</div>
+            <div class="ur">Level Up</div>
+        </div>
+        <div id="spellR">
+            <div class="ul">R</div>
+            <div class="ur">Level Up</div>
+        </div>
+    </div>
+    <div id="shop" class="rightPad">
+        
+    </div>
+    <div id="inventory" class="rightPad hide">
+        
     </div>
   </body>
 </html>
