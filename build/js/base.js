@@ -67,30 +67,62 @@ function createStage() {
 
     gameStage = new PIXI.Container();
 
-    var border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(5, 5, gameWidth - 10, gameHeight - 10).endFill();
-    gameStage.addChild(border);
+    gameStage.object = new PIXI.Graphics().beginFill(0x006600).drawRect(0, 0, gameWidth, gameHeight);
+    gameStage.addChild(gameStage.object);
 
-    var playerSplit = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6).endFill();
-    gameStage.addChild(playerSplit);
+    gameStage.border = new PIXI.Graphics().lineStyle(10, 0xdc143c).drawRect(5, 5, gameWidth - 10, gameHeight - 10);
+    gameStage.addChild(gameStage.border);
+
+    gameStage.split = new PIXI.Graphics().lineStyle(1, 0x000000, 1).beginFill(0x000000).drawRect(0,  gameHeight / 2 - 3, gameWidth, 6);
+    gameStage.addChild(gameStage.split);
+
+    stage.addChild(gameStage);
+
+    var miniMapStage = new PIXI.Container();
+    miniMapStage.x = renderer.width * 0.3;
+    miniMapStage.y = renderer.height * 0.84;
+    miniMapStage.width = renderer.width * 0.2;
+    miniMapStage.height = renderer.height * 0.16;
+
+    miniMapStage.object = new PIXI.Graphics().beginFill(0x333333).drawRect(0, 0, miniMapStage._width, miniMapStage._height);
+    miniMapStage.addChild(miniMapStage.object);
+
+    miniMapStage.border = new PIXI.Graphics().lineStyle(2, 0x000000).drawRect(1, 1, miniMapStage._width - 2, miniMapStage._height - 2);
+    miniMapStage.addChild(miniMapStage.border);
+
+    miniMapStage.split = new PIXI.Graphics().lineStyle(1, 0x000000).drawRect(0, miniMapStage._height / 2 - 1, miniMapStage._width, 2);
+    miniMapStage.addChild(miniMapStage.split);
+
+    stage.addChild(miniMapStage);
+
+    // miniMapRatio = {
+    //     width: gameWidth / miniMapStage.width,
+    //     height: gameHeight / miniMapStage.height,
+    //     radius: (gameHeight + gameWidth) / (miniMapStage.height + miniMapStage.width)
+    // }
+
+    // var point = stage.toGlobal({x: stage.pivot.x, y: stage.pivot.y});
+
+    // var playerBorder = new PIXI.Graphics().lineStyle(1, 0x000000).drawRect(0, 0, stage.width / miniMapRatio.width, stage.height / miniMapRatio.height);
+    // playerBorder.width = stage.width / miniMapRatio.width;
+    // playerBorder.height = stage.height / miniMapRatio.height;
+    // miniMapStage.addChild(playerBorder);
+    // playerBar.addChild(miniMapStage);
 
     collisionTree = QUAD.init({x: 0, y: 0, w: gameWidth, h: gameHeight});
 
+    // For Debugging
     fpsText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
     fpsText.x = 10;
     fpsText.y = 6;
     stage.addChild(fpsText);
 
-    var unitText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
+    unitText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
     unitText.x = 10;
     unitText.y = fpsText.height + 16;
 	stage.addChild(unitText);
+	// * End For Debugging
 
-    var playerBar = new PIXI.Container();
-    playerBar.y = renderer.height - (renderer.height * 0.2);
-    playerBar.width = renderer.width;
-    playerBar.height = renderer.height * 0.2;
-    playerBar.object = new PIXI.Graphics().beginFill("0x111").drawRect(0, 0, playerBar._width, playerBar._height);
-    playerBar.addChild(playerBar.object);
 
     // * Replaced with HTML * //
 
@@ -180,9 +212,6 @@ function createStage() {
     // * End Replaced with HTML * //
 
 
-
-    stage.addChild(gameStage);
-    stage.addChild(playerBar);
     // createTextObject(gameTime, "text", "00:00:00", 0.5);
     // gameTime.addChild(gameTime.textObject);
     // incomeTime = new createjs.Container();
@@ -265,6 +294,7 @@ function createStage() {
     // rightSwap.addChild(rightSwap.textObject);
     // cacheItem(rightSwap);
     // playerBar.addChild(rightSwap)
+
     // miniMapStage = new createjs.Container();
     // miniMapStage.x = playerBar.canvas.width * 0.3
     // miniMapStage.y = playerBar.canvas.height * 0.2
@@ -572,10 +602,6 @@ function init() {
         view: gameCanvas
     });
     renderer.plugins.interaction.autoPreventDefault = true;
-    renderer.view.style.position = "absolute";
-	renderer.view.style.top = "0px";
-	renderer.view.style.left = "0px";
-	renderer.backgroundColor = 0x006600;
     contentManager = new PIXI.loaders.Loader();
     loadImages()
     contentManager.once('complete', imageLoadingDone, this);
