@@ -11,20 +11,12 @@ var heroList = {
 			RN: 15,
 
 		},
-		color: "green",
-		imageName: 'warrior',
-		frames: {
-			width: 64,
-			height: 64,
-			regX: 32,
-			regY: 32,
-		},
 		animations: {
-			walk: [0, 9, true],
+			walk: ["warriorWalk_1.png","warriorWalk_2.png","warriorWalk_3.png","warriorWalk_4.png","warriorWalk_5.png","warriorWalk_6.png","warriorWalk_7.png","warriorWalk_8.png","warriorWalk_9.png","warriorWalk_10.png"],
 			die: [10, 21, false],
 			jump: [22, 32],
 			celebrate: [33, 43],
-			idle: [44, 44]
+			idle: ["warriorIdle_1.png"]
 		},
 	},
 	archer: {

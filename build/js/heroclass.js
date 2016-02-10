@@ -18,29 +18,27 @@ function hero(hero, heroSpells, x, y, player) {
 	this.stunned = false,
 	this.rooted = false,
 	this.attackTarget = null,
-	this.stageObject = new createjs.Container(),
+	this.stageObject = new PIXI.Container(),
 	this.stageObject.x = x,
 	this.stageObject.y = y,
 	// this.stageShape = new createjs.Shape(),
 	// this.stageShape.graphics.beginFill(hero.color).drawCircle(0, 0, 25),
 
-	this.healthBar = new createjs.Shape(),
-	this.healthBar.graphics.beginFill("green").drawRect(-30, -60, 60, 10);
+	this.healthBar = new PIXI.Graphics().beginFill(0x008000).drawRect(-30, -60, 60, 10);
 	// this.spellTwo.graphics.beginLinearGradientFill(["red","white"], [0, 1], 0, 120, 0, 20).drawRect(20, 20, 120, 120);
 	this.spellBar = {
-		spellOne: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-30, -50, 15, 15)),
-		spellOneCooldown: new createjs.Shape(new createjs.Graphics().beginFill('white').drawRect(-30, -50, 14, 14)),
-		spellTwo: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(-15, -50, 15, 15)),
-		spellTwoCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(-15, -50, 14, 14)),
-		spellThree: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(0, -50, 15, 15)),
-		spellThreeCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(0, -50, 14, 14)),
-		spellFour: new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill('white').drawRect(15, -50, 15, 15)),
-		spellFourCooldown: new createjs.Shape(new createjs.Graphics().beginFill("white").drawRect(15, -50, 14, 14)),
+		spellOne: new PIXI.Graphics().lineStyle(1, 0x000000).beginFill(0xffffff).drawRect(-30, -50, 15, 15),
+		spellOneCooldown: new PIXI.Graphics().beginFill(0xffffff).drawRect(-30, -50, 14, 14),
+		spellTwo: new PIXI.Graphics().lineStyle(1, 0x000000).beginFill(0xffffff).drawRect(-15, -50, 15, 15),
+		spellTwoCooldown: new PIXI.Graphics().beginFill(0xffffff).drawRect(-15, -50, 14, 14),
+		spellThree: new PIXI.Graphics().lineStyle(1, 0x000000).beginFill(0xffffff).drawRect(0, -50, 15, 15),
+		spellThreeCooldown: new PIXI.Graphics().beginFill(0xffffff).drawRect(0, -50, 14, 14),
+		spellFour: new PIXI.Graphics().lineStyle(1, 0x000000).beginFill(0xffffff).drawRect(15, -50, 15, 15),
+		spellFourCooldown: new PIXI.Graphics().beginFill(0xffffff).drawRect(15, -50, 14, 14),
 	},
 	this.player = player,
 	this.stageObject.alpha = 0.9
 	gameStage.addChild(this.stageObject),
-	this.stageObject.addChild(this.stageShape)
 	this.stageObject.addChild(this.healthBar),
 	this.stageObject.addChild(this.spellBar.spellOne),
 	this.stageObject.addChild(this.spellBar.spellTwo),
@@ -66,31 +64,69 @@ function hero(hero, heroSpells, x, y, player) {
 	this.experienceToLevel = 50 + (this.level * 50),
 	this.spellLevels = 1,
 	this.radius = 25,
-	this.miniMapObject = new createjs.Shape(new createjs.Graphics().beginFill('green').drawCircle(0, 0, this.radius / miniMapRatio.radius))
-	this.miniMapWayPoint = new createjs.Shape(new createjs.Graphics().setStrokeStyle(10 / miniMapRatio.radius).moveTo(this.stageObject.x, this.stageObject.y).beginStroke('yellow').lineTo(this.stageObject.x, this.stageObject.y))
-	this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
-	this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
-	miniMapStage.addChild(this.miniMapObject)
-	miniMapStage.addChild(this.miniMapWayPoint)
-	this.localSpriteSheet = new createjs.SpriteSheet({
-		framerate: 10,
-		images: [contentManager.getResult(hero.imageName)], //image to use
-		frames: hero.frames,
-		animations: hero.animations
-	}),
-	createjs.SpriteSheetUtils.addFlippedFrames(this.localSpriteSheet, true, false, false),
-	this.animationObject = new createjs.Sprite(this.localSpriteSheet),
-	this.animationObject.gotoAndPlay("idle"), //animate
-	this.icon = new createjs.Sprite(this.localSpriteSheet),
-	this.icon.gotoAndStop("idle"),
-	this.animationObject.isInIdleMode = true,
+	// this.miniMapObject = new PIXI.Graphics().beginFill(0x008000).drawCircle(0, 0, this.radius / miniMapRatio.radius)
+	// this.miniMapWayPoint = new PIXI.Graphics().setStrokeStyle(10 / miniMapRatio.radius).moveTo(this.stageObject.x, this.stageObject.y).setStrokeStyle(10 / miniMapRatio.radius, 0x435522).lineTo(this.stageObject.x, this.stageObject.y)
+	// this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
+	// this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
+	// miniMapStage.addChild(this.miniMapObject)
+	// miniMapStage.addChild(this.miniMapWayPoint)
+	// this.localSpriteSheet = new createjs.SpriteSheet({
+	// 	framerate: 10,
+	// 	images: [contentManager.getResult(hero.imageName)], //image to use
+	// 	frames: hero.frames,
+	// 	animations: hero.animations
+	// }),
+	// createjs.SpriteSheetUtils.addFlippedFrames(this.localSpriteSheet, true, false, false),
+	// this.animationObject = new createjs.Sprite(this.localSpriteSheet),
+	
+	this.animationObject = new PIXI.Container(),
+	// this.animationObject.gotoAndPlay("idle"), //animate
+	// this.icon = new createjs.Sprite(this.localSpriteSheet),
+	// this.icon.gotoAndStop("idle"),
+	// this.animationObject.isInIdleMode = true,
 	// gameStage.addChild(this.animationObject)
 	this.animationObject.rotation = 0
 	this.stageObject.addChild(this.animationObject)
 	this.goldTime = 45000
 	this.itemList = []
 	this.stageObject.heroReference = this
-	this.stageObject.addEventListener('click', changeDisplay) //Located in handle.js
+	// this.stageObject.addEventListener('click', changeDisplay) //Located in handle.js
+
+	this.init  = function() {
+		tempArray = []
+		for (var texture in hero.animations.walk) {
+			tempArray.push(PIXI.Texture.fromImage(hero.animations.walk[texture]))
+		}
+		this.animationObject.walk = new PIXI.extras.MovieClip(tempArray);
+		this.animationObject.walk.visible = false
+		this.animationObject.walk.pivot = {'x':32, 'y':32}
+		tempArray = []
+		for (var texture in hero.animations.idle) {
+			tempArray.push(PIXI.Texture.fromImage(hero.animations.idle[texture]))
+		}
+		this.animationObject.idle = new PIXI.extras.MovieClip(tempArray);
+		this.animationObject.idle.pivot = {'x':32, 'y':32}
+		this.animationObject.addChild(this.animationObject.walk)
+		this.animationObject.addChild(this.animationObject.idle)
+	}
+
+	this.playAnimation = function(animation) {
+		this.animationObject.walk.visible = false
+		this.animationObject.idle.visible = false
+		switch (animation) {
+			case 'walk':
+				this.animationObject.walk.visible = true
+				this.animationObject.walk.animationSpeed = this.CMS / 1000
+				this.animationObject.walk.play()
+				break
+			case 'idle':
+				this.animationObject.idle.visible = true
+				this.animationObject.idle.play()
+				break
+			default:
+				this.animationObject.idle.visible = true
+		}
+	}
 
 	this.update = function(event) {
 		if (this.alive == false) { //Hero is dead
@@ -124,7 +160,7 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
-		this.miniMapWayPoint.graphics.clear().setStrokeStyle(10 / miniMapRatio.radius).beginStroke('#000000').moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
+		// this.miniMapWayPoint.graphics.clear().setStrokeStyle(10 / miniMapRatio.radius).beginStroke('#000000').moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
 	},
 
 	this.updatePassive = function(event) {
@@ -141,7 +177,7 @@ function hero(hero, heroSpells, x, y, player) {
 			}
 		}
 
-		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
+		this.healthBar.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 
 	},
 
@@ -306,8 +342,9 @@ function hero(hero, heroSpells, x, y, player) {
 			this.moveWayPoint.x = point.x;
 			this.moveWayPoint.y = point.y;
 		} else {
-			var point = gameStage.globalToLocal(event.stageX, event.stageY);
-
+			var point = gameStage.toGlobal({'x': event.pageX, 'y':event.pageY});
+			console.log(event.data.getLocalPosition(gameStage))
+			console.log(point)
 			if (this.player.team.side == 0 && point.y > 1000 - this.radius) {
 				return;
 			} else if (this.player.team.side == 1 && point.y < 1000 - this.radius) {
@@ -399,7 +436,7 @@ function hero(hero, heroSpells, x, y, player) {
 		} else if (distance(this, this.attackTarget) > this.RN) { //Moved out of range, we should find a new target
 			this.attackTarget = null;
 		} else if ((new Date() - this.attackTime) > this.AS) { //Hes in range, and not dead, AND we can attack. Lets deal some damage
-			object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(1).beginStroke("black").beginFill("black").drawRect(0, 0, 4, 2)) //Create bullet object
+			object = new PIXI.Graphics().lineStyle(1, 0x000000).beginFill("black").drawRect(0, 0, 4, 2) //Create bullet object
 			object.x = this.stageObject.x
 			object.y = this.stageObject.y //I had to override the default, creating it calling this was screwing something up.
 			object.radius = 2 //bullet is 2px wide.

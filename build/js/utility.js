@@ -88,6 +88,7 @@ function levelSpell(hero, spellNumber) {
 }
 
 function spawnHero(hero, side) {
+    hero.init()
     spawnListOne = [{
         x: 1850,
         y: 500
@@ -108,8 +109,8 @@ function spawnHero(hero, side) {
                     hero.stageObject.y = spawnListOne[spawn].y;
                     hero.moveWayPoint.x = hero.stageObject.x;
                     hero.moveWayPoint.y = hero.stageObject.y;
-                    hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width);
-                    hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height);
+                    // hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width);
+                    // hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height);
                     return;
                 }
             }
@@ -313,17 +314,19 @@ function moveTo(unit, targetX, targetY, steps, avoid) {
             if (towardsX > 0) {
                 if (unit.animationObject.direction != 1) {
                     unit.animationObject.direction = 1
-                    unit.animationObject.gotoAndPlay("walk_h");
-                } else if (unit.animationObject.currentAnimation.indexOf("walk_h") === -1) {
-                    unit.animationObject.gotoAndPlay("walk_h");
+                    unit.animationObject.scale.x = 1
+                    unit.playAnimation('walk')
+                } else {
+                    unit.playAnimation('walk')
                 }
 
             } else {
                 if (unit.animationObject.direction != -1) {
                     unit.animationObject.direction = -1
-                    unit.animationObject.gotoAndPlay("walk");
-                } else if (unit.animationObject.currentAnimation.indexOf("walk") === -1) {
-                    unit.animationObject.gotoAndPlay("walk");
+                    unit.animationObject.scale.x = -1
+                    unit.playAnimation('walk')
+                } else {
+                    unit.playAnimation('walk')
                 }
             }
             unit.animationObject.isInIdleMode = false
@@ -336,7 +339,7 @@ function moveTo(unit, targetX, targetY, steps, avoid) {
 
     } else {
         if (unit.animationObject) {
-            unit.animationObject.gotoAndPlay("idle")
+            unit.playAnimation('idle')
             unit.animationObject.isInIdleMode = true
             unit.animationObject.rotation = 0
             unit.animationObject.scaleY = 1

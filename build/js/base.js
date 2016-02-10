@@ -53,10 +53,10 @@ function newGame(gameOptions) {
         opponentTeam.addPlayer(0, true, gameOptions.opponentPlayer.hero, gameOptions.opponentPlayer.spells)
         teamList.push(activeTeam)
     }
-    updateLeftBar(0)
-    updateRightBar(0)
-    setupInfoBar()
-    updateInfoBar('hero', activePlayer.hero)
+    // updateLeftBar(0)
+    // updateRightBar(0)
+    // setupInfoBar()
+    // updateInfoBar('hero', activePlayer.hero)
         //Add story
         //Add online
         //Add tutorial
@@ -494,7 +494,7 @@ function updateLeftBar(view) {
 }
 
 function loadImages() {
-    contentManager.add("warrior", "http://localhost:8888/assets/game/warrior.png")
+    contentManager.add("http://localhost:8888/assets/game/warrior.json")
     contentManager.add("background", "http://localhost:8888/assets/game/background.png")
     contentManager.add("monster1", "http://localhost:8888/assets/game/monster1.png");
     contentManager.add("monsters", "http://localhost:8888/assets/game/monsters.png")
@@ -513,10 +513,11 @@ function imageLoadingDone(e) {
     }
     createStage()
     console.log(renderer)
-    // newGame(gameOptions)
-    // renderer.canvas.oncontextmenu = function(e) {
-    //     e.preventDefault();
-    // };
+    newGame(gameOptions)
+    renderer.view.oncontextmenu = function(e) {
+        e.preventDefault();
+        handleClick(e);
+    };
     // playerBar.canvas.oncontextmenu = function(e) {
     //     e.preventDefault();
     // };
@@ -532,6 +533,8 @@ function imageLoadingDone(e) {
 
     //Capture mousemovement events for canvas
     renderer.view.onmousemove = handleMouse
+    gameStage.interactive = true
+    renderer.view.onclick = handleClick
     //Capture move leaving events for canvas
     renderer.view.onmouseout = handleMouse
     //Prevent right clicks... not working yet???
@@ -575,7 +578,7 @@ function init() {
     renderer.view.style.position = "absolute";
 	renderer.view.style.top = "0px";
 	renderer.view.style.left = "0px";
-	renderer.backgroundColor = 0x006600;
+	renderer.backgroundColor = 0x72ab72;
     contentManager = new PIXI.loaders.Loader();
     loadImages()
     contentManager.once('complete', imageLoadingDone, this);
@@ -600,17 +603,17 @@ function gameLoop(event) {
     fpsText.text = 'FPS: ' + Math.round(ticker.FPS)
     // unitText.text = 'Units: ' + Object.keys(teamList[0].unitList).length
     edgeScrolling(event); //In handle.js
-    // for (var team in teamList) { //We have to update each team
-    //     for (var player in teamList[team].playerList) { //Check each player on that team
-    //         teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
-    //     }
-    //     for (var unit in teamList[team].unitList) {
-    //         teamList[team].unitList[unit].update(event) //Update every unit spawned against this player
-    //     }
-    //     teamList[team].unitList = teamList[team].unitList.filter(function(x) { //Filter dead units from the player List
-    //         return x.alive == true;
-    //     })
-    // }
+    for (var team in teamList) { //We have to update each team
+        for (var player in teamList[team].playerList) { //Check each player on that team
+            teamList[team].playerList[player].hero.update(event) //Update the hero object for this player
+        }
+        for (var unit in teamList[team].unitList) {
+            teamList[team].unitList[unit].update(event) //Update every unit spawned against this player
+        }
+        teamList[team].unitList = teamList[team].unitList.filter(function(x) { //Filter dead units from the player List
+            return x.alive == true;
+        })
+    }
     // for (var particle in particleList) {
     //     particleList[particle].update(event);
     // }

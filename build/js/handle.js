@@ -139,19 +139,16 @@ function miniMapClick(event) {
 }
 
 function handleClick(event) {
-	if (playerStage.mouseInBounds == true && event.nativeEvent.which == 3) {
+	console.log(event)
+	if (event.which == 3) {
 		castActive = false;
 		activePlayer.hero.updateWaypoint(event);
 	}
 	if (castActive) {
-		if (playerStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
-			var point = gameStage.globalToLocal(playerStage.mouseX, playerStage.mouseY);
+		var point = gameStage.ToLocal(event.pageX, event.pageY);
 			activePlayer.hero.spells[castActive].cast(point.x, point.y, activePlayer.hero)
 			castActive = false;
-		} else {
-			castActive = false;
 		}
-	}
 }
 
 function updateSpells(event) {
