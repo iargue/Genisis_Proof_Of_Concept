@@ -11,6 +11,12 @@ div {
     display: inline-block;
 }
 
+#gameCanvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
 .hide {
     display: none
 }
