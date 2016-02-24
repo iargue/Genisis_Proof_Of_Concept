@@ -7,9 +7,9 @@ function hero(hero, heroSpells, x, y, player) {
 	this.MD = this.baseStats.MD,
 	this.MR = this.baseStats.MR,
 	this.AR = this.baseStats.AR,
-	this.MS = this.baseStats.MS * 10,
+	this.MS = this.baseStats.MS * 15,
 	this.RN = this.baseStats.RN * 10,
-	this.CMS = this.baseStats.MS * 10,
+	this.CMS = this.baseStats.MS * 15,
 	this.AS = 1000 - (this.baseStats.AS * 10),
 	this.particleSpeed = 450,
 	this.attackTime = new Date(),
@@ -152,7 +152,7 @@ function hero(hero, heroSpells, x, y, player) {
 			if (effect.effectType == "stun" || "root") return
 		}
 		if (this.alive == false) return; //We can possibly remove this
-		steps = (((event.delta) / 100 * this.CMS) / 10)
+		steps = (((event) / 100 * this.CMS))
 
 		if (this.moveWayPoint.x != this.stageObject.x || this.moveWayPoint.y != this.stageObject.y) {
 			this.moving = true;
@@ -171,7 +171,7 @@ function hero(hero, heroSpells, x, y, player) {
 			}
 		}
 		if (this.CHP < this.HP) {
-			this.CHP += (((2 / 100) * this.HP) / (1000 / event.delta))
+			this.CHP += (((2 / 100) * this.HP) / (1000 / event))
 			if (this.CHP > this.HP) {
 				this.CHP = this.HP
 			}
@@ -342,12 +342,11 @@ function hero(hero, heroSpells, x, y, player) {
 			this.moveWayPoint.x = point.x;
 			this.moveWayPoint.y = point.y;
 		} else {
-			var point = gameStage.toGlobal({'x': event.pageX, 'y':event.pageY});
-			console.log(event.data.getLocalPosition(gameStage))
+			var point = gameStage.toLocal({'x': event.pageX, 'y':event.pageY}, stage);
 			console.log(point)
-			if (this.player.team.side == 0 && point.y > 1000 - this.radius) {
+			if (this.player.team.side == 0 && point.y > gameStage._height/2 - this.radius) {
 				return;
-			} else if (this.player.team.side == 1 && point.y < 1000 - this.radius) {
+			} else if (this.player.team.side == 1 && point.y < gameStage._height/2 - this.radius) {
 				return;
 			}
 			this.moveWayPoint.x = point.x;
