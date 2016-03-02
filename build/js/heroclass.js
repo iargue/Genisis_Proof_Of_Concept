@@ -64,12 +64,12 @@ function hero(hero, heroSpells, x, y, player) {
 	this.experienceToLevel = 50 + (this.level * 50),
 	this.spellLevels = 1,
 	this.radius = 25,
-	// this.miniMapObject = new PIXI.Graphics().beginFill(0x008000).drawCircle(0, 0, this.radius / miniMapRatio.radius)
-	// this.miniMapWayPoint = new PIXI.Graphics().setStrokeStyle(10 / miniMapRatio.radius).moveTo(this.stageObject.x, this.stageObject.y).setStrokeStyle(10 / miniMapRatio.radius, 0x435522).lineTo(this.stageObject.x, this.stageObject.y)
-	// this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
-	// this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
-	// miniMapStage.addChild(this.miniMapObject)
-	// miniMapStage.addChild(this.miniMapWayPoint)
+	this.miniMapObject = new PIXI.Graphics().beginFill(0x008000).drawCircle(0, 0, this.radius / miniMapRatio.radius)
+	this.miniMapWayPoint = new PIXI.Graphics().lineStyle(10 / miniMapRatio.radius, 0x435522).moveTo(this.stageObject.x, this.stageObject.y).lineTo(this.stageObject.x, this.stageObject.y)
+	this.miniMapObject.x = Math.round(this.stageObject.x / miniMapRatio.width)
+	this.miniMapObject.y = Math.round(this.stageObject.y / miniMapRatio.height)
+	miniMap.addChild(this.miniMapObject)
+	miniMap.addChild(this.miniMapWayPoint)
 	// this.localSpriteSheet = new createjs.SpriteSheet({
 	// 	framerate: 10,
 	// 	images: [contentManager.getResult(hero.imageName)], //image to use
@@ -160,7 +160,7 @@ function hero(hero, heroSpells, x, y, player) {
 		} else {
 			this.moving = false
 		}
-		// this.miniMapWayPoint.graphics.clear().setStrokeStyle(10 / miniMapRatio.radius).beginStroke('#000000').moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
+		this.miniMapWayPoint.clear().lineStyle(10 / miniMapRatio.radius, 0x000000).moveTo(Math.round(this.stageObject.x / miniMapRatio.width), Math.round(this.stageObject.y / miniMapRatio.height)).lineTo(Math.round(this.moveWayPoint.x / miniMapRatio.width), Math.round(this.moveWayPoint.y / miniMapRatio.height))
 	},
 
 	this.updatePassive = function(event) {
@@ -329,21 +329,20 @@ function hero(hero, heroSpells, x, y, player) {
 	this.updateWaypoint = function(event, miniMap) { //Simply updates our hero's Waypoint based on clicks
 		if (miniMap) {
 			// var point = gameStage.localToLocal(event.stageX * miniMapRatio.width, event.stageY * miniMapRatio.height, miniMapStage);
-			var globalPoint = miniMapStage.globalToLocal(event.stageX, event.stageY)
+			var globalPoint = event
 			point = {
 				x: globalPoint.x * miniMapRatio.width,
 				y: globalPoint.y * miniMapRatio.height
 			}
-			if (this.player.team.side == 0 && point.y > 1000 - this.radius) {
+			if (this.player.team.side == 0 && point.y > gameStage._height/2- this.radius) {
 				return;
-			} else if (this.player.team.side == 1 && point.y < 1000 - this.radius) {
+			} else if (this.player.team.side == 1 && point.y < gameStage._height/2 - this.radius) {
 				return;
 			}
 			this.moveWayPoint.x = point.x;
 			this.moveWayPoint.y = point.y;
 		} else {
-			var point = gameStage.toLocal({'x': event.pageX, 'y':event.pageY}, stage);
-			console.log(point)
+			var point = gameStage.toLocal(renderer.plugins.interaction.eventData.data.global);
 			if (this.player.team.side == 0 && point.y > gameStage._height/2 - this.radius) {
 				return;
 			} else if (this.player.team.side == 1 && point.y < gameStage._height/2 - this.radius) {
@@ -407,8 +406,8 @@ function hero(hero, heroSpells, x, y, player) {
 		this.moveWayPoint.x = this.stageObject.x
 		this.moveWayPoint.y = this.stageObject.y
 		this.animationObject.gotoAndPlay('idle')
-		// gameStage.addChild(this.stageObject)
-		// miniMapStage.addChild(this.miniMapObject)
+		gameStage.addChild(this.stageObject)
+		miniMapStage.addChild(this.miniMapObject)
 	}
 
 	this.checkCollision = function(x, y, radius) {

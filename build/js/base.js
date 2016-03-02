@@ -19,6 +19,7 @@ var stage,
     buttonHeight,
     renderer = null,
     scrollDown = false,
+    scrollDownTime = 0,
     scrollUp = false,
     scrollLeft = false,
     scrollRight = false,
@@ -460,7 +461,7 @@ function imageLoadingDone(e) {
     newGame(gameOptions)
     renderer.view.oncontextmenu = function(e) {
         e.preventDefault();
-        // handleClick(e);
+        handleClick(e);
     };
     console.log(gameStage.width);
 

@@ -109,8 +109,8 @@ function spawnHero(hero, side) {
                     hero.stageObject.y = spawnListOne[spawn].y;
                     hero.moveWayPoint.x = hero.stageObject.x;
                     hero.moveWayPoint.y = hero.stageObject.y;
-                    // hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width);
-                    // hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height);
+                    hero.miniMapObject.x = Math.round(hero.stageObject.x / miniMapRatio.width);
+                    hero.miniMapObject.y = Math.round(hero.stageObject.y / miniMapRatio.height);
                     return;
                 }
             }

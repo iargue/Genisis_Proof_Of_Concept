@@ -3,15 +3,18 @@ function handleMouse(e) {
 	offsetX = window.innerWidth * 0.05
 	offsetY = window.innerHeight * 0.05
 	//This if statement checks if the mouse is to the bottom or top of the screen and starts scrolling. If its not at the top or bottom, we stop scrolling
-	if (e.pageY >= (window.innerHeight - (window.innerHeight * 0.2)) - offsetY) {
+	if (e.pageY >= (window.innerHeight - (window.innerHeight * 0.2)) - offsetY && e.pageY <= (window.innerHeight - (window.innerHeight * 0.2))) {
 			scrollDown = true
 			scrollUp = false
+			scrollDownTime += 1;
 	} else if (e.pageY < offsetY) {
 		scrollUp = true
 		scrollDown = false
+		scrollDownTime = 0
 	} else {
 		scrollUp = false
 		scrollDown = false
+		scrollDownTime = 0
 	}
 	//This statement checks if the mouse is at the left or right of the screen and scrolls as needed. If we are not left or right, we stop scrolling.
 	if (e.pageX >= window.innerWidth - offsetX) {
@@ -30,6 +33,7 @@ function handleMouse(e) {
 		scrollRight = false
 		scrollUp = false
 		scrollDown = false
+		scrollDownTime = 0
 	}
 }
 
@@ -106,45 +110,45 @@ function handleKeyDown(e) {
 	}
 }
 
-function miniMapClick(event) {
-	console.log(event)
-	// event.stopPropagation()
-	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
-		point = {
-			x: (event.localX * miniMapRatio.width) - (renderer.width / 2),
-			y: (event.localY * miniMapRatio.height) - (renderer.height / 2),
+function miniMapClick(point, clickType) {
+	if (clickType == 1) {
+		gameStagePoint = {
+			x: (point.x * miniMapRatio.width) - (renderer.width / 2),
+			y: (point.y * miniMapRatio.height) - (renderer.height / 2),
 		}
-		if (point.x < 0) {
-			point.x = 0
-		} else if (point.x > (gameWidth - renderer.width)) {
-			point.x = (gameWidth - renderer.width)
+		if (gameStagePoint.x < 0) {
+			gameStagePoint.x = 0
+		} else if (gameStagePoint.x > (gameWidth - renderer.width)) {
+			gameStagePoint.x = (gameWidth - renderer.width)
 		}
-		if (point.y < 0) {
-			point.y = 0
-		} else if (point.y > (gameHeight - renderer.height)) {
-			point.y = (gameHeight - renderer.height)
+		if (gameStagePoint.y < 0) {
+			gameStagePoint.y = 0
+		} else if (gameStagePoint.y > (gameHeight - renderer.height)) {
+			gameStagePoint.y = (gameHeight - renderer.height)
 		}
 
-		gameStage.pivot.x = point.x;
-		gameStage.pivot.y = point.y;
+		gameStage.pivot.x = gameStagePoint.x;
+		gameStage.pivot.y = gameStagePoint.y;
 
-		playerBorder.x = gameStage.pivot.x / miniMapRatio.width;
-		playerBorder.y = gameStage.pivot.y / miniMapRatio.height;
+		miniMap.stageBorder.x = gameStage.pivot.x / miniMapRatio.width;
+		miniMap.stageBorder.y = gameStage.pivot.y / miniMapRatio.height;
 	}
 	scrollDown = false
 	scrollUp = false
 	scrollLeft = false
 	scrollRight = false
-	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 3) {
+	if (clickType == 3) {
 		castActive = false;
-		activePlayer.hero.updateWaypoint(event, true);
+		activePlayer.hero.updateWaypoint(point, true);
 	}
 }
 
 function handleClick(event) {
-	// event.data.originalEvent.preventDefault();
-	console.log(event)
-	if (event.which == 3) {
+	point = miniMap.toLocal(renderer.plugins.interaction.eventData.data.global)
+	if (point.x >= 0 && point.y >= 0 && point.x <= miniMap._width && point.y <= miniMap._height) {
+		castActive = false;
+		miniMapClick(point, event.which)
+	} else if (event.which == 3) {
 		castActive = false;
 		activePlayer.hero.updateWaypoint(event);
 	}
@@ -182,7 +186,7 @@ function updateSpells(event) {
 
 
 function edgeScrolling(event) {
-	if (scrollDown) {
+	if (scrollDown && scrollDownTime > 10) {
 		if (gameStage.pivot.y + (renderer.height - (renderer.height * 0.2)) > gameHeight) {
 			gameStage.pivot.y = gameHeight - (renderer.height - (renderer.height * 0.2))
 		} else if (gameStage.pivot.y + (renderer.height - (renderer.height * 0.2)) < gameHeight) {
