@@ -34,6 +34,7 @@ function handleMouse(e) {
 }
 
 function handleKeyDown(e) {
+	console.log(e)
 	if (e.shiftKey) {
 		activePlayer.hero.levelSpell(e.keyCode)
 	} else {
@@ -100,12 +101,14 @@ function handleKeyDown(e) {
 				activePlayer.hero.castSpell(e.keyCode);
 		}
 
-		playerBorder.x = gameStage.pivot.x / miniMapRatio.width
-		playerBorder.y = gameStage.pivot.y / miniMapRatio.height
+		miniMap.stageBorder.x = gameStage.pivot.x / miniMapRatio.width
+		miniMap.stageBorder.y = gameStage.pivot.y / miniMapRatio.height
 	}
 }
 
 function miniMapClick(event) {
+	console.log(event)
+	// event.stopPropagation()
 	if (playerBar.mouseInBounds == true && event.nativeEvent.which == 1) {
 		point = {
 			x: (event.localX * miniMapRatio.width) - (renderer.width / 2),
@@ -139,6 +142,7 @@ function miniMapClick(event) {
 }
 
 function handleClick(event) {
+	// event.data.originalEvent.preventDefault();
 	console.log(event)
 	if (event.which == 3) {
 		castActive = false;
@@ -149,6 +153,7 @@ function handleClick(event) {
 			activePlayer.hero.spells[castActive].cast(point.x, point.y, activePlayer.hero)
 			castActive = false;
 		}
+
 }
 
 function updateSpells(event) {
@@ -208,8 +213,9 @@ function edgeScrolling(event) {
 		}
 	}
 	//MARKED
-	// playerBorder.x = gameStage.pivot.x / miniMapRatio.width
-	// playerBorder.y = gameStage.pivot.y / miniMapRatio.height
+	    // var point = stage.toGlobal({x: gameStage.pivot.x, y: gameStage.pivot.y});
+	miniMap.stageBorder.x = gameStage.pivot.x / miniMapRatio.width
+	miniMap.stageBorder.y = gameStage.pivot.y / miniMapRatio.height
 }
 
 function updateCollisionTree(event) {

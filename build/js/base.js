@@ -208,22 +208,23 @@ function createStage() {
     miniMap.border = new PIXI.Graphics().lineStyle(2, 0x000000).drawRect(1, 1, miniMap._width - 2, miniMap._height - 2);
     miniMap.split = new PIXI.Graphics().beginFill(0x000000).drawRect(0, miniMap._height / 2 - 1, miniMap._width, 2);
     
-    // miniMapRatio = {
-    //     width: gameWidth / miniMapStage.width,
-    //     height: gameHeight / miniMapStage.height,
-    //     radius: (gameHeight + gameWidth) / (miniMapStage.height + miniMapStage.width)
-    // }
+    miniMapRatio = {
+        width: gameWidth / miniMap._width,
+        height: gameHeight / miniMap._height,
+        radius: (gameHeight + gameWidth) / (miniMap._height + miniMap._width)
+    }
 
-    // var point = stage.toGlobal({x: stage.pivot.x, y: stage.pivot.y});
-
-    // var playerBorder = new PIXI.Graphics().lineStyle(1, 0x000000).drawRect(0, 0, stage.width / miniMapRatio.width, stage.height / miniMapRatio.height);
-    // playerBorder.width = stage.width / miniMapRatio.width;
-    // playerBorder.height = stage.height / miniMapRatio.height;
-    // miniMapStage.addChild(playerBorder);
-
+    miniMap.stageBorder = new PIXI.Graphics().lineStyle(1, 0x000000).drawRect(0, 0, renderer.width / miniMapRatio.width, (renderer.height - playerBar.height) / miniMapRatio.height);
+    
     miniMap.addChild(miniMap.object);
     miniMap.addChild(miniMap.border);
     miniMap.addChild(miniMap.split);
+    miniMap.addChild(miniMap.stageBorder);
+
+    miniMap.interactive = true
+    //Capture clicks for canvas
+    // miniMap.on('mousedown', miniMapClick)
+
     playerBar.addChild(miniMap);
 
     shopPad = new PIXI.Container();
@@ -449,7 +450,6 @@ function loadImages() {
 }
 
 function imageLoadingDone(e) {
-	console.log(e)
     gameOptions = {
         mode: 'solo',
         hero: 'warrior',
@@ -460,31 +460,26 @@ function imageLoadingDone(e) {
     newGame(gameOptions)
     renderer.view.oncontextmenu = function(e) {
         e.preventDefault();
-        handleClick(e);
+        // handleClick(e);
     };
     console.log(gameStage.width);
 
-    // playerBar.canvas.oncontextmenu = function(e) {
-    //     e.preventDefault();
-    // };
     ticker = new PIXI.ticker.Ticker();
     ticker.add(gameLoop, this);
     ticker.start()
-    // createjs.Ticker.on("tick", gameLoop);
-    // createjs.Ticker.setFPS(120);
-    // document.onkeydown = handleKeyDown
-    // playerStage.mouseMoveOutside = true;
-    //playerStage.addEventListener("stagemouseup", handleClick);
-    // miniMapStage.addEventListener("click", miniMapClick);
-
-    //Capture mousemovement events for canvas
-    renderer.view.onmousemove = handleMouse
+        
     gameStage.interactive = true
+    //Capture clicks for canvas
+    // gameStage.on('click', handleClick)
     renderer.view.onclick = handleClick
+     //Capture keypresses for document
+    document.onkeydown = handleKeyDown
     //Capture move leaving events for canvas
     renderer.view.onmouseout = handleMouse
     //Prevent right clicks... not working yet???
     renderer.view.preventDefault = true
+    //Capture events for canvas when mouse leaves it
+    renderer.view.onmousemove = handleMouse
 
     resize()
 }

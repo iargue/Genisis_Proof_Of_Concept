@@ -311,7 +311,7 @@ function moveTo(unit, targetX, targetY, steps, avoid) {
             // 	unit.animationObject.direction = 1
             // 	unit.animationObject.scaleY = 1
             // }
-            if (towardsX > 0) {
+            if (towardsX < 0) {
                 if (unit.animationObject.direction != 1) {
                     unit.animationObject.direction = 1
                     unit.animationObject.scale.x = 1
