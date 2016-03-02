@@ -177,7 +177,7 @@ function hero(hero, heroSpells, x, y, player) {
 			}
 		}
 
-		this.healthBar.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
+		this.healthBar.clear().beginFill(0x008000).drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 
 	},
 
@@ -190,28 +190,28 @@ function hero(hero, heroSpells, x, y, player) {
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellOneCooldown.graphics.clear().beginFill("red").drawRect(-30, -50, percentage * 14, 14)
+					this.spellBar.spellOneCooldown.clear().beginFill("red").drawRect(-30, -50, percentage * 14, 14)
 					continue
 				case "1": //Key 2
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellTwoCooldown.graphics.clear().beginFill("red").drawRect(-15, -50, percentage * 14, 14)
+					this.spellBar.spellTwoCooldown.clear().beginFill("red").drawRect(-15, -50, percentage * 14, 14)
 					continue
 				case "2":
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellThreeCooldown.graphics.clear().beginFill("red").drawRect(0, -50, percentage * 14, 14)
+					this.spellBar.spellThreeCooldown.clear().beginFill("red").drawRect(0, -50, percentage * 14, 14)
 					continue
 				case "3":
 					percentage = ((new Date() - this.spells[spell].currentCoolDown) / this.spells[spell].coolDown)
 					if (percentage > 1) {
 						percentage = 1
 					}
-					this.spellBar.spellFourCooldown.graphics.clear().beginFill("red").drawRect(15, -50, percentage * 14, 14)
+					this.spellBar.spellFourCooldown.clear().beginFill("red").drawRect(15, -50, percentage * 14, 14)
 					continue
 			}
 
@@ -389,7 +389,7 @@ function hero(hero, heroSpells, x, y, player) {
 			this.animationObject.gotoAndPlay('die')
 
 		} else {
-			this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
+			this.healthBar.clear().beginFill(0x008000).drawRect(-30, -60, (this.CHP / this.HP) * 60, 10)
 		}
 	}
 
@@ -400,7 +400,7 @@ function hero(hero, heroSpells, x, y, player) {
 		this.CMS = this.MS
 		this.CHP = this.HP
 		this.CMP = this.MP
-		this.healthBar.graphics.clear().beginFill("green").drawRect(-30, -60, 60, 10);
+		this.healthBar.graphics.clear().beginFill(0x008000).drawRect(-30, -60, 60, 10);
 		console.log(this.player)
 		spawnHero(this, this.player.team.side)
 		this.moveWayPoint.x = this.stageObject.x

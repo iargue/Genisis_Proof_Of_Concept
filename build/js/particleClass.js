@@ -97,7 +97,7 @@ skillShotParticle = function(object, distance, speed, attacker, spell) {
 			this.active = false
 			this.spell.onRange(object, attacker)
 		} else {
-			steps = (((event.delta) / 100 * this.particleSpeed) / 10)
+			steps = (((event) / 100 * this.particleSpeed) / 10)
 			moveTo(this, this.destination.x, this.destination.y, steps)
 		}
 	}
@@ -152,7 +152,7 @@ bulletParticle = function(object, particleSpeed, target, parent) { //This create
 			gameStage.removeChild(this.stageObject);
 			this.destination.takeDamage(this.parent.AD, "AD", this.parent);
 		} else
-			steps = (((event.delta) / 100 * this.particleSpeed) / 10);
+			steps = (((event) / 100 * this.particleSpeed) / 10);
 		moveTo(this, this.destination.stageObject.x, this.destination.stageObject.y, steps)
 	}
 }

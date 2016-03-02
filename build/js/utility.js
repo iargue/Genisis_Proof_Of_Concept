@@ -151,7 +151,6 @@ function moveTo(unit, targetX, targetY, steps, avoid) {
     towardsX = targetX - unit.stageObject.x;
     towardsY = targetY - unit.stageObject.y;
 
-
     toPlayerLength = Math.sqrt(towardsX * towardsX + towardsY * towardsY);
     var angle = Math.atan2(targetY - unit.stageObject.y, targetX - unit.stageObject.x); //Rotation to target.
     if (avoid) {

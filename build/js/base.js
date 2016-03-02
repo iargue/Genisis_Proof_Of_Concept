@@ -552,13 +552,13 @@ function gameLoop(event) {
             return x.alive == true;
         })
     }
-    // for (var particle in particleList) {
-    //     particleList[particle].update(event);
-    // }
-    // particleList = particleList.filter(function(x) { //Filter dead units from the player List
-    //     return x.active == true;
-    // })
-    // updateCollisionTree(event) //in handle.js
+    for (var particle in particleList) {
+        particleList[particle].update(event);
+    }
+    particleList = particleList.filter(function(x) { //Filter dead units from the player List
+        return x.active == true;
+    })
+    updateCollisionTree(event) //in handle.js
     // updateStage(event);
     // updatePlayerBar(event);
     renderer.render(stage)
