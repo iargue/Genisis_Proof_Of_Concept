@@ -114,7 +114,7 @@ textParticle = function(object, expireTime) { //This is used to draw temporary t
 	this.update = function(event) { //This is called ever time.
 		if (new Date() - this.appliedTime > this.expires) { //More MS have elapsed then our expired time.
 			this.active = false; //No longer active.
-			playerStage.removeChild(this.stageObject); //Object is removed from playerStage too
+			stage.removeChild(this.stageObject); //Object is removed from playerStage too
 		}
 	}
 }

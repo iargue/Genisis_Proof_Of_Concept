@@ -46,7 +46,7 @@ function Clone(x) {
 }
 
 function displayText(text, color) {
-    var y = playerStage.canvas.height - 50;
+    var y = playerBar.y - 50;
     var blackList = []
     for (var particle in particleList) {
         blackList.push(particleList[particle].stageObject.y)
@@ -55,14 +55,14 @@ function displayText(text, color) {
         if (blackList.indexOf(y) != -1) {
             y -= 20;
         } else {
-            var textObject = new createjs.Text(text, "12px " + textFont, color);
-            textObject.x = playerStage.canvas.width / 2;
+            var textObject = new PIXI.Text(text, {font: textSize + "px " + textFont, fill : color});
+            textObject.x = stage._width / 2;
             textObject.y = y;
-            playerStage.addChild(textObject);
+            stage.addChild(textObject);
             particleList.push(new textParticle(textObject, 2000));
             break;
         }
-        if (y < playerStage.canvas.height / 2 + playerStage.canvas.height / 4) {
+        if (y < playerBar.y / 2 + playerBar.y / 4) {
             break
         }
     }

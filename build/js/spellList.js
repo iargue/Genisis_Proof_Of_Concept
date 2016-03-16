@@ -24,6 +24,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
         this.effectType = "slow"
         this.cast = function(x, y, attacker) {
             if (new Date() - this.currentCoolDown < this.coolDown || this.level == 0) {
+                console.log('Not ready')
                 displayText('Spell not ready', 'red')
                 return false;
             }
@@ -36,12 +37,13 @@ var spellList = { //Constains a list of every spell in the game, Named.
 
             var targets = [];
             collisionTree.retrieve(bounds, function(collidee) {
+                console.log(collidee)
                 if (collidee.checkCollision(x, y, 100)) {
                     targets.push(collidee)
                 }
             });
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
+            object = new PIXI.Graphics().lineStyle(1).beginFill(0xFF0000).drawCircle(x, y, 100)
             object.alpha = 0.5
             gameStage.addChild(object)
             particleList.push(new drawParticle(object, 750))
@@ -90,7 +92,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100)
             object.alpha = 0.5
             gameStage.addChild(object)
             particleList.push(new drawParticle(object, 750))
@@ -139,7 +141,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("black").drawCircle(x, y, 100)
             object.alpha = 0.5
             gameStage.addChild(object)
             particleList.push(new drawParticle(object, 750))
@@ -171,7 +173,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 return false; //Todo: Add display text
             }
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill("black").drawRect(0, 0, 10, 20))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginFill("black").drawRect(0, 0, 10, 20)
             object.x = attacker.stageObject.x;
             object.y = attacker.stageObject.y;
             object.height = 10
@@ -215,7 +217,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 return false; //Todo: Add display text
             }
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill("red").drawCircle(0, 0, 10))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginFill("red").drawCircle(0, 0, 10)
             object.x = attacker.stageObject.x;
             object.y = attacker.stageObject.y;
             object.height = 10
@@ -243,7 +245,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             }, this);
 
-            explosionObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill('red').drawCircle(0, 0, 50))
+            explosionObject = new PIXI.Graphics().setStrokeStyle(2).beginFill('red').drawCircle(0, 0, 50)
             explosionObject.x = collidee.stageObject.x
             explosionObject.y = collidee.stageObject.y
             explosionObject.radius = 50
@@ -272,7 +274,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             }, this);
 
-            explosionObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill('red').drawCircle(0, 0, 50))
+            explosionObject = new PIXI.Graphics().setStrokeStyle(2).beginFill('red').drawCircle(0, 0, 50)
             explosionObject.x = object.x
             explosionObject.y = object.y
             explosionObject.radius = 50
@@ -305,7 +307,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 return false; //Todo: Add display text
             }
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill("blue").drawCircle(0, 0, 10))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginFill("blue").drawCircle(0, 0, 10)
             object.x = attacker.stageObject.x;
             object.y = attacker.stageObject.y;
             object.height = 10
@@ -340,7 +342,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
             }
 
             for (var i = 1; i < 9; i++) {
-                explosionObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill('blue').drawRect(0, 0, 5, 10))
+                explosionObject = new PIXI.Graphics().setStrokeStyle(2).beginFill('blue').drawRect(0, 0, 5, 10)
                 explosionObject.x = object.x
                 explosionObject.y = object.y
                 explosionObject.height = 5
@@ -374,7 +376,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
             }
 
             for (var i = 1; i < 9; i++) {
-                explosionObject = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginFill('blue').drawRect(0, 0, 5, 10))
+                explosionObject = new PIXI.Graphics().setStrokeStyle(2).beginFill('blue').drawRect(0, 0, 5, 10)
                 explosionObject.x = object.x
                 explosionObject.y = object.y
                 explosionObject.height = 5
@@ -546,7 +548,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 100))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 100)
             object.x = x
             object.y = y
             object.alpha = 0.5
@@ -597,7 +599,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 16))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 16)
             object.x = x
             object.y = y
             object.radius = 16
@@ -666,7 +668,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
             }
 
 
-            object = new createjs.Shape(new createjs.Graphics().setStrokeStyle(2).beginStroke("blue").moveTo(targets[0].stageObject.x, targets[0].stageObject.y))
+            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("blue").moveTo(targets[0].stageObject.x, targets[0].stageObject.y)
             
             for (var i = 1; i < targets.length; i++) {
 				targets[i].takeDamage(this.damagePerLevel[this.level], "MD", attacker)

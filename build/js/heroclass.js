@@ -268,10 +268,12 @@ function hero(hero, heroSpells, x, y, player) {
 		for (var effect in this.effects) {
 			if (effect.effectType == "stun" || "root") return
 		}
-		if (playerStage.mouseInBounds) { //Make sure they were in the canvas to actully cast a spell
-			var point = gameStage.globalToLocal(playerStage.mouseX, playerStage.mouseY);
+		point = stage.toLocal(renderer.plugins.interaction.eventData.data.global)
+		if (point.y <= playerBar.y) { //Make sure they were in the canvas to actully cast a spell
+			var point = gameStage.toLocal(renderer.plugins.interaction.eventData.data.global)
 			switch (keyCode) {
 				case 81: //Key Q
+					console.log('Casting')
 					this.spells[0].cast(point.x, point.y, this) //Cast spell 1 with current mouse x and y
 					return false;
 				case 87: //Key W

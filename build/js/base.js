@@ -243,7 +243,10 @@ function createStage() {
 
     stage.addChild(playerBar);
 
-    collisionTree = QUAD.init({x: 0, y: 0, w: gameWidth, h: gameHeight});
+    test = {x: 0, y: 0, w: gameWidth, h: gameHeight}
+
+    collisionTree = QUAD.init(test);
+    console.log(collisionTree)
 
     // For Debugging
     fpsText = new PIXI.Text('0', {font: textSize + "px " + textFont, fill : '0x000000'});
@@ -454,7 +457,7 @@ function imageLoadingDone(e) {
     gameOptions = {
         mode: 'solo',
         hero: 'warrior',
-        spells: [new spellList['chainLightening'], new spellList['coneFire'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
+        spells: [new spellList['chainLightening'], new spellList['aoeSlow'], new spellList['damageOverTime'], new ultimateList['ultIceBall']]
     }
     createStage();
     console.log(renderer)
