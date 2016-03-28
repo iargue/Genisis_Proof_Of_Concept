@@ -40,6 +40,7 @@ function monster(monster, x, y, player) {
     this.radius = 16,
     this.miniMapObject = new PIXI.Graphics().beginFill(0xff0000).drawCircle(0, 0, Math.round(this.radius / miniMapRatio.radius)),
     miniMap.addChild(this.miniMapObject),
+    console.log(this.stageObject.getBounds())
     // this.stageObject.addEventListener('click', changeDisplay) // in handle.js
 
 

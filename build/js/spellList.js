@@ -500,7 +500,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 y: Math.sin(angle - (30 * Math.PI / 180)) * 150 + attacker.stageObject.y
             }
             object = new createjs.Shape();
-            object.graphics.setStrokeStyle(2).beginStroke('red').moveTo(attacker.stageObject.x, attacker.stageObject.y).lineTo(destination.x, destination.y).lineTo(destination2.x, destination2.y).closePath()
+            object.graphics.lineStyle(1, 0xFF0000).moveTo(attacker.stageObject.x, attacker.stageObject.y).lineTo(destination.x, destination.y).lineTo(destination2.x, destination2.y).closePath()
             //The above object draws a triangle between every point.
             gameStage.addChild(object)
             particleList.push(new drawParticle(object, 350)) //Creates the temporary particle for 350 seconds for the spell.
@@ -548,7 +548,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 100)
+            object = new PIXI.Graphics().lineStyle(1).beginFill(0xFF0000).drawCircle(0, 0, 100)
             object.x = x
             object.y = y
             object.alpha = 0.5
@@ -599,7 +599,7 @@ var spellList = { //Constains a list of every spell in the game, Named.
                 }
             });
 
-            object = new PIXI.Graphics().setStrokeStyle(2).beginStroke("red").beginFill("red").drawCircle(0, 0, 16)
+            object = new PIXI.Graphics().lineStyle(1).beginFill(0xFF0000).drawCircle(0, 0, 16)
             object.x = x
             object.y = y
             object.radius = 16
