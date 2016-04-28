@@ -1,3 +1,17 @@
+
+var colors = {
+    red : '0xFF0000',
+    darkRed : '0x990000',
+    blue : '0x0000e5',
+    darkBlue : '0x000072',
+    green : '0x006600',
+    lightGreen : '0x000072',
+    black : '0x000000',
+    grey : '0x808080'
+}
+
+
+//Converts time stored in milliseconds to a human readable format (H:MM:SS)
 function msToTime(duration) {
     var milliseconds = parseInt((duration % 1000) / 100),
         seconds = parseInt((duration / 1000) % 60),
@@ -11,6 +25,7 @@ function msToTime(duration) {
     return hours + ":" + minutes + ":" + seconds;
 }
 
+//Pads a string with spaces. Not sure if used after Pixel Rewrite.
 function padString(string, padding) {
     var newText = string;
     if (string.length < padding)
@@ -19,6 +34,7 @@ function padString(string, padding) {
     return newText;
 }
 
+// Converts time from a human readable format (H:SS:MM) to milliseconds
 function timeToMs(str) {
     var p = str.split(':'),
         s = 0,
@@ -32,19 +48,23 @@ function timeToMs(str) {
     return s * 1000;
 }
 
+//Gets a random int base 10
 function getRandom10(min, max) {
     return getRandomInt(min / 10, max / 10) * 10;
 }
 
+//Gets a random int between min/max
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+//Clones an object
 function Clone(x) {
     for (p in x)
         this[p] = (typeof(x[p]) == 'object') ? new Clone(x[p]) : x[p];
 }
 
+//Displays text on players view. Text as a lifetime of 2,000 MS
 function displayText(text, color) {
     var y = playerBar.y - 50;
     var blackList = []
@@ -68,6 +88,7 @@ function displayText(text, color) {
     }
 }
 
+//Levels up a spell for  a hero
 function levelSpell(hero, spellNumber) {
     if ((hero.level / 3) < hero.spells[spellNumber].level) return;
 
@@ -87,6 +108,7 @@ function levelSpell(hero, spellNumber) {
 
 }
 
+//Spawns a hero on the specified side
 function spawnHero(hero, side) {
     hero.init()
     spawnListOne = [{
@@ -118,6 +140,8 @@ function spawnHero(hero, side) {
     }
 }
 
+
+//Spawns a unit on the battlefield
 function spawnUnit(monsterNumber) {
     var blackList = [],
         nodeOkay = false,
@@ -145,6 +169,7 @@ function spawnUnit(monsterNumber) {
     return unit
 }
 
+//Moves object to specified location. If avoid is selected, the move will attempt to avoid other objects.
 function moveTo(unit, targetX, targetY, steps, avoid) {
     // avoid is undefined/false by default. Set it to true if you need the object to avoid minions
     // Calculate direction towards target
@@ -354,12 +379,15 @@ function moveTo(unit, targetX, targetY, steps, avoid) {
 
 }
 
+
+//Calculate the distance between two units.
 function distance(firstUnit, secondUnit) {
     var xDist = Math.abs(firstUnit.stageObject.x - secondUnit.stageObject.x)
     var yDist = Math.abs(firstUnit.stageObject.y - secondUnit.stageObject.y)
     return Math.sqrt(xDist * xDist + yDist * yDist);
 }
 
+//Calculates the distance between two x and y coridinates.
 function distanceTo(x, y, toX, toY) {
     var xDist = Math.abs(x - toX)
     var yDist = Math.abs(y - toY)
@@ -367,7 +395,6 @@ function distanceTo(x, y, toX, toY) {
 }
 
 function isInTriangle(px, py, ax, ay, bx, by, cx, cy) {
-
     // This is not readable at all, but this uses the  Barycentric coordinate method to test for collision with a triangle.
     //px,py are the point you want to test
     //ax,ay, bx,by, cx,cy are the 3 points that make the triangle.
@@ -406,6 +433,8 @@ function cacheItem(item) { //Will Cache any item with width or height that is de
     }
 }
 
+
+//Depreciated. Used for Easeljs text object creation. To be deleted.
 function createTextObject(container, type, text, width, padding, color) {
     var newText = text;
     // Create string always 9 or more characters long
@@ -448,6 +477,8 @@ function createSelectorBox(container, side) {
 
 }
 
+
+//Times the running of a function for debuging purposes.
 function timeIt(callBack, arguments, nmae) {
     console.time(name)
     callBack.call(arguments)
